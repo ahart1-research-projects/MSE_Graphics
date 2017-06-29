@@ -57,7 +57,7 @@
 
 
 
-# Test this stuff
+# This works
 library(raster)
 library(png)
 TestFishImage <- readPNG("TestFish.png")
@@ -85,6 +85,7 @@ layout.show(Try)
 # 
 
 library(raster)
+library(png)
 for(icon in IconList){
   IconImage <- readPNG(paste(IconList, ".png", sep=""))
   plot(1,1, axes=FALSE, ann=FALSE)
