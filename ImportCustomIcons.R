@@ -7,7 +7,7 @@
 # 
 # 
 # 
-# library(png)
+ library(png)
 # library(grid)
 # library(graphics)
 # 
@@ -59,6 +59,7 @@
 
 # Test this stuff
 library(raster)
+library(png)
 TestFishImage <- readPNG("TestFish.png")
 
 Try <- layout(matrix(c(1,2,3,4),2,2))
@@ -82,3 +83,12 @@ layout.show(Try)
 # Test2FishImage <- readPNG("TestFish.png")
 # class(Test2FishImage)
 # 
+
+library(raster)
+for(icon in IconList){
+  IconImage <- readPNG(paste(IconList, ".png", sep=""))
+  plot(1,1, axes=FALSE, ann=FALSE)
+  lim <- par()
+  rasterImage(IconImage, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
+  
+}
