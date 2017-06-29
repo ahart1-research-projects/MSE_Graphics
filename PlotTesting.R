@@ -10,22 +10,6 @@ boxplot(formula=(Data[,i]~as.factor(CatchCeiling)), data=Data, ylab=paste(Perfor
 abline(h=ReferenceValue)
 
 
-##### Barplots #####
-# Arguments: ChosenColors (vector or matrix depending on data is vector or matrix), xlab=XLabel, ylab=YLabel, axes=True/False, axisnames=True/False (axes must be true if axisnames=TRUE)
-# cex.axis and cex.names adjust name size, offset=0 default allow adjustment relative to axis
-##### Vertical Barplot #####
-barplot(height=Data, width=BarWidths, space=0, horiz=FALSE, col=ChosenColors, xlab=XLabel, ylab=YLabel, axes=True/False, axisnames=True/False, cex.axis=1, cex.names=1, offset=0)
-
-##### Vertical Stacked Barplot #####
-barplot(height=Data, width=BarWidths, space=0, beside=FALSE, horiz=FALSE, col=ChosenColors, xlab=XLabel, ylab=YLabel, axes=True/False, axisnames=True/False, cex.axis=1, cex.names=1, offset=0)
-
-##### Horizonal Barplot #####
-barplot(height=Data, width=BarWidths, space=0, horiz=TRUE, col=ChosenColors, xlab=XLabel, ylab=YLabel, axes=True/False, axisnames=True/False, cex.axis=1, cex.names=1, offset=0)
-
-##### Horizontal Stacked Barplot #####
-barplot(height=Data, width=BarWidths, space=0, beside=FALSE, horiz=TRUE, col=ChosenColors, xlab=XLabel, ylab=YLabel, axes=True/False, axisnames=True/False, cex.axis=1, cex.names=1, offset=0)
-
-
 # ?????? I want to add horizontal threshold lines
 # ????? figure out plot, pictogram plot
 # look at other code to plot timeseries
