@@ -1,21 +1,5 @@
 # This script subsets the herring data
 
-# Performance metrics to focus on
-     # % MSY >= 100%, acceptable level as low as 85%
-          # PropSSBrelSSBmsy = Proportion Years Herring SSB < SSBmsy(Median)
-          # PropSSBrelhalfSSBmsy = Proportino years herring SSB < 0.5SSBmsy(Median)
-          # PropSSBrel3SSBzero = Proportion years herring SSB <0.3SSBf=0 (Median)
-          # PropSSBrel75SSBzero = Proportion years herring SSB<0.75SSBf=0 (Median)
-     # Variation in annual yield, preferably <10%, as high as <25%
-          # Yvar = Interannual Variation in Herring Yield (Median)
-          # YieldrelMSY = Herring yield relative to MSY (Median)
-          # p50_IAVNR = Interannual variation in net revenue (Median)
-          # p50_IAVGR = Interannual variation in gross revenue (Median)
-     # Probability of overfished =0%, acceptable up to <25%
-          # PropFrelFmsy = Proportion years with overfishing (Median)
-     # Probability of herring closure (ABC=0) between <0-10%
-          # PropClosure = Proportion years with fishery closure (ABC=0; Median)
-
 ##### First define the function which picks out the subset of data we are interested in #####
 ExtractCRInformation <- function(HerringMSEData=NULL, CRInfo=NULL, CRnumVectorInfo=NULL, CRNames = NULL){
   # This script extracts the 9 control rules from all available data based on CR and CRnum information 
@@ -104,7 +88,7 @@ Make_OM_vs_PerfMet_Matrix <- function(OperatingModels=NULL, ControlRule=NULL, Da
 }
 
 
-  
+# ChooseYrs is still not being added to file name, I can't figure out well  
 Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL){
   # Args:
        # OperatingModel: Name of operating model of interest
@@ -127,7 +111,7 @@ Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Da
   colnames(Data_PerfMet_vs_CR) <- ControlRules
   
   # Write data to file
-  write.table(Data_PerfMet_vs_CR, file=paste("Data_PerfMet_vs_CR", OperatingModel, OperatingModel, sep="_"))
+  write.table(Data_PerfMet_vs_CR, file=paste("Data_PerfMet_vs_CR", ChooseYrs, OperatingModel, sep="_"))
 }
 
 
