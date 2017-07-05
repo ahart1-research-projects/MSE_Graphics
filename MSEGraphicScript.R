@@ -1,10 +1,27 @@
 # MSE graphic code
 
+# Performance metrics to focus on
+     # % MSY >= 100%, acceptable level as low as 85%
+          # PropSSBrelSSBmsy = Proportion Years Herring SSB < SSBmsy(Median)
+          # PropSSBrelhalfSSBmsy = Proportino years herring SSB < 0.5SSBmsy(Median)
+          # PropSSBrel3SSBzero = Proportion years herring SSB <0.3SSBf=0 (Median)
+          # PropSSBrel75SSBzero = Proportion years herring SSB<0.75SSBf=0 (Median)
+     # Variation in annual yield, preferably <10%, as high as <25%
+          # Yvar = Interannual Variation in Herring Yield (Median)
+          # YieldrelMSY = Herring yield relative to MSY (Median)
+          # p50_IAVNR = Interannual variation in net revenue (Median)
+          # p50_IAVGR = Interannual variation in gross revenue (Median)
+     # Probability of overfished =0%, acceptable up to <25%
+          # PropFrelFmsy = Proportion years with overfishing (Median)
+     # Probability of herring closure (ABC=0) between <0-10%
+          # PropClosure = Proportion years with fishery closure (ABC=0; Median)
+
+################################################ Subset Data For Graphics ######################################################
 ##### Actually subset the data #####
-source("/Users/arhart/Research/MSE_Graphics/FormatHerringData.R")
+source("/Users/ahart2/Research/MSE_Graphics/FormatHerringData.R")
 
 ##### Full Subset Data #####
-HerringMSEData <- readRDS("/Users/arhart/Downloads/allres.rds")
+HerringMSEData <- readRDS("/Users/ahart2/Downloads/allres.rds")
 ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
 
@@ -21,8 +38,13 @@ ControlRuleNames <- unique(AllSubsettedHerringData[,"CRName"])
 # Performance metrics of interest
 PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "PropSSBrel3SSBzero", "PropSSBrel75SSBzero", "Yvar", "YieldrelMSY",
                              "p50_IAVNR", "p50_IAVGR", "PropFrelFmsy", "PropClosure")
+# Easily interpreted names of performance metrics, must be same order/length as PerformanceMetricVector, but should be more descriptive
+TranslatedPerfMetVector <- c("Prop Years SSB < SSBmsy", "Prop Years SSB < 0.5 SSBmsy", "Prop Years SSB < 0.3 SSBf=0", "Prop Years SSB < 0.75 SSBf=0", "Interannual Variation in Yield",
+                            "Yield Relative to MSY", "Interannual Variation Net Revenue", "Interannual Variation Gross Revenue", "Prop Years Overfishing Occurs", "Prop Year Closure Occurs")
 
-##### Format Subsetted data for barplots #####
+################################################ Produce Bargraphs ######################################################
+
+########## Format Subsetted data for barplots ##########
 ##### Produce OM vs CR data files #####
 # setwd("/Users/arhart/Research/MSE_Graphics/Data")
 # Loop over performance metrics for BB data
@@ -54,6 +76,78 @@ for(i in 1:length(OperatingModelList)){
   Make_CR_vs_PerfMet_Matrix(OperatingModel = OperatingModelList[i], ControlRules = ControlRuleNames, Data=CR_BB3yr_Data, PerformanceMetrics = PerformanceMetricVector, ChooseYrs = "BB3yr")
 }
 
+
+########## Make Bargraphs ##########
+##### Make plot with multiple performance metrics vs. multiple control rules for one operating model #####
+# Loop over operating models for BB data
+for(om in 1:length(OperatingModelList)){ # ????????? fix legend in png file
+  png(filename = paste("Graph_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"))
+  MultiplePerfMetricPlots(Data=paste("/Users/ahart2/Research/MSE_Graphics/Data_PerfMet_vs_CR_BB", OperatingModelList[om], sep="_"), 
+                          xlab= "Control Rules", 
+                          main= paste("Performance Metric Values for", OperatingModelList[om], "Operating Model BB", sep=" "),
+                          PlotColor = c("blue","green","yellow","orange","light blue","dark green","pink","red","brown","purple"),
+                          PlotType="PerformanceMetric_ControlRule")
+  dev.off()
+}
+# Loop over operating models for BB3yr data
+for(om in 1: length(OperatingModelList)){
+  png(filename = paste("Graph_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"))
+  MultiplePerfMetricPlots(Data=paste("/Users/ahart2/Research/MSE_Graphics/Data_PerfMet_vs_CR_BB3yr", OperatingModelList[om], sep="_"), 
+                          xlab= "Control Rules", 
+                          main= paste("Performance Metric Values for", OperatingModelList[om], "Operating Model BB3yr", sep=" "),
+                          PlotColor = c("blue","green","yellow","orange","light blue","dark green","pink","red","brown","purple"),
+                          PlotType="PerformanceMetric_ControlRule")
+  dev.off()
+}
+
+##### Make plot with multiple performance metrics vs. multiple operating models for one control rule #####
+# Loop over control rules for BB data
+for(cr in 1: length(ControlRuleNames)){
+  png(filename = paste("Graph_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"))
+  MultiplePerfMetricPlots(Data=paste("/Users/ahart2/Research/MSE_Graphics/Data_PerfMet_vs_OM_BB", ControlRuleNames[cr], sep="_"),
+                          xlab="Operating Models",
+                          main=paste("Performance Metric Values for", ControlRuleNames[cr], "Control Rule BB", sep=" "),
+                          PlotColor = c("blue","green","yellow","orange","light blue","dark green","pink", "red", "brown","purple"),
+                          PlotType = "PerformanceMetric_OperatingModel")
+  dev.off()
+}
+# Loop over control rules for BB3yr data
+for(cr in 1: length(ControlRuleNames)){
+  png(filename = paste("Graph_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"))
+  MultiplePerfMetricPlots(Data=paste("/Users/ahart2/Research/MSE_Graphics/Data_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], sep="_"),
+                          xlab="Operating Models",
+                          main=paste("Performance Metric Values for", ControlRuleNames[cr], "Control Rule BB3yr", sep=" "),
+                          PlotColor = c("blue","green","yellow","orange","light blue","dark green","pink", "red", "brown","purple"),
+                          PlotType = "PerformanceMetric_OperatingModel")
+  dev.off()
+}
+
+##### Make multipanel plot with one performance metric vs. multiple control rules for one operating model #####
+# Loop over performance metrics for BB data
+for(pm in 1: length(PerformanceMetricVector)){
+  png(filename=paste("Graph_Multipanel_One_OM_vs_CR_BB", PerformanceMetricVector[pm], ".png", sep="_"))
+  SinglePerfMetricPlots(Data = paste("/Users/ahart2/Research/MSE_Graphics/Data_OM_vs_CR_BB", PerformanceMetricVector[pm], sep="_"), # ???????? I don't think data is being referenced correctly
+                        ylab = TranslatedPerfMetVector[pm], 
+                        main = TranslatedPerfMetVector[pm],
+                        PlotType = "Multipanel_1_OperatingModel_MultipleConrolRule", 
+                        OperatingModelVector = OperatingModelList, 
+                        PlotColor = c("dark blue", "light green","light blue", "dark green", "red", "orange","pink", "purple", "yellow"))
+  dev.off()
+}
+# Loop over performance metrics for BB3yr data
+for(pm in 1: length(PerformanceMetricVector)){
+  png(filename=paste("Graph_Multipanel_One_OM_vs_CR_BB3yr", PerformanceMetricVector[pm], ".png", sep="_"))
+  SinglePerfMetricPlots(Data = paste("/Users/ahart2/Research/MSE_Graphics/Data_OM_vs_CR_BB3yr", PerformanceMetricVector[pm], sep="_"), # ???????? I don't think data is being referenced correctly
+                        ylab = TranslatedPerfMetVector[pm], 
+                        main = TranslatedPerfMetVector[pm],
+                        PlotType = "Multipanel_1_OperatingModel_MultipleConrolRule", 
+                        OperatingModelVector = OperatingModelList, 
+                        PlotColor = c("dark blue", "light green","light blue", "dark green", "red", "orange","pink", "purple", "yellow"))
+  dev.off()
+}
+
+
+################################################ Produce Decision Tables ######################################################
 
 ##### Set up info for Decision Table Function #####
 # RowNames
