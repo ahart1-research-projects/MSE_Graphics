@@ -12,13 +12,6 @@ rownames(TestBarPlotMatrix) <- c("OM1", "OM2", "OM3","OM4","OM5")
 OperatingModelVector <- c("OM1", "OM2", "OM3","OM4","OM5")
 
 
-# Code to make multi-panel plot 1 plot per OM, all CR, annual variation in yield data, BB
-SinglePerfMetricPlots(Data = Data_OM_vs_CR_BB_Yvar, # ???????? I don't think data is being referenced correctly
-                      ylab = "Annual Variability in Yield (%)", 
-                      main = "Annual Variability in Yield",
-                      PlotType = "Multipanel_1_OperatingModel_MultipleControlRule", 
-                      OperatingModelVector = OperatingModelList, 
-                      PlotColor = c("dark blue", "light green","light blue", "dark green", "red", "orange","pink", "purple", "yellow"))
 
 # Code to make multi-panel plot 1 plot per CR, all OM, annual variation in yield data, BB
 SinglePerfMetricPlots(Data=Data_OM_vs_CR_BB_Yvar,
@@ -38,7 +31,7 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
             # matrix rows are operating models
             # matrix columns are control rules
        # ylab: Name of y-axis label, should reflect name and units of perfomance metric
-       # main: Main title for plot
+       # main: Main title for plot, ungrouped plots will be pasted together with "for operating model ___" or "for control rule___"
        # PlotType: name of plot type, options below with associated additional arguments
             # PlotType=="1_OperatingModel_MultipleControlRule"
                  # OperatingModel: The name of the operating model associated with data
@@ -56,6 +49,10 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
                  # PlotColor: Vector of colors for plot, should be same length as nrow(Data)
             # PlotType=="X_MultipleOperatingModel_Y_MultipleControlRule"
                  # PlotColor: Vector of colors for plot, should be same length as ncol(Data)
+  
+  # Read in data
+  Data <- read.table(Data)
+  Data <- as.matrix(Data)
   
   # This turns data passed as extra arguments into a list for graphs to use
   ExtraArguments <- list(...) 
@@ -76,8 +73,7 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
             offset=0)
   } else if(PlotType=="Multipanel_1_OperatingModel_MultipleConrolRule"){
     # Multipanel 1 Operating Model, Multiple Control Rules
-    par(mfrow=c(nrow(Data),3, mar=c(0,0,0,0)))
-        
+    par(mfrow = c(4,3), mar=c(2,2,2,2))
         for(plot in 1:length(ExtraArguments$OperatingModelVector)){
           barplot(height=Data[plot,], 
                   width= rep(1,ncol(Data)), 
@@ -86,7 +82,7 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
                   col=ExtraArguments$PlotColor, 
                   xlab="Control Rule", 
                   ylab=ylab,
-                  main=paste(main, "for", ExtraArguments$OperatingModel, sep=" "),
+                  main=paste(main, "for", ExtraArguments$OperatingModel[plot], sep=" "),
                   axes=TRUE, 
                   cex.axis=1, 
                   cex.names=1, 
@@ -101,14 +97,14 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
             col=ExtraArguments$PlotColor, 
             xlab="Operating Model", 
             ylab=ylab,
-            main=main,
+            main=paste(main, "for", ExtraArguments$ControlRule, sep=" "), 
             axes=TRUE, 
             cex.axis=1, 
             cex.names=1, 
             offset=0)
   } else if(PlotType=="MultiPanel_1_ControlRule_MultipleOperatingModel"){
     # Multipanel 1 Control Rule, Multiple Operating Models
-      par(mfrow=c(ncol(Data),3, mar=c(0,0,0,0)))
+      par(mfrow=c(ncol(Data),3, mar=c(2,2,2,2)))
         
         for(plot in 1:length(ExtraArguments$ControlRuleVectors)){
           barplot(height=Data[plot,], 
@@ -118,7 +114,7 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
                   col=ExtraArguments$PlotColor, 
                   xlab="Operating Model", 
                   ylab=ylab,
-                  main=main,
+                  main=paste(main, "for", ExtraArguments$ControlRule[plot], sep=" "), 
                   axes=TRUE, 
                   cex.axis=1, 
                   cex.names=1, 
@@ -145,29 +141,10 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
   }
 }
 
-  
-  
-TestMultiplePerfMets <- matrix(NA,5,6)
-colnames(TestMultiplePerfMets) <- c("OM1","OM2","OM3","OM4","OM5","OM6")
-rownames(TestMultiplePerfMets) <- c("PerfMet1","PerfMet2","PerfMet3","PerfMet4","PerfMet5")
-TestMultiplePerfMets[1,1:6] <-1
-TestMultiplePerfMets[2,1:6] <- 2
-TestMultiplePerfMets[3,1:6] <-3
-TestMultiplePerfMets[4,1:6] <-4
-TestMultiplePerfMets[5,1:6] <-5
 
 
 # Code to make Multiple performance metrics plots
-MultiplePerfMetricPlots(Data="/Users/arhart/Research/MSE_Graphics/Data_OM_vs_CR_BB_Yvar", # ??????/ data not being referenced properly
-                        xlab= "Control Rules", 
-                        ylab=PerformanceMetricVector, 
-                        main="Performance Metric Values for HiM_LowSteep_AssBias_OldWt Operating Model",
-                        PlotColor = c("blue","green","yellow","orange","light blue","dark green","pink","red","brown","purple"),
-                        PlotType="PerformanceMetric_ControlRule")
-
-
- 
-MultiplePerfMetricPlots <- function(Data=NULL, xlab=NULL, ylab=NULL, main=NULL, PlotType=NULL, PlotColor=NULL){
+MultiplePerfMetricPlots <- function(Data=NULL, xlab=NULL, main=NULL, PlotType=NULL, PlotColor=NULL){
   # This function gives options for plotting values for a multiple performance metric across different operating models and/or control rules
   # It produces a grouped bar plot
   # Args:
@@ -175,7 +152,6 @@ MultiplePerfMetricPlots <- function(Data=NULL, xlab=NULL, ylab=NULL, main=NULL, 
             # Each row is a performance metric 
             # Columns are control rule or operating model
        # xlab: X-axis label, should be control rule or operating model depending on data
-       # ylab: Y-axis label, should be measure of performance metric
        # main: Main title for plot
        # PlotColor: Vector of colors for plot, should be equal to nrow(Data)
        # PlotType: name of plot type, options below with associated additional arguments
@@ -186,29 +162,25 @@ MultiplePerfMetricPlots <- function(Data=NULL, xlab=NULL, ylab=NULL, main=NULL, 
  Data <- as.matrix(Data)
   
  if(PlotType=="PerformanceMetric_OperatingModel"){
-   print("Here")
    # Grouped bar plot, bar for each performance metric, grouped by operating model
    par(mar=c(5,4,4,7), xpd=TRUE)
    barplot(Data, col=PlotColor,
            width=1, 
            beside=TRUE,
            xlab=xlab,
-           ylab=ylab,
+           ylab="Performance Metric Value",
            main=main)
-   legend("topright", inset=c(-0.60,0), fill=PlotColor, legend=rownames(Data))
+   legend("topright", inset=c(-0.20,0), fill=PlotColor, legend=rownames(Data))
  } else if(PlotType=="PerformanceMetric_ControlRule"){
-   print("There")
-   print(Data)
-   plot(Data[1,])
    # Grouped bar plot, bar for each performance metric, grouped by control rule
    par(mar=c(5,4,4,7), xpd=TRUE)
    barplot(Data, col=PlotColor,
            width=1, 
            beside=TRUE,
            xlab=xlab,
-           ylab=ylab,
+           ylab="Performance Metric Value",
            main=main)
-   legend("topright", inset=c(-0.60,0), fill=PlotColor, legend=rownames(Data))
+   legend("topright", inset=c(-0.20,0), fill=PlotColor, legend=rownames(Data))
  } else {
    print(paste("Error", PlotType, sep=" "))
  }
