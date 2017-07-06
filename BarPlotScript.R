@@ -13,13 +13,6 @@ OperatingModelVector <- c("OM1", "OM2", "OM3","OM4","OM5")
 
 
 
-# Code to make multi-panel plot 1 plot per CR, all OM, annual variation in yield data, BB
-SinglePerfMetricPlots(Data=Data_OM_vs_CR_BB_Yvar,
-                      ylab="Annual Variability in yield (%)",
-                      main="Annual Variability in Yield",
-                      PlotType= "Multipanel_1_ControlRule_MultipleOperatintModel",
-                      ControlRuleVector = ControlRuleNames,
-                      PlotColor = c("green", "yellow", "light blue", "red", "purple", "orange", "pink", "dark green"))
 
 
 
