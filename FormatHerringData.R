@@ -20,17 +20,17 @@ ExtractCRInformation <- function(OriginalDataFile=NULL, CRInfo=NULL, CRnumVector
   for(num in 1:length(CRnumVectorInfo)){
     # Pick rows from HerringMSEData matrix where CR and CRnum match chosen combination
     MatrixRows <- which(HerringMSEData[,which(colnames(HerringMSEData)=="CR")]==CRInfo & HerringMSEData[,which(colnames(HerringMSEData)=="CRnum")]==CRnumVectorInfo[num])
-    print(MatrixRows)
+    # print(MatrixRows)
     # Repeat CRName associated with CRnumVectorInfo[num]
     CRName <- rep(CRNames[num], length(MatrixRows)) 
-    print(CRName)
+    # print(CRName)
     
     # Combine labels column with corresponding row in HerringMSEData
     LabeledCRData <- cbind(CRName, HerringMSEData[MatrixRows,])
-    print(LabeledCRData)
+    # print(LabeledCRData)
     
     CRSubset_HerringMSEData <- rbind(CRSubset_HerringMSEData, LabeledCRData)
-    print(CRSubset_HerringMSEData)
+    # print(CRSubset_HerringMSEData)
   }
   
   return(CRSubset_HerringMSEData)
@@ -118,4 +118,53 @@ Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Da
   write.table(Data_PerfMet_vs_CR, file=paste("Data_PerfMet_vs_CR", ChooseYrs, OperatingModel, sep="_"))
 }
 
+Make_WebDiagram_Matrix_1_OM <- function(OperatingModel=NULL, ControlRules=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL){
+  # Args:
+       # OperatingModel: Name of operating model of interest
+       # ControlRules: Vector containing control rule names
+       # Data: A matrix where each performance metric is in a column, must have a column with CRNames
+       # PerformanceMetrics: Vector of performance metric names
+       # ChooseYrs: "BB" or "BB3yr", correspond to data source
+  # Returns:
+       # A table with information on chosen operating model for each control rule and each performance metric
+  
+  # Set up matrix
+  Data_Web_PerfMet_vs_CR <- matrix(NA, length(ControlRules), length(PerformanceMetrics))
+  
+  # Fill matrix with data corresponding to chosen Control Rule
+  for(metric in 1:length(PerformanceMetrics)){
+    Data_Web_PerfMet_vs_CR[ ,metric] <- Data[which(Data[,"OM"]== OperatingModel),PerformanceMetrics[metric]]
+  }
+  
+  colnames(Data_Web_PerfMet_vs_CR) <- PerformanceMetrics
+  rownames(Data_Web_PerfMet_vs_CR) <- ControlRules
+  
+  # Write data to file
+  write.table(Data_Web_PerfMet_vs_CR, file=paste("Data_Web_PerfMet_vs_CR", ChooseYrs, OperatingModel, sep="_"))
+}
+
+Make_WebDiagram_Matrix_1_CR <- function(OperatingModels=NULL, ControlRule=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL){
+  # Args:
+       # OperatingModels: Vector containing operating model names
+       # ControlRule: Name of control rule of interest
+       # Data: A matrix where each performance metric is in a column, must have a column with CRNames
+       # PerformanceMetrics: Vector of performance metric names
+       # ChooseYrs: "BB" or "BB3yr", correspond to data source
+  # Returns:
+       # A table with information on chosen control rule for each operating model and each performance metric
+  
+  # Set up matrix
+  Data_Web_PerfMet_vs_OM <- matrix(NA, length(OperatingModels), length(PerformanceMetrics))
+  
+  # Fill matrix with data corresponding to chosen Control Rule
+  for(metric in 1:length(PerformanceMetrics)){
+    Data_Web_PerfMet_vs_OM[ ,metric] <- Data[which(Data[,"CRName"]== ControlRule),PerformanceMetrics[metric]]
+  }
+  
+  colnames(Data_Web_PerfMet_vs_OM) <- PerformanceMetrics
+  rownames(Data_Web_PerfMet_vs_OM) <- OperatingModels
+  
+  # Write data to file
+  write.table(Data_Web_PerfMet_vs_OM, file=paste("Data_Web_PerfMet_vs_OM", ChooseYrs, ControlRule, sep="_"))
+}
 
