@@ -1,27 +1,31 @@
 # This script subsets the herring data
 
 ##### First define the function which picks out the subset of data we are interested in #####
-ExtractCRInformation <- function(HerringMSEData=NULL, CRInfo=NULL, CRnumVectorInfo=NULL, CRNames = NULL){
+ExtractCRInformation <- function(OriginalDataFile=NULL, CRInfo=NULL, CRnumVectorInfo=NULL, CRNames = NULL){
   # This script extracts the 9 control rules from all available data based on CR and CRnum information 
   # and appends a column containing control rule names and operating model numbered (arbitrary but consistent)
   
   # Args:
-       # HerringMSEData: File read in
+       # OriginalDataFile: Matrix with a column for every performance metric, contains all data
        # CRInfo: String containing information for CR (BB or BB3yr options)
-       # CRnumInfo: Vector containing different numbers for control rules
-       # CRNames: Vector containing strings of different control rules, must be same length as CRnumInfo
+       # CRnumVectorInfo: Vector containing different numbers for control rules, must be same length and order as CRNames
+       # CRNames: Vector containing strings of different control rules, must be same length and order as CRnumInfo
   # Returns: 
        # A matrix containing same columns as original data, only rows associated with 9 control rules of interest
   
   CRSubset_HerringMSEData <- NULL
   
+  HerringMSEData <- readRDS(OriginalDataFile)
+  
   for(num in 1:length(CRnumVectorInfo)){
     # Pick rows from HerringMSEData matrix where CR and CRnum match chosen combination
     MatrixRows <- which(HerringMSEData[,which(colnames(HerringMSEData)=="CR")]==CRInfo & HerringMSEData[,which(colnames(HerringMSEData)=="CRnum")]==CRnumVectorInfo[num])
     print(MatrixRows)
-    CRName <- rep(CRNames[num], length(MatrixRows))
+    # Repeat CRName associated with CRnumVectorInfo[num]
+    CRName <- rep(CRNames[num], length(MatrixRows)) 
     print(CRName)
     
+    # Combine labels column with corresponding row in HerringMSEData
     LabeledCRData <- cbind(CRName, HerringMSEData[MatrixRows,])
     print(LabeledCRData)
     
