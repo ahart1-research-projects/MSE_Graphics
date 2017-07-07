@@ -100,20 +100,20 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
   ##### Make plot with multiple performance metrics vs. multiple control rules for one operating model #####
   # Loop over operating models for BB data
   for(om in 1:length(OperatingModelList)){ # ????????? fix legend in png file
-    png(filename = paste("Graph_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"))
+    png(filename = paste("Graph_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"), width=800, height=500)
     MultiplePerfMetricPlots(Data=paste(paste(FilePath, "Data_PerfMet_vs_CR_BB", sep="/"), OperatingModelList[om], sep="_"), 
                             xlab= "Control Rules", 
-                            main= paste("Performance Metric Values for", OperatingModelList[om], "Operating Model BB", sep=" "),
+                            main= paste("Performance Metric Values for", "\n", OperatingModelList[om], "Operating Model BB", sep=" "),
                             PlotColor = PerformanceMetricColors,
                             PlotType="PerformanceMetric_ControlRule")
     dev.off()
   }
   # Loop over operating models for BB3yr data
   for(om in 1: length(OperatingModelList)){
-    png(filename = paste("Graph_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"))
+    png(filename = paste("Graph_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"), width=800, height=500)
     MultiplePerfMetricPlots(Data=paste(paste(FilePath, "Data_PerfMet_vs_CR_BB3yr", sep="/"), OperatingModelList[om], sep="_"), 
                             xlab= "Control Rules", 
-                            main= paste("Performance Metric Values for", OperatingModelList[om], "Operating Model BB3yr", sep=" "),
+                            main= paste("Performance Metric Values for", "\n", OperatingModelList[om], "Operating Model BB3yr", sep=" "),
                             PlotColor = PerformanceMetricColors,
                             PlotType="PerformanceMetric_ControlRule")
     dev.off()
@@ -122,7 +122,7 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
   ##### Make plot with multiple performance metrics vs. multiple operating models for one control rule #####
   # Loop over control rules for BB data
   for(cr in 1: length(ControlRuleNames)){
-    png(filename = paste("Graph_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"))
+    png(filename = paste("Graph_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"), width=800, height=500)
     MultiplePerfMetricPlots(Data=paste(paste(FilePath, "Data_PerfMet_vs_OM_BB", sep="/"), ControlRuleNames[cr], sep="_"),
                             xlab="Operating Models",
                             main=paste("Performance Metric Values for", ControlRuleNames[cr], "Control Rule BB", sep=" "),
@@ -132,7 +132,7 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
   }
   # Loop over control rules for BB3yr data
   for(cr in 1: length(ControlRuleNames)){
-    png(filename = paste("Graph_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"))
+    png(filename = paste("Graph_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"), width=800, height=500)
     MultiplePerfMetricPlots(Data=paste(paste(FilePath, "Data_PerfMet_vs_OM_BB3yr", sep="/"), ControlRuleNames[cr], sep="_"),
                             xlab="Operating Models",
                             main=paste("Performance Metric Values for", ControlRuleNames[cr], "Control Rule BB3yr", sep=" "),
@@ -153,57 +153,82 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
                           PlotColor = ControlRuleColors)
     dev.off()
   }
-  # Loop over performance metrics for BB3yr data
   for(pm in 1: length(PerformanceMetricVector)){
     png(filename=paste("Graph_Multipanel_One_OM_vs_CR_BB3yr", PerformanceMetricVector[pm], ".png", sep="_"))
     SinglePerfMetricPlots(Data = paste(paste(FilePath, "Data_OM_vs_CR_BB3yr", sep="/"), PerformanceMetricVector[pm], sep="_"), # ???????? I don't think data is being referenced correctly
                           ylab = TranslatedPerfMetVector[pm], 
                           main = TranslatedPerfMetVector[pm],
-                          PlotType = "MultiPanel_1_ControlRule_MultipleOperatingModel", 
+                          PlotType = "MultiPanel_1_OperatingModel_MultipleControlRule", 
                           OperatingModelVector = OperatingModelList, 
                           PlotColor = ControlRuleColors)
     dev.off()
   }
   
-  ########## Make Web/Radar Diagrams ##########
-  source(paste(FilePath, "WebDiagramScript.R", sep="/"))
+  # This doesnt work currently ??????????????????
+  # ##### Make multipanel plot with one performance metric vs. multiple operating model for one control rule #####
+  # # Loop over performance metrics for BB data
+  # for(pm in 1: length(PerformanceMetricVector)){
+  #   png(filename = paste("Graph_Multipanel_One_CR_vs_OM_BB", PerformanceMetricVector[pm], ".png", sep="_"))
+  #   SinglePerfMetricPlots(Data=paste(paste(FilePath, "Data_OM_vs_CR_BB", sep="/"), PerformanceMetricVector[pm], sep="_"),
+  #                         ylab= TranslatedPerfMetVector[pm],
+  #                         main= TranslatedPerfMetVector[pm],
+  #                         PlotType= "MultiPanel_1_ControlRule_MultipleOperatingModel",
+  #                         ControlRuleVector = ControlRuleNames,
+  #                         PlotColor = OperatingModelColors)
+  #   dev.off()
+  # }
+  # # Loop over performance metrics for BB3yr
+  # for(pm in 1:length(PerformanceMetricVector)){
+  #   png(filename = paste("Graph_Multipanel_One_CR_vs_OM_BB3yr", sep="/"), PerformanceMetricVector[pm], ".png", sep="_")
+  #   SinglePerfMetricPlots(Data=paste(paste(FilePath, "Data_OM_vs_CR_BB3yr", sep="/"), PerformanceMetricVector[pm], sep="_"),
+  #                         ylab= TranslatedPerfMetVector[pm],
+  #                         main= TranslatedPerfMetVector[pm],
+  #                         PlotType= "MultiPanel_1_ControlRule_MultipleOperatingModel",
+  #                         ControlRuleVector = ControlRuleNames,
+  #                         PlotColor = OperatingModelColors)
+  #   dev.off()
+  # }
   
-  ##### Make Web diagrams, each web = performance metrics for one operating model under same control rule #####
-  # Loop over control rules for BB data
-  for(cr in 1:length(ControlRuleNames)){
-    WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB", sep="/"), ControlRuleNames[cr], sep="_" ),
-                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
-                    LegendLabels = OperatingModelList,
-                    AxisLabels = TranslatedPerfMetVector,
-                    OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"))
-  }
-  # Loop over control rules for BB3yr data
-  for(cr in 1:length(ControlRuleNames)){
-    WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB3yr", sep="/"), ControlRuleNames[cr], sep="_" ),
-                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
-                    LegendLabels = OperatingModelList,
-                    AxisLabels = TranslatedPerfMetVector,
-                    OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"))
-  }
-  
-  ##### Make web diagrams, each web= performance metrics for one control rule under the same operating model #####
-  # Loop over operating models for BB data
-  for(om in 1:length(OperatingModelList)){
-    WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB", sep="/"), OperatingModelList[om], sep="_" ),
-                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
-                    LegendLabels = ControlRuleNames,
-                    AxisLabels = TranslatedPerfMetVector,
-                    OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"))
-  }
-  # Loop over operating models for BB3yr data
-  for(om in 1:length(OperatingModelList)){
-    WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB3yr", sep="/"), OperatingModelList[om], sep="_" ),
-                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
-                    LegendLabels = ControlRuleNames,
-                    AxisLabels = TranslatedPerfMetVector,
-                    OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"))
-  }
-  
+
+  # ########## Make Web/Radar Diagrams ##########
+  # source(paste(FilePath, "WebDiagramScript.R", sep="/"))
+  # 
+  # ##### Make Web diagrams, each web = performance metrics for one operating model under same control rule #####
+  # # Loop over control rules for BB data
+  # for(cr in 1:length(ControlRuleNames)){
+  #   WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB", sep="/"), ControlRuleNames[cr], sep="_" ),
+  #                   PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
+  #                   LegendLabels = OperatingModelList,
+  #                   AxisLabels = TranslatedPerfMetVector,
+  #                   OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"))
+  # }
+  # # Loop over control rules for BB3yr data
+  # for(cr in 1:length(ControlRuleNames)){
+  #   WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB3yr", sep="/"), ControlRuleNames[cr], sep="_" ),
+  #                   PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
+  #                   LegendLabels = OperatingModelList,
+  #                   AxisLabels = TranslatedPerfMetVector,
+  #                   OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"))
+  # }
+  # 
+  # ##### Make web diagrams, each web= performance metrics for one control rule under the same operating model #####
+  # # Loop over operating models for BB data
+  # for(om in 1:length(OperatingModelList)){
+  #   WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB", sep="/"), OperatingModelList[om], sep="_" ),
+  #                   PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
+  #                   LegendLabels = ControlRuleNames,
+  #                   AxisLabels = TranslatedPerfMetVector,
+  #                   OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"))
+  # }
+  # # Loop over operating models for BB3yr data
+  # for(om in 1:length(OperatingModelList)){
+  #   WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB3yr", sep="/"), OperatingModelList[om], sep="_" ),
+  #                   PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
+  #                   LegendLabels = ControlRuleNames,
+  #                   AxisLabels = TranslatedPerfMetVector,
+  #                   OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"))
+  # }
+  # 
 }
 
 
@@ -211,30 +236,6 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
 
 
 
-# error in plot.window that I don't understand
-##### Make multipanel plot with one performance metric vs. multiple operating model for one control rule #####
-# Loop over performance metrics for BB data
-for(pm in 1: length(PerformanceMetricVector)){
-  png(filename = paste("Graph_Multipanel_One_CR_vs_OM_BB", PerformanceMetricVector[pm], ".png", sep="_"))
-  SinglePerfMetricPlots(Data=paste(paste(FilePath, "Data_OM_vs_CR_BB", sep="/"), PerformanceMetricVector[pm], sep="_"),
-                        ylab= TranslatedPerfMetVector[pm],
-                        main= TranslatedPerfMetVector[pm],
-                        PlotType= "MultiPanel_1_ControlRule_MultipleOperatingModel",
-                        ControlRuleVector = ControlRuleNames,
-                        PlotColor = OperatingModelColors)
-  dev.off()
-}
-# Loop over performance metrics for BB3yr
-for(pm in 1:length(PerformanceMetricVector)){
-  png(filename = paste("Graph_Multipanel_One_CR_vs_OM_BB3yr", sep="/"), PerformanceMetricVector[pm], ".png", sep="_")
-  SinglePerfMetricPlots(Data=paste(paste(FilePath, "Data_OM_vs_CR_BB3yr", sep="/"), PerformanceMetricVector[pm], sep="_"),
-                        ylab= TranslatedPerfMetVector[pm],
-                        main= TranslatedPerfMetVector[pm],
-                        PlotType= "MultiPanel_1_ControlRule_MultipleOperatingModel",
-                        ControlRuleVector = ControlRuleNames,
-                        PlotColor = OperatingModelColors)
-  dev.off()
-}
 
 
 
@@ -349,7 +350,7 @@ MakeGraphicDecisionTable(Title="PerformanceMetric", IconList=c("HerringFishery",
 # Add or remove corresponding items from both
      # OperatingModelList and TranslatedOperatingModel
 
-MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
 
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
@@ -360,7 +361,7 @@ MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "Pr
 # Easily interpreted names of performance metrics, must be same order/length as PerformanceMetricVector, but should be more descriptive
 MSE_TranslatedPerfMetVector <- c("Prop Years SSB < SSBmsy", "Prop Years SSB < 0.5 SSBmsy", "Prop Years SSB < 0.3 SSBf=0", "Prop Years SSB < 0.75 SSBf=0", "Interannual Variation in Yield",
                              "Yield Relative to MSY", "Interannual Variation Net Revenue", "Interannual Variation Gross Revenue", "Prop Years Overfishing Occurs", "Prop Year Closure Occurs")
-FilePath <- "/Users/ahart2/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
                         "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
                         "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
@@ -380,7 +381,5 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile, ControlRuleNames = MSE_Con
 # ?????? returns unused arguments? 
 
 
-
-
-
+# Try fixing plots
 
