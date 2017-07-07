@@ -278,27 +278,27 @@ GraphicHeightsAllOms <- c()
 
 
 # TestData used for plot coding
-TestBarDataVector <- c(1,2,3,4,5,6,7,8,9,10)
-TestBarDataMultiple <- list(c(1,2,3),5,5,5,5,5,5,5)
-TestBarDataMatrix <- as.matrix(c(1,2,3,4,5,6,7,8,9,10,10,9,8,7,6,5,4,3,2,1),2,10)
-TestStackedBar <-NULL
-TestStackedBar$NumberPetTurkey <- c(1,2,3,0,0,1,0,1,0,0)
-TestStackedBar$NumberOtherPets <- c(0,2,4,3,1,0,0,1,0,2)
-TestStackedBarData <- list(TestStackedBar, TestStackedBar, TestStackedBar, TestStackedBar,
-                        TestStackedBar, TestStackedBar, TestStackedBar, TestStackedBar,
-                        TestStackedBar, TestStackedBar)
+# TestBarDataVector <- c(1,2,3,4,5,6,7,8,9,10)
+# TestBarDataMultiple <- list(c(1,2,3),5,5,5,5,5,5,5)
+# TestBarDataMatrix <- as.matrix(c(1,2,3,4,5,6,7,8,9,10,10,9,8,7,6,5,4,3,2,1),2,10)
+# TestStackedBar <-NULL
+# TestStackedBar$NumberPetTurkey <- c(1,2,3,0,0,1,0,1,0,0)
+# TestStackedBar$NumberOtherPets <- c(0,2,4,3,1,0,0,1,0,2)
+# TestStackedBarData <- list(TestStackedBar, TestStackedBar, TestStackedBar, TestStackedBar,
+#                         TestStackedBar, TestStackedBar, TestStackedBar, TestStackedBar,
+#                         TestStackedBar, TestStackedBar)
 #TestStackedBar$LivesOnFarm <- c("yes", "yes", "yes", "no", "no", "no", "yes", "yes", "no", "no")
 
 # setwd to file with graphics
 setwd("/Users/arhart/Research/MSE_Graphics/Icons")
-
+IconList=c("HerringFishery", "HerringResource", "LobsterFishery", "TunaFishery", "WhaleSeabirdWatching")
 # TryMaking Table
 MakeGraphicDecisionTable(Title="PerformanceMetric", IconList=c("HerringFishery", "HerringResource", "LobsterFishery", "TunaFishery", "WhaleSeabirdWatching"),
                          RowCategoryName = "Operating Models", "Control Rule Options", 
                          RowNames = c("OM1", "OM2", "OM3", "OM4", "OM5","OM6","OM7","OM8"),
                          ColumnNames = c("CR1", "CR2","CR3","CR4","CR5","CR6","CR7","CR8","CR9"),
                          GraphicLayout = GraphicLayoutAllOMs, GraphicNRow = GraphicRowsAllOMs, 
-                         GraphicNCol = GraphicColumnsAllOMs, PlotOrder = c("VerticalBarplot","VerticalStackedBarplot","HorizontalBarplot","HorizontalStackedBarplot","Pictogram",0,0,0,0), 
+                         GraphicNCol = GraphicColumnsAllOMs, PlotOrder = c("VerticalBarplot","VerticalStackedBarplot","HorizontalBarplot","HorizontalStackedBarplot",0,0,0,0,0), 
                          VerticalBarData = TestBarDataMultiple, VerticalBarWidths = c(1,2,3,4,5,6,7,8,9,10),
                          VerticalBarColors=c("blue","red"), VerticalBarXLabel="Xlabel", VerticalBarYLabel="YLabel",
                          VerticalBarAxes = TRUE,
@@ -350,7 +350,7 @@ MakeGraphicDecisionTable(Title="PerformanceMetric", IconList=c("HerringFishery",
 # Add or remove corresponding items from both
      # OperatingModelList and TranslatedOperatingModel
 
-MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
 
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
@@ -364,7 +364,7 @@ MSE_PerformanceMetricVector <- c("YieldrelMSY", "Yvar", "PropSSBrelhalfSSBmsy", 
 #                              "Yield Relative to MSY", "Interannual Variation Net Revenue", "Interannual Variation Gross Revenue", "Prop Years Overfishing Occurs", "Prop Year Closure Occurs")
 
 MSE_TranslatedPerfMetVector <- c("Yield Relative to MSY", "Interannual Variation in Yield", "Probability of Overfished", "Prop Year Closure Occurs")
-MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
                         "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
                         "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
@@ -385,4 +385,8 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile, ControlRuleNames = MSE_Con
 
 
 # Try fixing plots
-
+WebDiagramPlots(Data = paste(paste(MSE_FilePath, "Data_Web_PerfMet_vs_CR_BB3yr", sep="/"), MSE_OperatingModelList[1], sep="_" ),
+                PlotColor=MSE_ControlRuleColors,
+                LegendLabels = MSE_ControlRuleNames,
+                AxisLabels = MSE_TranslatedPerfMetVector,
+                OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB3yr", MSE_OperatingModelList[1], ".png", sep="_"))
