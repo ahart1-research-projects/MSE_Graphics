@@ -66,11 +66,11 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
             offset=0)
   } else if(PlotType=="MultiPanel_1_OperatingModel_MultipleControlRule"){
     # Multipanel 1 Operating Model, Multiple Control Rules
-    par(mfrow = c(4,3), mar=c(2,2,2,2))
+    par(mfrow = c(4,3), mar=c(2,4,2,2))
     # For each operating model make barplot of values under different control rules
         for(plot in 1:length(ExtraArguments$OperatingModelVector)){ 
           barplot(height=Data[plot,], 
-                  width= rep(1,ncol(Data)), 
+                  width= rep(1, ncol(Data)), 
                   space=1, 
                   horiz=FALSE, 
                   col=ExtraArguments$PlotColor, 
@@ -82,6 +82,8 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
                   cex.names=1, 
                   offset=0)  
         }
+    plot(1,1,type = "n", axes = FALSE, ann = FALSE)
+    legend("topleft", inset=c(-0.2,-0.4), cex=0.77, fill=ExtraArguments$PlotColor, legend=rownames(Data))
   } else if(PlotType=="1_ControlRule_MultipleOperatingModel"){ # ?????????? not tested yet
     # 1 Control Rule , Multiple Operating Models
     barplot(height=Data[,ExtraArguments$ControlRule], 
@@ -98,11 +100,11 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
             offset=0)
   } else if(PlotType=="MultiPanel_1_ControlRule_MultipleOperatingModel"){ 
     # Multipanel 1 Control Rule, Multiple Operating Models
-      par(mfrow = c(4,3), mar=c(2,2,2,2))
+      par(mfrow = c(4,3), mar=c(2,4,2,2))
     # For each control rule make barplot of values under different operating models
-        for(plot in 1:length(ExtraArguments$ControlRuleVectors)){
-          barplot(height=Data[,plot], 
-                  width= rep(1,ncol(Data)), 
+        for(plot in 1:length(ExtraArguments$ControlRuleVector)){
+          barplot(height=Data[ ,plot], 
+                  width= rep(1,nrow(Data)), 
                   space=1, 
                   horiz=FALSE, 
                   col=ExtraArguments$PlotColor, 
@@ -113,7 +115,9 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
                   cex.axis=1, 
                   cex.names=1, 
                   offset=0) 
-         } 
+        }
+    plot(1,1,type = "n", axes = FALSE, ann = FALSE)
+    legend("topleft", inset=c(-0.2,-0.4), cex=0.77, fill=ExtraArguments$PlotColor, legend=rownames(Data))
   }  else if(PlotType=="Y_MultipleOperatingModel_X_MultipleControlRule"){
     # Grouped bar plot, bar for each operating model
     par(mar=c(5,4,4,7), xpd=TRUE)
@@ -157,24 +161,24 @@ MultiplePerfMetricPlots <- function(Data=NULL, xlab=NULL, main=NULL, PlotType=NU
   
  if(PlotType=="PerformanceMetric_OperatingModel"){
    # Grouped bar plot, bar for each performance metric, grouped by operating model
-   par(mar=c(5,4,4,7), xpd=TRUE)
+   par(mar=c(5,4,4,9), xpd=TRUE)
    barplot(Data, col=PlotColor,
            width=1, 
            beside=TRUE,
            xlab=xlab,
            ylab="Performance Metric Value",
            main=main)
-   legend("topright", inset=c(-0.20,0), fill=PlotColor, legend=rownames(Data))
+   legend("topright", inset=c(-0.2,0), cex=0.8, fill=PlotColor, legend=rownames(Data))
  } else if(PlotType=="PerformanceMetric_ControlRule"){
    # Grouped bar plot, bar for each performance metric, grouped by control rule
-   par(mar=c(5,4,4,7), xpd=TRUE)
+   par(mar=c(5,4,4,9), xpd=TRUE)
    barplot(Data, col=PlotColor,
            width=1, 
            beside=TRUE,
            xlab=xlab,
            ylab="Performance Metric Value",
            main=main)
-   legend("topright", inset=c(-0.20,0), fill=PlotColor, legend=rownames(Data))
+   legend("topright", inset=c(-0.2,0), cex=0.8, fill=PlotColor, legend=rownames(Data))
  } else {
    print(paste("Error", PlotType, sep=" "))
  }
