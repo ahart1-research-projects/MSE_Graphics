@@ -7,7 +7,7 @@ plot_indicators <- function(ind,
                             axis_labels=1:8,
                             plotfile='indicator_plot.pdf',
                             
-                            standardized=FALSE, autodetectAxisLimits=FALSE...) {
+                            standardized=FALSE, autodetectAxisLimits=FALSE, ...) {
   #throw warning if Isaac forgets to use a color vector the length of his scenarios
   if (length(colvec)<nrow(ind)) {
     print("YOU SUPPLIED A COLOR VECTOR THAT IS SHORTER THAN THE NUMBER OF SCNEARIOS")
@@ -16,12 +16,12 @@ plot_indicators <- function(ind,
   }
   
   
-  aa2 <- ind[,-1]
+  aa2 <- ind
   #make all in zero to max(ind), can add code here to retain 0->1 for proportion indicators.
   aa1 <- rep(1,ncol(aa2))
   aa1 <- apply(aa2,2,max,na.rm=TRUE)
-  aa0 <- aa1
-  aa0[] <-0
+  aa0 <- aa1 # max value
+  aa0[] <-0 # zero value
   #make MTL indicators minimum of 3
   pick <- grep("Mtl",names(ind)[-1])
   aa0[pick] <- 2
@@ -125,6 +125,7 @@ WebDiagramPlots <- function(Data=NULL, PlotColor = NULL, LegendLabels = NULL, Ax
   
   Data <- read.table(Data)
   Data <- as.data.frame(Data)
+  print(Data)
   
   plot_indicators(ind=Data,
                   colvec=PlotColor,
