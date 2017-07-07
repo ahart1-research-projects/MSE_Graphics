@@ -190,45 +190,45 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
   # }
   
 
-  # ########## Make Web/Radar Diagrams ##########
-  # source(paste(FilePath, "WebDiagramScript.R", sep="/"))
-  # 
-  # ##### Make Web diagrams, each web = performance metrics for one operating model under same control rule #####
-  # # Loop over control rules for BB data
-  # for(cr in 1:length(ControlRuleNames)){
-  #   WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB", sep="/"), ControlRuleNames[cr], sep="_" ),
-  #                   PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
-  #                   LegendLabels = OperatingModelList,
-  #                   AxisLabels = TranslatedPerfMetVector,
-  #                   OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"))
-  # }
-  # # Loop over control rules for BB3yr data
-  # for(cr in 1:length(ControlRuleNames)){
-  #   WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB3yr", sep="/"), ControlRuleNames[cr], sep="_" ),
-  #                   PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
-  #                   LegendLabels = OperatingModelList,
-  #                   AxisLabels = TranslatedPerfMetVector,
-  #                   OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"))
-  # }
-  # 
-  # ##### Make web diagrams, each web= performance metrics for one control rule under the same operating model #####
-  # # Loop over operating models for BB data
-  # for(om in 1:length(OperatingModelList)){
-  #   WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB", sep="/"), OperatingModelList[om], sep="_" ),
-  #                   PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
-  #                   LegendLabels = ControlRuleNames,
-  #                   AxisLabels = TranslatedPerfMetVector,
-  #                   OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"))
-  # }
-  # # Loop over operating models for BB3yr data
-  # for(om in 1:length(OperatingModelList)){
-  #   WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB3yr", sep="/"), OperatingModelList[om], sep="_" ),
-  #                   PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
-  #                   LegendLabels = ControlRuleNames,
-  #                   AxisLabels = TranslatedPerfMetVector,
-  #                   OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"))
-  # }
-  # 
+  ########## Make Web/Radar Diagrams ##########
+  source(paste(FilePath, "WebDiagramScript.R", sep="/"))
+
+  ##### Make Web diagrams, each web = performance metrics for one operating model under same control rule #####
+  # Loop over control rules for BB data
+  for(cr in 1:length(ControlRuleNames)){
+    WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB", sep="/"), ControlRuleNames[cr], sep="_" ),
+                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
+                    LegendLabels = OperatingModelList,
+                    AxisLabels = TranslatedPerfMetVector,
+                    OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"))
+  }
+  # Loop over control rules for BB3yr data
+  for(cr in 1:length(ControlRuleNames)){
+    WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB3yr", sep="/"), ControlRuleNames[cr], sep="_" ),
+                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
+                    LegendLabels = OperatingModelList,
+                    AxisLabels = TranslatedPerfMetVector,
+                    OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"))
+  }
+
+  ##### Make web diagrams, each web= performance metrics for one control rule under the same operating model #####
+  # Loop over operating models for BB data
+  for(om in 1:length(OperatingModelList)){
+    WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB", sep="/"), OperatingModelList[om], sep="_" ),
+                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
+                    LegendLabels = ControlRuleNames,
+                    AxisLabels = TranslatedPerfMetVector,
+                    OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"))
+  }
+  # Loop over operating models for BB3yr data
+  for(om in 1:length(OperatingModelList)){
+    WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB3yr", sep="/"), OperatingModelList[om], sep="_" ),
+                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
+                    LegendLabels = ControlRuleNames,
+                    AxisLabels = TranslatedPerfMetVector,
+                    OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"))
+  }
+
 }
 
 
@@ -350,18 +350,21 @@ MakeGraphicDecisionTable(Title="PerformanceMetric", IconList=c("HerringFishery",
 # Add or remove corresponding items from both
      # OperatingModelList and TranslatedOperatingModel
 
-MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
 
 # Performance metrics of interest
-MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "PropSSBrel3SSBzero", "PropSSBrel75SSBzero", "Yvar", "YieldrelMSY",
-                             "p50_IAVNR", "p50_IAVGR", "PropFrelFmsy", "PropClosure")
+# MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "PropSSBrel3SSBzero", "PropSSBrel75SSBzero", "Yvar", "YieldrelMSY",
+#                             "p50_IAVNR", "p50_IAVGR", "PropFrelFmsy", "PropClosure")
+MSE_PerformanceMetricVector <- c("YieldrelMSY", "Yvar", "PropSSBrelhalfSSBmsy", "PropClosure")
 # Easily interpreted names of performance metrics, must be same order/length as PerformanceMetricVector, but should be more descriptive
-MSE_TranslatedPerfMetVector <- c("Prop Years SSB < SSBmsy", "Prop Years SSB < 0.5 SSBmsy", "Prop Years SSB < 0.3 SSBf=0", "Prop Years SSB < 0.75 SSBf=0", "Interannual Variation in Yield",
-                             "Yield Relative to MSY", "Interannual Variation Net Revenue", "Interannual Variation Gross Revenue", "Prop Years Overfishing Occurs", "Prop Year Closure Occurs")
-MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+# MSE_TranslatedPerfMetVector <- c("Prop Years SSB < SSBmsy", "Prop Years SSB < 0.5 SSBmsy", "Prop Years SSB < 0.3 SSBf=0", "Prop Years SSB < 0.75 SSBf=0", "Interannual Variation in Yield",
+#                              "Yield Relative to MSY", "Interannual Variation Net Revenue", "Interannual Variation Gross Revenue", "Prop Years Overfishing Occurs", "Prop Year Closure Occurs")
+
+MSE_TranslatedPerfMetVector <- c("Yield Relative to MSY", "Interannual Variation in Yield", "Probability of Overfished", "Prop Year Closure Occurs")
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
                         "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
                         "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
