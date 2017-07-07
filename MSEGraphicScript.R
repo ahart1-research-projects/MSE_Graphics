@@ -144,8 +144,8 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
   ##### Make multipanel plot with one performance metric vs. multiple control rules for one operating model #####
   # Loop over performance metrics for BB data
   for(pm in 1: length(PerformanceMetricVector)){
-    png(filename=paste("Graph_Multipanel_One_OM_vs_CR_BB", PerformanceMetricVector[pm], ".png", sep="_"))
-    SinglePerfMetricPlots(Data = paste(paste(FilePath, "Data_OM_vs_CR_BB", sep="/"), PerformanceMetricVector[pm], sep="_"), # ???????? I don't think data is being referenced correctly
+    png(filename=paste("Graph_Multipanel_One_OM_vs_CR_BB", PerformanceMetricVector[pm], ".png", sep="_"), width=850, height=700)
+    SinglePerfMetricPlots(Data = paste(paste(FilePath, "Data_OM_vs_CR_BB", sep="/"), PerformanceMetricVector[pm], sep="_"), 
                           ylab = TranslatedPerfMetVector[pm], 
                           main = TranslatedPerfMetVector[pm],
                           PlotType = "MultiPanel_1_OperatingModel_MultipleControlRule", 
@@ -154,8 +154,8 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
     dev.off()
   }
   for(pm in 1: length(PerformanceMetricVector)){
-    png(filename=paste("Graph_Multipanel_One_OM_vs_CR_BB3yr", PerformanceMetricVector[pm], ".png", sep="_"))
-    SinglePerfMetricPlots(Data = paste(paste(FilePath, "Data_OM_vs_CR_BB3yr", sep="/"), PerformanceMetricVector[pm], sep="_"), # ???????? I don't think data is being referenced correctly
+    png(filename=paste("Graph_Multipanel_One_OM_vs_CR_BB3yr", PerformanceMetricVector[pm], ".png", sep="_"), width=850, height=700)
+    SinglePerfMetricPlots(Data = paste(paste(FilePath, "Data_OM_vs_CR_BB3yr", sep="/"), PerformanceMetricVector[pm], sep="_"), 
                           ylab = TranslatedPerfMetVector[pm], 
                           main = TranslatedPerfMetVector[pm],
                           PlotType = "MultiPanel_1_OperatingModel_MultipleControlRule", 
@@ -197,7 +197,7 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
   # Loop over control rules for BB data
   for(cr in 1:length(ControlRuleNames)){
     WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB", sep="/"), ControlRuleNames[cr], sep="_" ),
-                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
+                    PlotColor=OperatingModelColors,
                     LegendLabels = OperatingModelList,
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"))
@@ -205,7 +205,7 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
   # Loop over control rules for BB3yr data
   for(cr in 1:length(ControlRuleNames)){
     WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_OM_BB3yr", sep="/"), ControlRuleNames[cr], sep="_" ),
-                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink"),
+                    PlotColor=OperatingModelColors,
                     LegendLabels = OperatingModelList,
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste("Graph_Web_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"))
@@ -215,7 +215,7 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
   # Loop over operating models for BB data
   for(om in 1:length(OperatingModelList)){
     WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB", sep="/"), OperatingModelList[om], sep="_" ),
-                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
+                    PlotColor=ControlRuleColors,
                     LegendLabels = ControlRuleNames,
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"))
@@ -223,7 +223,7 @@ ProducePlots <- function(OriginalDataFile=NULL, ControlRuleNames=NULL, ControlRu
   # Loop over operating models for BB3yr data
   for(om in 1:length(OperatingModelList)){
     WebDiagramPlots(Data = paste(paste(FilePath, "Data_Web_PerfMet_vs_CR_BB3yr", sep="/"), OperatingModelList[om], sep="_" ),
-                    PlotColor=c("red", "orange", "yellow", "green", "light blue", "dark blue", "purple", "pink", "dark green"),
+                    PlotColor=ControlRuleColors,
                     LegendLabels = ControlRuleNames,
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste("Graph_Web_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"))
@@ -372,8 +372,8 @@ MSE_TranslatedOperatingModel <- c("OM1", "OM2", "OM3", "OM4", "OM5", "OM6", "OM7
 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
 MSE_OperatingModelColors <- c("#084081", "#0868ac", "#800026", "#bd0026", "#4eb3d3", "#a8ddb5", "#fc4e2a", "#feb24c")
-MSE_PerformanceMetricColors <- c("#084081", "#0868ac", "#800026", "#bd0026", "#4eb3d3", "#a8ddb5", "#fc4e2a", "#feb24c", "#238443", "#f768a1")
-
+# MSE_PerformanceMetricColors <- c("#084081", "#0868ac", "#800026", "#bd0026", "#4eb3d3", "#a8ddb5", "#fc4e2a", "#feb24c", "#238443", "#f768a1")
+MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a")
 
 # This formats the data and makes all associated plots
 ProducePlots(OriginalDataFile = MSE_OriginalDataFile, ControlRuleNames = MSE_ControlRuleNames, ControlRuleColors = MSE_ControlRuleColors, 
