@@ -6,7 +6,7 @@ ExtractCRInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRNumber
   # and appends a column containing control rule names and operating model numbered (arbitrary but consistent)
   
   # Args:
-       # OriginalDataFile: Matrix with a column for every performance metric, contains all data
+       # OriginalDataFile: Matrix with a column for every performance metric, contains all data, RDS file type
        # ChooseYrs: String containing information for CR (BB or BB3yr options)
        # CRNumbers: Vector containing different numbers for control rules, must be same length and order as CRNames
        # CRNames: Vector containing strings of different control rules, must be same length and order as CRnumInfo
@@ -44,7 +44,7 @@ ExtractCRInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRNumber
 
 ##### Create a matrix with focused subset for plotting #####
 
-Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=NULL, PerformanceMetric=NULL, ChooseYrs=NULL, TranslatedOperatingModel=NULL, TranslatedCRName=NULL){
+Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=NULL, PerformanceMetric=NULL, ChooseYrs=NULL, TranslatedOperatingModel=NULL, TranslatedCRName=NULL, OutputDirectory){
   # Args:
        # OperatingModels: Vector containing operating model names
        # ControlRules: Vector containing control rule names
@@ -53,10 +53,15 @@ Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=N
        # ChooseYrs: "BB" or "BB3yr", correspond to data source
        # TranslatedOperatingModel: Vector of full operating model names, must be same order and length as OperatingModelList
        # TranslatedCRName: Vector of full control rule names, must be same order and length as CRNames
+       # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
   # Returns:
        # A table with information on chosen performance metric for each operating model and each control rule
             # Rows are operating models
             # Columns are control rules
+  
+  # Read in data
+  Data <- read.table(Data)
+  Data <- as.matrix(Data)
   
   # Set up matrix
   Data_OM_vs_CR <- matrix(NA, length(OperatingModels), length(ControlRules))
@@ -69,13 +74,13 @@ Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=N
   colnames(Data_OM_vs_CR) <- TranslatedCRName
 
   # Write data to file
-  write.table(Data_OM_vs_CR, file=paste("Data_OM_vs_CR", ChooseYrs, PerformanceMetric, sep="_"))
+  write.table(Data_OM_vs_CR, file=paste(FilePath, OutputDirectory, paste("Data_OM_vs_CR", ChooseYrs, PerformanceMetric, sep="_"), sep="/"))
 }
 
 
 
 Make_OM_vs_PerfMet_Matrix <- function(OperatingModels=NULL, ControlRule=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL, 
-                                      TranslatedOperatingModel=NULL, TranslatedPerfMetVector=NULL){
+                                      TranslatedOperatingModel=NULL, TranslatedPerfMetVector=NULL, OutputDirectory=NULL){
   # Args:
        # OperatingModels: Vector containing operating model names
        # ControlRule: Name of control rule of interest
@@ -84,9 +89,14 @@ Make_OM_vs_PerfMet_Matrix <- function(OperatingModels=NULL, ControlRule=NULL, Da
        # ChooseYrs: "BB" or "BB3yr", correspond to data source
        # TranslatedOperatingModel: Vector of full operating model names, must be same order and length as OperatingModelList
        # TranslatedPerfMetVector: Vector of full performance metric names, must be same order and length as PerformanceMetrics
+       # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
   
   # Returns:
        # A table with information on chosen control rule for each operating model and each performance metric
+  
+  # Read in data
+  Data <- read.table(Data)
+  Data <- as.matrix(Data)
   
   # Set up matrix
   Data_PerfMet_vs_OM <- matrix(NA, length(PerformanceMetrics), length(OperatingModels))
@@ -100,12 +110,12 @@ Make_OM_vs_PerfMet_Matrix <- function(OperatingModels=NULL, ControlRule=NULL, Da
   colnames(Data_PerfMet_vs_OM) <- TranslatedOperatingModel
   
   # Write data to file
-  write.table(Data_PerfMet_vs_OM, file=paste("Data_PerfMet_vs_OM", ChooseYrs, ControlRule, sep="_"))
+  write.table(Data_PerfMet_vs_OM, file=paste(FilePath, OutputDirectory, paste("Data_PerfMet_vs_OM", ChooseYrs, ControlRule, sep="_"), sep="/"))
 }
 
 
 Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL,
-                                      TranslatedPerfMetVector=NULL, TranslatedCRName=NULL){
+                                      TranslatedPerfMetVector=NULL, TranslatedCRName=NULL, OutputDirectory=NULL){
   # Args:
        # OperatingModel: Name of operating model of interest
        # ControlRules: Vector containing control rule names
@@ -114,9 +124,14 @@ Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Da
        # ChooseYrs: "BB" or "BB3yr", correspond to data source
        # TranslatedPerfMetVector: Vector of full performance metric names, must be same order and length as PerformanceMetrics
        # TranslatedCRName: Vector of full control rule names, must be same order and length as CRNames
+       # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
   
   # Returns:
        # A table with information on chosen operating model for each control rule and each performance metric
+  
+  # Read in data
+  Data <- read.table(Data)
+  Data <- as.matrix(Data)
   
   # Set up matrix
   Data_PerfMet_vs_CR <- matrix(NA, length(PerformanceMetrics), length(ControlRules))
@@ -130,11 +145,11 @@ Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Da
   colnames(Data_PerfMet_vs_CR) <- TranslatedCRName
   
   # Write data to file
-  write.table(Data_PerfMet_vs_CR, file=paste("Data_PerfMet_vs_CR", ChooseYrs, OperatingModel, sep="_"))
+  write.table(Data_PerfMet_vs_CR, file=paste(FilePath, OutputDirectory, paste("Data_PerfMet_vs_CR", ChooseYrs, OperatingModel, sep="_"), sep="/"))
 }
 
 Make_WebDiagram_Matrix_1_OM <- function(OperatingModel=NULL, ControlRules=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL,
-                                        TranslatedPerfMetVector=NULL, TranslatedCRName=NULL){
+                                        TranslatedPerfMetVector=NULL, TranslatedCRName=NULL, OutputDirectory=NULL){
   # Args:
        # OperatingModel: Name of operating model of interest
        # ControlRules: Vector containing control rule names
@@ -143,9 +158,14 @@ Make_WebDiagram_Matrix_1_OM <- function(OperatingModel=NULL, ControlRules=NULL, 
        # ChooseYrs: "BB" or "BB3yr", correspond to data source
        # TranslatedPerfMetVector: Vector of full performance metric names, must be same order and length as PerformanceMetrics
        # TranslatedCRName: Vector of full control rule names, must be same order and length as CRNames
+       # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
   
   # Returns:
        # A table with information on chosen operating model for each control rule and each performance metric
+  
+  # Read in data
+  Data <- read.table(Data)
+  Data <- as.matrix(Data)
   
   # Set up matrix
   Data_Web_PerfMet_vs_CR <- matrix(NA, length(ControlRules), length(PerformanceMetrics))
@@ -159,11 +179,11 @@ Make_WebDiagram_Matrix_1_OM <- function(OperatingModel=NULL, ControlRules=NULL, 
   rownames(Data_Web_PerfMet_vs_CR) <- TranslatedCRName
   
   # Write data to file
-  write.table(Data_Web_PerfMet_vs_CR, file=paste("Data_Web_PerfMet_vs_CR", ChooseYrs, OperatingModel, sep="_"))
+  write.table(Data_Web_PerfMet_vs_CR, file=paste(FilePath, OutputDirectory, paste("Data_Web_PerfMet_vs_CR", ChooseYrs, OperatingModel, sep="_"), sep="/"))
 }
 
 Make_WebDiagram_Matrix_1_CR <- function(OperatingModels=NULL, ControlRule=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL,
-                                        TranslatedOperatingModel=NULL, TranslatedPerfMetVector=NULL){
+                                        TranslatedOperatingModel=NULL, TranslatedPerfMetVector=NULL, OutputDirectory=NULL){
   # Args:
        # OperatingModels: Vector containing operating model names
        # ControlRule: Name of control rule of interest
@@ -172,9 +192,14 @@ Make_WebDiagram_Matrix_1_CR <- function(OperatingModels=NULL, ControlRule=NULL, 
        # ChooseYrs: "BB" or "BB3yr", correspond to data source
        # TranslatedOperatingModel: Vector of full operating model names, must be same order and length as OperatingModelList
        # TranslatedPerfMetVector: Vector of full performance metric names, must be same order and length as PerformanceMetrics
+       # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
   
   # Returns:
        # A table with information on chosen control rule for each operating model and each performance metric
+  
+  # Read in data
+  Data <- read.table(Data)
+  Data <- as.matrix(Data)
   
   # Set up matrix
   Data_Web_PerfMet_vs_OM <- matrix(NA, length(OperatingModels), length(PerformanceMetrics))
@@ -188,6 +213,6 @@ Make_WebDiagram_Matrix_1_CR <- function(OperatingModels=NULL, ControlRule=NULL, 
   rownames(Data_Web_PerfMet_vs_OM) <- TranslatedOperatingModel
   
   # Write data to file
-  write.table(Data_Web_PerfMet_vs_OM, file=paste("Data_Web_PerfMet_vs_OM", ChooseYrs, ControlRule, sep="_"))
+  write.table(Data_Web_PerfMet_vs_OM, file=paste(FilePath, OutputDirectory, paste("Data_Web_PerfMet_vs_OM", ChooseYrs, ControlRule, sep="_"), sep="/"))
 }
 
