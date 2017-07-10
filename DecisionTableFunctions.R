@@ -3,7 +3,7 @@
 MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=NULL, RowNames=NULL, 
                                      ColumnCategoryName=NULL, ColumnNames=NULL,
                                      GraphicLayout=GraphicLayoutDefault, GraphicNRow=8, GraphicNCol=4, 
-                                     GraphicHeights=GraphicHeightsDefault, GraphicWidths=GraphicWidthsDefault, PlotOrder=NULL, ...){
+                                     GraphicHeights=GraphicHeightsDefault, GraphicWidths=GraphicWidthsDefault, PlotOrder=NULL, OutputFileName=NULL, ...){
   # Args:
        # Title: A string containing the title for the decision table graphic
        # IconList: A vector of icons names to be printed right of the Title, number can not exceed (GraphicNCol - 4), default is empty
@@ -16,9 +16,11 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
        # GraphicNCol: Number of columns in GraphicFormat Matrix, must be at least 8
        # GraphicHeights: A vector containing row heights, must be same length as GraphicNRow
        # GraphicWidths: A vector containing column widths, must be same length as GraphicNCol
+       # OutputFileName: A string contining the output file name
        # PlotOrder: A vector of strings containing names of the plots to produce options are listed below with associated arguments, PlotOrder must be equal in length of GraphicNCol-1
-            # "VerticalBarplot"
+            # "SingleColumn_VerticalBarplot"
                  # VerticalBarData: List of vectors or matricies containing data to plot in vertical barplot, number of items in list must be equal to length of RowNames
+                      # Each item in the list will be plotted in an individual graph
                  # VerticalBarWidths vector of bar widths
                  # VerticalBarColors: 1 or more colors for plot
                  # VerticalBarXLabel: labels x axis
@@ -53,16 +55,18 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
   # Returns:
        # A ploted decision table with customized graphics
   
+  png(filename = paste(OutputFileName, ".png", sep=""), width=500, height=800)
+  
   # These set up the default format
-  GraphicLayoutDefault <- c( 1, 1, 1, 1, # First four grid spaces must be assigned 1 as this is where the title will be plotted
-                             2, 2, 2, 2,
-                             3, 4, 4, 4,
-                             3, 5, 5, 5,
-                             3, 6, 7, 8,
-                             9, 9, 9, 9,
-                             10,11,12,13,
-                             14,14,14,14)
-  GraphicWidthsDefault <- rep(1, GraphicNCol)
+  GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, # First four grid spaces must be assigned 1 as this is where the title will be plotted
+                             3, 3, 3, 3, 3, # 2 is empty grid to balance table appearance
+                             4, 5, 5, 5, 2,
+                             4, 6, 6, 6, 6,
+                             4, 7, 8, 9, 2,
+                            10,10,10,10,10,
+                            11,12,13,14, 2,
+                            15,15,15,15,15)
+  GraphicWidthsDefault <- c(rep(1, GraphicNCol-1), 0.5)
   GraphicHeightsDefault <- rep(c(1,0.25), GraphicNRow/2)
   
   # Produce and display GraphicFormat
@@ -85,15 +89,18 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
     lim <- par() # Gets boundaries of plot space
     rasterImage(IconImage, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4]) # Plots raster image in plot space bounded by lim
   }
-  if(length(IconList) < (GraphicNCol-4)){ # This fills remaining slots in first row with empty plots if fewer icons than slots
-    for(empty in GraphicNCol-4-length(IconList)){
+  if(length(IconList) < (GraphicNCol-5)){ # This fills remaining slots in first row with empty plots if fewer icons than slots
+    for(empty in GraphicNCol-5-length(IconList)){
       par(mar=c(0,0,0,0))
       plot(1,1,type="n", axes=FALSE, ann=FALSE)
     }
   }
   
+  # Plot empty space on right side of graph
+  plot(1,1,type="n", axes=FALSE, ann=FALSE)
+  
   # Plot first horizontal division
-  par(mar=c(0,0,0,0))
+  par(mar=c(0,0.5,0,0.5))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   abline(h=1, col="black", lwd=2)
   
@@ -108,33 +115,54 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
   text(1,1,labels=c(ColumnCategoryName), cex=1.5) 
   
   # Plot horizontal division line
-  par(mar=c(0,0,0,0))
+  par(mar=c(0,0.5,0,0.5))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   abline(h=1, col="black", lwd=1)
   
   # Plot ColumnNames
-  for(Name in ColumnNames){
+  for(Name in 1:length(ColumnNames)){
     plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-    text(1,1, labels = ColumnNames[Name], cex=1)
+    text(1,1, labels = ColumnNames[Name], cex=1.3)
   }
   
   ##### Repeating information in the table #####
   for(row in 1:length(RowNames)){
     # Plot horizontal division line
+    par(mar=c(0,0.5,0,0.5))
     plot(1,1,type="n", axes=FALSE, ann=FALSE)
     abline(h=1, col="black", lwd=1)
     
     # Plot RowName
     plot(1,1,type="n", axes=FALSE, ann=FALSE)
-    text(1,1,labels=RowNames[row], cex=1)
+    text(1,1,labels=RowNames[row], cex=1.3)
     
     # Plot graphs specified by PlotOrder
     ExtraArguments <- list(...) # This turns data passed as extra arguments into a list for graphs to use
     
+   # if(PlotOrder=="FullMatrix_VerticalBoxplot"){
+      for(i in 1:ncol(ExtraArguments$VerticalBarData)){
+        par(mar=c(1.8,2,0,0), xpd=TRUE)
+        barplot(height=ExtraArguments$VerticalBarData[row,i], 
+                width=ExtraArguments$VerticalBarWidths, 
+                space=0, 
+                horiz=FALSE, 
+                col=ExtraArguments$VerticalBarColors[i], 
+                # xlab=paste(round(ExtraArguments$VerticalBarData[row,i], digits=2)),
+                ylab=ExtraArguments$VerticalBarYLabel,
+                ylim=c(0,1.1*max(ExtraArguments$VerticalBarData)),
+                axes=ExtraArguments$VerticalBarAxes, 
+                cex.axis=1, 
+                cex.names=1, 
+                offset=0)
+        text(0.23,-0.13,labels=paste(round(ExtraArguments$VerticalBarData[row,i], digits=2)), cex=1.5)
+      }
+    #}
+
     for(graphic in PlotOrder){
-      if(graphic=="VerticalBarplot"){
+      if(graphic=="SingleColumn_VerticalBarplot"){
+        par(mar=c(0.5,2,0,0))
         barplot(height=ExtraArguments$VerticalBarData[[row]], width=ExtraArguments$VerticalBarWidths, space=0, horiz=FALSE, col=ExtraArguments$VerticalBarColors, 
-                xlab=ExtraArguments$VerticalBarXLabel, ylab=ExtraArguments$VerticalBarYLabel, axes=ExtraArguments$VerticalBarAxes, cex.axis=1, cex.names=1, offset=0)
+                xlab=paste(ExtraArguments$VerticalBarXLabel, sep=""), ylab=ExtraArguments$VerticalBarYLabel, axes=ExtraArguments$VerticalBarAxes, cex.axis=1, cex.names=1, offset=0)
       } else if(graphic=="VerticalStackedBar"){
         barplot(table(ExtraArguments$VerticalStackedBarData[[row]]), width=ExtraArguments$VerticalStackedBarWidths, space=0, horiz=FALSE, col=ExtraArguments$VerticalStackedBarColors, 
                 xlab=ExtraArguments$VerticalStackedBarXLabel, ylab=ExtraArguments$VerticalStackedBarYLabel, axes=ExtraArguments$VerticalStackedBarAxes,  cex.axis=1, cex.names=1, offset=0)
@@ -155,122 +183,26 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
   }
   
   # Plot last horizontal division
-  par(mar=c(0,0,0,0))
+  par(mar=c(0.25,0.5,0.5,0.5))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   abline(h=1, col="black", lwd=2)
+  
+  dev.off()
 }
 
+# This code tests the FullMatrix_VerticalBoxplot
+# par(mfrow=c(8,9))
+# for(j in 1:nrow(Data)){
+#   for(i in 1:ncol(Data)){
+#     barplot(height=Data[j,i], width=1, space=0, horiz=FALSE, col=MSE_ControlRuleColors[i], 
+#             xlab=paste(Data[j,i], sep=""), ylab="Test", axes=TRUE, cex.axis=1, cex.names=1, offset=0, 
+#             ylim=c(0,1.1*max(Data)))
+#     
+#   }
+# }
 
 
 
-# # 1
-# # 2:7
-# # 8
-# # 9
-# # 10
-# # 11
-# # 12:20
-# for(numCR in 1:length(CRList)){
-# }
-# # 21
-# # 22
-# # 23:31
-# 
-# 
-# # 32
-# 
-# 
-# # 33
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# text(1,1,labels=c("Model2"), cex=1)
-# 
-# # 34:42
-# for(numcR in 1:length(CRList)){
-#   plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-# }
-# 
-# # 43
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# abline(h=1, col="black", lwd=1)
-# 
-# # 44
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# text(1,1,labels=c("Model3"), cex=1)
-# 
-# # 45:53
-# for(numcR in 1:length(CRList)){
-#   plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-# }
-# 
-# # 54
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# abline(h=1, col="black", lwd=1)
-# 
-# # 55
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# text(1,1,labels=c("Model4"), cex=1)
-# 
-# # 56:64
-# for(numcR in 1:length(CRList)){
-#   plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-# }
-# 
-# # 65
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# abline(h=1, col="black", lwd=1)
-# 
-# # 66
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# text(1,1,labels=c("Model5"), cex=1)
-# 
-# # 67:75
-# for(numcR in 1:length(CRList)){
-#   plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-# }
-# 
-# # 76
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# abline(h=1, col="black", lwd=1)
-# 
-# # 77
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# text(1,1,labels=c("Model6"), cex=1)
-# 
-# # 78:86
-# for(numcR in 1:length(CRList)){
-#   plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-# }
-# 
-# # 87
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# abline(h=1, col="black", lwd=1)
-# 
-# # 88
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# text(1,1,labels=c("Model7"), cex=1)
-# 
-# # 89:97
-# for(numcR in 1:length(CRList)){
-#   plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-# }
-# 
-# # 98
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# abline(h=1, col="black", lwd=1)
-# 
-# # 99
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# text(1,1,labels=c("Model8"), cex=1)
-# 
-# # 100:108
-# for(numcR in 1:length(CRList)){
-#   plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-# }
-# 
-# # 109
-# par(mar=c(0,0,0,0))
-# plot(1,1,type="n", axes=FALSE, ann=FALSE)
-# abline(h=1, col="black", lwd=2)
 
 
 MakePictogram <- function(FileName=NULL, PickIcon=NULL, CountData=NULL, CountDataScale=NULL, NCols=NULL){
