@@ -125,6 +125,9 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
     text(1,1, labels = ColumnNames[Name], cex=1.3)
   }
   
+  # Plot empty space on right side of graph
+  plot(1,1,type="n", axes=FALSE, ann=FALSE)
+  
   ##### Repeating information in the table #####
   for(row in 1:length(RowNames)){
     # Plot horizontal division line
@@ -141,6 +144,7 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
     
    # if(PlotOrder=="FullMatrix_VerticalBoxplot"){
       for(i in 1:ncol(ExtraArguments$VerticalBarData)){
+        #par(mar=c(0,0,0,0), xpd=TRUE)
         par(mar=c(1.8,2,0,0), xpd=TRUE)
         barplot(height=ExtraArguments$VerticalBarData[row,i], 
                 width=ExtraArguments$VerticalBarWidths, 
@@ -180,6 +184,10 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
       }
       # Stacked bar plots still don't work, but no error returned
     }
+    
+    # Plot empty space on right side of graph
+    plot(1,1,type="n", axes=FALSE, ann=FALSE)
+    
   }
   
   # Plot last horizontal division
