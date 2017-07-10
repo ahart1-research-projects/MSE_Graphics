@@ -1,10 +1,11 @@
 # This script makes visually appealing tables (in reality it is a multi-panel plot not a table)
 
-MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=NULL, RowNames=NULL, 
+MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=NULL, RowCategoryName=NULL, RowNames=NULL, 
                                      ColumnCategoryName=NULL, ColumnNames=NULL,
                                      GraphicLayout=GraphicLayoutDefault, GraphicNRow=8, GraphicNCol=4, 
                                      GraphicHeights=GraphicHeightsDefault, GraphicWidths=GraphicWidthsDefault, PlotOrder=NULL, OutputFileName=NULL, ...){
   # Args:
+       # OutputDirectory: String containing the full path name of folder to store output
        # Title: A string containing the title for the decision table graphic
        # IconList: A vector of icons names to be printed right of the Title, number can not exceed (GraphicNCol - 4), default is empty
        # RowCategoryName: A string containing the descriptive title for row names
@@ -55,7 +56,7 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
   # Returns:
        # A ploted decision table with customized graphics
   
-  png(filename = paste(OutputFileName, ".png", sep=""), width=500, height=800)
+  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=500, height=800)
   
   # These set up the default format
   GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, # First four grid spaces must be assigned 1 as this is where the title will be plotted
@@ -90,9 +91,10 @@ MakeGraphicDecisionTable <- function(Title=NULL, IconList=NULL, RowCategoryName=
     rasterImage(IconImage, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4]) # Plots raster image in plot space bounded by lim
   }
   if(length(IconList) < (GraphicNCol-5)){ # This fills remaining slots in first row with empty plots if fewer icons than slots
-    for(empty in GraphicNCol-5-length(IconList)){
+    for(empty in 1:(GraphicNCol-5-length(IconList))){
       par(mar=c(0,0,0,0))
       plot(1,1,type="n", axes=FALSE, ann=FALSE)
+      print("Empty Plot Icon" )
     }
   }
   
