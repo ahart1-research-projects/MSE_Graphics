@@ -128,10 +128,12 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
     plot(1,1,type = "n", axes = FALSE, ann = FALSE)
     legend("topleft", inset=c(-0.2,-0.4), cex=0.77, fill=ExtraArguments$PlotColor, legend=rownames(Data))      # Try Testing
   }  else if(PlotType=="Y_MultipleOperatingModel_X_MultipleControlRule"){
-    # Grouped bar plot, bar for each operating model
+    # Grouped bar plot, grouped by control rule, bar for each operating model
     png(filename = ExtraArguments$OutputFile, width=800, height=500)
+    # plot color = OM
     par(mar=c(5,4,4,7), xpd=TRUE)
-    barplot(Data, col=ExtraArguments$PlotColor,
+    barplot(Data, 
+            col=ExtraArguments$PlotColor,
             width=1, 
             beside=TRUE,
             ylab=ylab,
@@ -153,6 +155,10 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
     dev.off()
   }
 }
+
+
+
+
 
 
 
