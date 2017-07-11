@@ -34,7 +34,11 @@ plot_indicators <- function(ind,
     } else if(colnames(ind)[NCol] == "Interannual.Variation.in.Yield"){
       # Scale data to: 1/Data
       Scaled_ind <- cbind(Scaled_ind, 1/ind[ ,NCol])
-    }  
+    } else if(colnames(ind)[NCol] == "Net.Revenue.for.Herring"){
+      Scaled_ind <- cbind(Scaled_ind, ind[ ,NCol]/10)
+    } else {
+      Scaled_ind <- cbind(Scaled_ind, ind[,NCol])
+    }
   }
   # print(ind[,1])   # Check data format
   # print(1/ind[,2])
@@ -142,7 +146,6 @@ WebDiagramPlots <- function(Data=NULL, PlotColor = NULL, LegendLabels = NULL, Ax
   
   Data <- read.table(Data)
   Data <- as.data.frame(Data)
-  print(Data)
   
   plot_indicators(ind=Data,
                   colvec=PlotColor,
