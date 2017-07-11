@@ -30,16 +30,21 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
                  # OperatingModel: The name of the operating model associated with data
                  # PlotColor: Vector of colors for plot                 
             # PlotType=="MultiPanel_1_OperatingModel_MultipleControlRule"
-                 # OperatingModelVector: A vector of operating model names
+                 # OperatingModelList: A vector of operating model names
                  # PlotColor: Vector of colors for plot
+                 # TranslatedControlRuleVector: Vector of translated control rules, must be same order and length as ControlRuleVector
+                 # TranslatedOperatingModel: Vector of translated operating model names, must be same order and length as OperatingModelList
             # PlotType=="1_ControlRule_MultipleOperatingModel"
                  # ControlRule: The name of the control rule associated with data
                  # PlotColor: Vector of colors for plot
             # PlotType=="MultiPanel_1_ControlRule_MultipleOperatingModel"
                  # ControlRuleVector: A vector of control rule names
                  # PlotColor: Vector of colors for plot
+                 # TranslatedOperatingModel: Vector of translated operating model names, must be same order and length as OperatingModelList
             # PlotType=="Y_MultipleOperatingModel_X_MultipleControlRule"
                  # PlotColor: Vector of colors for plot, should be same length as nrow(Data)
+                 # TranslatedControlRuleVector: Vector of translated control rules, must be same order and length as ControlRuleVector
+                 
             # PlotType=="X_MultipleOperatingModel_Y_MultipleControlRule"
                  # PlotColor: Vector of colors for plot, should be same length as ncol(Data)
        # OutputFile: String containing name of output file where graph is stored
@@ -76,19 +81,20 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
             offset=0)
   } else if(PlotType=="MultiPanel_1_OperatingModel_MultipleControlRule"){                 # THIS WORKS
     # Multipanel 1 Operating Model, Multiple Control Rules
-    png(filename = ExtraArguments$OutputFile, width=850, height=700)
-    par(mfrow = c(4,3), mar=c(5,4,5,1), xpd=TRUE)
+    png(filename = ExtraArguments$OutputFile, width=940, height=700)
+    par(mfrow = c(4,3), mar=c(5,3,5,1), xpd=TRUE)
     # For each operating model make barplot of values under different control rules
-        for(plot in 1:length(ExtraArguments$OperatingModelVector)){ 
+        for(plot in 1:length(ExtraArguments$OperatingModelList)){ 
           barplot(height=Data[plot,], 
                   width= rep(1, ncol(Data)), 
                   space=1, 
                   horiz=FALSE, 
                   col=ExtraArguments$PlotColor, 
                   xlab="Control Rule", 
+                  names.arg = ExtraArguments$TranslatedControlRuleVector,
                   ylab=ylab,
                   ylim=c(0, round(1.1*max(Data),digits=1)),
-                  main= paste(main, ExtraArguments$OperatingModelVector[plot], sep=" "),
+                  main= paste(main, ExtraArguments$TranslatedOperatingModel[plot], sep=" "),
                   axes=TRUE, 
                   cex.axis=1.5,
                   cex.lab=1.5,
@@ -97,7 +103,7 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
                   offset=0)  
         }
     plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-    legend("center", inset=c(-0.2,-0.4), cex=1.5, fill=ExtraArguments$PlotColor, legend=colnames(Data))
+    legend("center", inset=c(-0.2,-0.4), cex=1.5, fill=ExtraArguments$PlotColor, legend=ExtraArguments$TranslatedControlRuleVector)
     dev.off()
   } else if(PlotType=="1_ControlRule_MultipleOperatingModel"){                        # NOT TESTED
     # 1 Control Rule , Multiple Operating Models
@@ -107,6 +113,7 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
             horiz=FALSE, 
             col=ExtraArguments$PlotColor, 
             xlab="Operating Model", 
+            names.arg = ExtraArguments$TranslatedOperatingModel,
             ylab=ylab,
             ylim=c(0, round(1.1*max(Data),digits=1)),
             main=main, 
@@ -125,6 +132,7 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
                   horiz=FALSE, 
                   col=ExtraArguments$PlotColor, 
                   xlab="Operating Model", 
+                  names.arg = ExtraArguments$TranslatedOperatingModel,
                   ylab=ylab,
                   ylim=c(0, round(1.1*max(Data), digits=1)),
                   main=main, 
@@ -134,7 +142,7 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
                   offset=0) 
         }
     plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-    legend("topleft", inset=c(-0.2,-0.4), cex=0.77, fill=ExtraArguments$PlotColor, legend=rownames(Data))      # THIS WORKS
+    legend("center", inset=c(-0.2,-0.4), cex=1.5, fill=ExtraArguments$PlotColor, legend=ExtraArguments$TranslatedControlRuleVector)
   }  else if(PlotType=="Y_MultipleOperatingModel_X_MultipleControlRule"){
     # Grouped bar plot, grouped by control rule, bar for each operating model
     png(filename = ExtraArguments$OutputFile, width=800, height=500)
@@ -144,10 +152,11 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
             col=ExtraArguments$PlotColor,
             width=1, 
             beside=TRUE,
+            names.arg = ExtraArguments$TranslatedControlRuleVector,
             ylab=ylab,
             ylim=c(0, round(1.1*max(Data),digits=1)),
             main=main)
-    legend("topright", inset=c(-0.60,0), fill=ExtraArguments$PlotColor, legend=rownames(Data))              # NOT TESTED
+    legend("topright", inset=c(0,0), cex=1, fill=ExtraArguments$PlotColor, legend=ExtraArguments$TranslatedControlRuleVector)
     dev.off()
   } else if(PlotType=="X_MultipleOperatingModel_Y_MultipleControlRule"){
     # Grouped bar plot, bar for each control rule
@@ -171,13 +180,14 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
 
 
 # Code to make Multiple performance metrics plots
-MultiplePerfMetricPlots <- function(Data=NULL, xlab=NULL, main=NULL, PlotType=NULL, PlotColor=NULL, OutputFile = NULL){
+MultiplePerfMetricPlots <- function(Data=NULL, BarNames=NULL, xlab=NULL, main=NULL, PlotType=NULL, PlotColor=NULL, OutputFile = NULL){
   # This function gives options for plotting values for a multiple performance metric across different operating models and/or control rules
   # It produces a grouped bar plot
   # Args:
        # Data: A matrix (PerfMet_vs_OM or PerfMet_vs_CR files produced by Make_OM_vs_PerfMet_Matrix() and Make_CR_vs_PerfMet_Matrix() functions)
             # Each row is a performance metric 
             # Columns are control rule or operating model
+       # BarNames: Vector of names for bars
        # xlab: X-axis label, should be control rule or operating model depending on data
        # main: Main title for plot
        # PlotColor: Vector of colors for plot, should be equal to nrow(Data)
@@ -198,6 +208,7 @@ MultiplePerfMetricPlots <- function(Data=NULL, xlab=NULL, main=NULL, PlotType=NU
            width=1, 
            beside=TRUE,
            xlab=xlab,
+           names.arg=BarNames,
            ylab="Performance Metric Value",
            ylim=c(0,round(1.1*max(Data),digits=1)),
            main=main,
@@ -215,6 +226,7 @@ MultiplePerfMetricPlots <- function(Data=NULL, xlab=NULL, main=NULL, PlotType=NU
            width=1, 
            beside=TRUE,
            xlab=xlab,
+           names.arg=BarNames,
            ylab="Performance Metric Value",
            ylim=c(0,round(1.1*max(Data), digits=1)),
            main=main,
