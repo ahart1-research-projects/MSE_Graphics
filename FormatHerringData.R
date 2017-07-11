@@ -11,7 +11,7 @@ ExtractCRInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRNumber
        # CRNumbers: Vector containing different numbers for control rules, must be same length and order as CRNames
        # CRNames: Vector containing strings of different control rules, must be same length and order as CRnumInfo
        # TranslatedCRName: Vector of full control rule names, must be same order and length as CRNames
-  
+       
   # Returns: 
        # A matrix containing same columns as original data, only rows associated with 9 control rules of interest
   
@@ -44,7 +44,8 @@ ExtractCRInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRNumber
 
 ##### Create a matrix with focused subset for plotting #####
 
-Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=NULL, PerformanceMetric=NULL, ChooseYrs=NULL, TranslatedOperatingModel=NULL, TranslatedCRName=NULL, OutputDirectory){
+Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=NULL, PerformanceMetric=NULL, ChooseYrs=NULL, 
+                                 TranslatedOperatingModel=NULL, TranslatedCRName=NULL, OutputDirectory=NULL, FilePath = NULL){
   # Args:
        # OperatingModels: Vector containing operating model names
        # ControlRules: Vector containing control rule names
@@ -54,6 +55,8 @@ Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=N
        # TranslatedOperatingModel: Vector of full operating model names, must be same order and length as OperatingModelList
        # TranslatedCRName: Vector of full control rule names, must be same order and length as CRNames
        # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
+       # FilePath: File path to MSE_Graphics project
+  
   # Returns:
        # A table with information on chosen performance metric for each operating model and each control rule
             # Rows are operating models
@@ -61,8 +64,9 @@ Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=N
   
   # Read in data
   Data <- read.table(Data)
+  print(Data) # for some reason as.matrix turns everything into a string
   Data <- as.matrix(Data)
-  
+
   # Set up matrix
   Data_OM_vs_CR <- matrix(NA, length(OperatingModels), length(ControlRules))
   
@@ -72,15 +76,18 @@ Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=N
   }
   rownames(Data_OM_vs_CR) <- TranslatedOperatingModel
   colnames(Data_OM_vs_CR) <- TranslatedCRName
-
+  
+  OutputFileName <- paste(FilePath, OutputDirectory, paste("Data_OM_vs_CR", ChooseYrs, PerformanceMetric, sep="_"), sep="/")
+  print(OutputFileName) # problem with FilePath
   # Write data to file
-  write.table(Data_OM_vs_CR, file=paste(FilePath, OutputDirectory, paste("Data_OM_vs_CR", ChooseYrs, PerformanceMetric, sep="_"), sep="/"))
+  # write.table(Data_OM_vs_CR, file=paste(FilePath, OutputDirectory, paste("Data_OM_vs_CR", ChooseYrs, PerformanceMetric, sep="_"), sep="/"))
+  write.table(Data_OM_vs_CR, file=OutputFileName)
 }
 
 
 
 Make_OM_vs_PerfMet_Matrix <- function(OperatingModels=NULL, ControlRule=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL, 
-                                      TranslatedOperatingModel=NULL, TranslatedPerfMetVector=NULL, OutputDirectory=NULL){
+                                      TranslatedOperatingModel=NULL, TranslatedPerfMetVector=NULL, OutputDirectory=NULL, FilePath=NULL){
   # Args:
        # OperatingModels: Vector containing operating model names
        # ControlRule: Name of control rule of interest
@@ -90,6 +97,7 @@ Make_OM_vs_PerfMet_Matrix <- function(OperatingModels=NULL, ControlRule=NULL, Da
        # TranslatedOperatingModel: Vector of full operating model names, must be same order and length as OperatingModelList
        # TranslatedPerfMetVector: Vector of full performance metric names, must be same order and length as PerformanceMetrics
        # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
+       # FilePath: File path to MSE_Graphics project
   
   # Returns:
        # A table with information on chosen control rule for each operating model and each performance metric
@@ -115,7 +123,7 @@ Make_OM_vs_PerfMet_Matrix <- function(OperatingModels=NULL, ControlRule=NULL, Da
 
 
 Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL,
-                                      TranslatedPerfMetVector=NULL, TranslatedCRName=NULL, OutputDirectory=NULL){
+                                      TranslatedPerfMetVector=NULL, TranslatedCRName=NULL, OutputDirectory=NULL, FilePath=NULL){
   # Args:
        # OperatingModel: Name of operating model of interest
        # ControlRules: Vector containing control rule names
@@ -125,6 +133,7 @@ Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Da
        # TranslatedPerfMetVector: Vector of full performance metric names, must be same order and length as PerformanceMetrics
        # TranslatedCRName: Vector of full control rule names, must be same order and length as CRNames
        # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
+       # FilePath: File path to MSE_Graphics project
   
   # Returns:
        # A table with information on chosen operating model for each control rule and each performance metric
@@ -149,7 +158,7 @@ Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Da
 }
 
 Make_WebDiagram_Matrix_1_OM <- function(OperatingModel=NULL, ControlRules=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL,
-                                        TranslatedPerfMetVector=NULL, TranslatedCRName=NULL, OutputDirectory=NULL){
+                                        TranslatedPerfMetVector=NULL, TranslatedCRName=NULL, OutputDirectory=NULL, FilePath=NULL){
   # Args:
        # OperatingModel: Name of operating model of interest
        # ControlRules: Vector containing control rule names
@@ -159,6 +168,7 @@ Make_WebDiagram_Matrix_1_OM <- function(OperatingModel=NULL, ControlRules=NULL, 
        # TranslatedPerfMetVector: Vector of full performance metric names, must be same order and length as PerformanceMetrics
        # TranslatedCRName: Vector of full control rule names, must be same order and length as CRNames
        # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
+       # FilePath: File path to MSE_Graphics project
   
   # Returns:
        # A table with information on chosen operating model for each control rule and each performance metric
@@ -183,7 +193,7 @@ Make_WebDiagram_Matrix_1_OM <- function(OperatingModel=NULL, ControlRules=NULL, 
 }
 
 Make_WebDiagram_Matrix_1_CR <- function(OperatingModels=NULL, ControlRule=NULL, Data=NULL, PerformanceMetrics=NULL, ChooseYrs=NULL,
-                                        TranslatedOperatingModel=NULL, TranslatedPerfMetVector=NULL, OutputDirectory=NULL){
+                                        TranslatedOperatingModel=NULL, TranslatedPerfMetVector=NULL, OutputDirectory=NULL, FilePath=NULL){
   # Args:
        # OperatingModels: Vector containing operating model names
        # ControlRule: Name of control rule of interest
@@ -193,6 +203,7 @@ Make_WebDiagram_Matrix_1_CR <- function(OperatingModels=NULL, ControlRule=NULL, 
        # TranslatedOperatingModel: Vector of full operating model names, must be same order and length as OperatingModelList
        # TranslatedPerfMetVector: Vector of full performance metric names, must be same order and length as PerformanceMetrics
        # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
+       # FilePath: File path to MSE_Graphics project
   
   # Returns:
        # A table with information on chosen control rule for each operating model and each performance metric
