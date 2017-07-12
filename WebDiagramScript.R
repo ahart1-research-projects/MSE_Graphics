@@ -23,7 +23,7 @@ plot_indicators <- function(ind,
   Scaled_ind <- NULL
   
   for(NCol in 1:ncol(ind)){
-    if(colnames(ind)[NCol] == "Yield.Relative.to.MSY"){
+    if(colnames(ind)[NCol] == "Yield.Relative.to.MSY" | colnames(ind)[NCol] == "Predator.Avg.Weight:.Dogfish"){
       # No data scaling necessary
       Scaled_ind <- cbind(Scaled_ind, ind[ ,NCol])
       
@@ -120,7 +120,7 @@ plot_indicators <- function(ind,
   write.csv(new_dat, file = paste(plotfile, ".csv"))              
   
   # Add legend
-  legend(0.7,1.6,legend=legend_labels,lwd=3,col=colvec,cex=1,bty='n')
+  legend(0.7,1.8,legend=legend_labels,lwd=3,col=colvec,cex=1,bty='n')
   
   dev.off()
 }
