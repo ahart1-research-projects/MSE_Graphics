@@ -151,9 +151,9 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
                 horiz=FALSE, 
                 col=ExtraArguments$VerticalBarColors[i], 
                 # xlab=paste(round(ExtraArguments$VerticalBarData[row,i], digits=2)),
-                ylab=ExtraArguments$VerticalBarYLabel,
+                # ylab=ExtraArguments$VerticalBarYLabel,
                 ylim=c(0,1.1*max(ExtraArguments$VerticalBarData)),
-                axes=ExtraArguments$VerticalBarAxes, 
+                # axes=ExtraArguments$VerticalBarAxes, 
                 cex.axis=1, 
                 cex.names=1, 
                 offset=0)
@@ -161,28 +161,31 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
       }
     #}
 
-    for(graphic in PlotOrder){
-      if(graphic=="SingleColumn_VerticalBarplot"){
-        par(mar=c(0.5,2,0,0))
-        barplot(height=ExtraArguments$VerticalBarData[[row]], width=ExtraArguments$VerticalBarWidths, space=0, horiz=FALSE, col=ExtraArguments$VerticalBarColors, 
-                xlab=paste(ExtraArguments$VerticalBarXLabel, sep=""), ylab=ExtraArguments$VerticalBarYLabel, axes=ExtraArguments$VerticalBarAxes, cex.axis=1, cex.names=1, offset=0)
-      } else if(graphic=="VerticalStackedBar"){
-        barplot(table(ExtraArguments$VerticalStackedBarData[[row]]), width=ExtraArguments$VerticalStackedBarWidths, space=0, horiz=FALSE, col=ExtraArguments$VerticalStackedBarColors, 
-                xlab=ExtraArguments$VerticalStackedBarXLabel, ylab=ExtraArguments$VerticalStackedBarYLabel, axes=ExtraArguments$VerticalStackedBarAxes,  cex.axis=1, cex.names=1, offset=0)
-      } else if(graphic=="HorizontalBarplot"){
-        barplot(height=ExtraArguments$HorizontalBarData[[row]], width=ExtraArguments$HorizontalBarWidths, space=0, horiz=TRUE, col=ExtraArguments$HorizontalBarColors, 
-                xlab=ExtraArguments$HorizontalBarXLabel, ylab=ExtraArguments$HorizontalBarYLabel, axes=ExtraArguments$HorizontalBarAxes, cex.axis=1, cex.names=1, offset=0)
-      } else if(graphic=="HorizontalStackedBar"){
-        barplot(table(ExtraArguments$HorizontalStackedBarData[[row]]), width=ExtraArguments$HorizontalStackedBarWidths, space=0, beside=FALSE, horiz=TRUE, col=ExtraArguments$HorizontalStackedBarColors, 
-                xlab=ExtraArguments$HorizontalStackedBarXLabel, ylab=ExtraArguments$HorizontalStackedBarYLabel, axes=ExtraArguments$HorizontalStackedBarAxes,  cex.axis=1, cex.names=1, offset=0)
-      } else if(graphic=="Pictogram"){
-        MakePictogram(PickIcon=ExtraArguments$PictogramImage, CountData=ExtraArguments$PictogramData[[row]], CountDataScale=ExtraArguments$PictogramDataScale, NCols=ExtraArguments$PictogramColumns) 
-        # This will have the pictogram code when I can get it to work, see function at the end of this script
-      } else {
-        plot(1,1,type = "n", axes = FALSE, ann = FALSE) # Plot empty space
-      }
-      # Stacked bar plots still don't work, but no error returned
-    }
+    # The commented section below works, but each option can only be called once in the decision table
+    # Additionally, the same plot will be plotted across the entire row, although plots will vary between rows
+    
+    # for(graphic in PlotOrder){
+    #   if(graphic=="SingleColumn_VerticalBarplot"){
+    #     par(mar=c(0.5,2,0,0))
+    #     barplot(height=ExtraArguments$VerticalBarData[[row]], width=ExtraArguments$VerticalBarWidths, space=0, horiz=FALSE, col=ExtraArguments$VerticalBarColors, 
+    #             xlab=paste(ExtraArguments$VerticalBarXLabel, sep=""), ylab=ExtraArguments$VerticalBarYLabel, axes=ExtraArguments$VerticalBarAxes, cex.axis=1, cex.names=1, offset=0)
+    #   } else if(graphic=="VerticalStackedBar"){
+    #     barplot(table(ExtraArguments$VerticalStackedBarData[[row]]), width=ExtraArguments$VerticalStackedBarWidths, space=0, horiz=FALSE, col=ExtraArguments$VerticalStackedBarColors, 
+    #             xlab=ExtraArguments$VerticalStackedBarXLabel, ylab=ExtraArguments$VerticalStackedBarYLabel, axes=ExtraArguments$VerticalStackedBarAxes,  cex.axis=1, cex.names=1, offset=0)
+    #   } else if(graphic=="HorizontalBarplot"){
+    #     barplot(height=ExtraArguments$HorizontalBarData[[row]], width=ExtraArguments$HorizontalBarWidths, space=0, horiz=TRUE, col=ExtraArguments$HorizontalBarColors, 
+    #             xlab=ExtraArguments$HorizontalBarXLabel, ylab=ExtraArguments$HorizontalBarYLabel, axes=ExtraArguments$HorizontalBarAxes, cex.axis=1, cex.names=1, offset=0)
+    #   } else if(graphic=="HorizontalStackedBar"){
+    #     barplot(table(ExtraArguments$HorizontalStackedBarData[[row]]), width=ExtraArguments$HorizontalStackedBarWidths, space=0, beside=FALSE, horiz=TRUE, col=ExtraArguments$HorizontalStackedBarColors, 
+    #             xlab=ExtraArguments$HorizontalStackedBarXLabel, ylab=ExtraArguments$HorizontalStackedBarYLabel, axes=ExtraArguments$HorizontalStackedBarAxes,  cex.axis=1, cex.names=1, offset=0)
+    #   } else if(graphic=="Pictogram"){
+    #     MakePictogram(PickIcon=ExtraArguments$PictogramImage, CountData=ExtraArguments$PictogramData[[row]], CountDataScale=ExtraArguments$PictogramDataScale, NCols=ExtraArguments$PictogramColumns) 
+    #     # This will have the pictogram code when I can get it to work, see function at the end of this script
+    #   } else {
+    #     plot(1,1,type = "n", axes = FALSE, ann = FALSE) # Plot empty space
+    #   }
+    #   # Stacked bar plots still don't work, but no error returned
+    # }
     
   }
   
