@@ -101,6 +101,8 @@ Make_OM_vs_PerfMet_Matrix <- function(OperatingModels=NULL, ControlRule=NULL, Da
   
   # Returns:
        # A table with information on chosen control rule for each operating model and each performance metric
+            # rows are performance metrics
+            # columns are operating models
   
   # Read in data
   Data <- read.table(Data)
@@ -137,6 +139,8 @@ Make_CR_vs_PerfMet_Matrix <- function(OperatingModel=NULL, ControlRules=NULL, Da
   
   # Returns:
        # A table with information on chosen operating model for each control rule and each performance metric
+            # rows are performance metrics
+            # columns are control rules
   
   # Read in data
   Data <- read.table(Data)
@@ -172,6 +176,8 @@ Make_WebDiagram_Matrix_1_OM <- function(OperatingModel=NULL, ControlRules=NULL, 
   
   # Returns:
        # A table with information on chosen operating model for each control rule and each performance metric
+            # rows are operating models
+            # columns are performance metrics, the first column contains operating model names
   
   # Read in data
   Data <- read.table(Data)
@@ -207,6 +213,8 @@ Make_WebDiagram_Matrix_1_CR <- function(OperatingModels=NULL, ControlRule=NULL, 
   
   # Returns:
        # A table with information on chosen control rule for each operating model and each performance metric
+            # rows are control rules
+            # columns are performance metrics, the first column contains control rule names
   
   # Read in data
   Data <- read.table(Data)
