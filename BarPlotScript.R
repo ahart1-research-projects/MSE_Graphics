@@ -44,22 +44,29 @@ SinglePerfMetricPlots <- function(Data=NULL, ylab=NULL, main=NULL, PlotType=NULL
             # PlotType=="Y_MultipleOperatingModel_X_MultipleControlRule"
                  # PlotColor: Vector of colors for plot, should be same length as nrow(Data)
                  # TranslatedControlRuleVector: Vector of translated control rules, must be same order and length as ControlRuleVector
-                 
             # PlotType=="X_MultipleOperatingModel_Y_MultipleControlRule"
                  # PlotColor: Vector of colors for plot, should be same length as ncol(Data)
        # OutputFile: String containing name of output file where graph is stored
+  
+  # Returns:
+       # Barplot containing information for a single performance metric compared across operating models or control rules
+            # PlotType=="1_OperatingModel_MultipleControlRule": each bar is the performance metric value under a different control rule and a single operating model
+            # PlotType=="MultiPanel_1_OperatingModel_MultipleControlRule": multi-panel plot, each panel is an operating model
+                 # each bar is the performance metric value under a different control rule
+            # PlotType=="1_ControlRule_MultipleOperatingModel": each bar is the performance metric value for a different operating model and under a single control rule
+            # PlotType=="MultiPanel_1_ControlRule_MultipleOperatingModel": multi-panel plot, each panel is a control rule
+                 # each bar is the performance metric value for a different operating model and under a single control rule
+            # PlotType=="Y_MultipleOperatingModel_X_MultipleControlRule": Grouped bar plot, grouped by control rule
+                 # each group of bars represents performance metric values across operating models under a single control rule
+                 # each bar is the performance metric value for a different operating model
+            # PlotType=="X_MultipleOperatingModel_Y_MultipleControlRule": Grouped bar plot, grouped by operating model
+                 # each group of bars represents performance metric values across control rules for a single operating model
+                 # each bar is the performance metric value under different control rule
   
   # Read in data
   Data <- read.table(Data)
   Data <- as.matrix(Data)
   
-  # for(name in 1:length(colnames(Data))){
-  #   if("X." %in% colnames(Data)[name]){ # if X. is in the column name
-  #     RevisedName <- strsplit(colnames(Data)[name], "X.")
-  #     colnames(Data)[name] <- as.character(RevisedName[[1]][2]) # Replace with column name minus the X.
-  #   }
-  # }
-  # print(colnames(Data))
   
   # This turns data passed as extra arguments into a list for graphs to use
   ExtraArguments <- list(...) 
@@ -195,6 +202,15 @@ MultiplePerfMetricPlots <- function(Data=NULL, BarNames=NULL, xlab=NULL, main=NU
             # PlotType=="PerformanceMetric_OperatingModel", grouped by operating model
             # PlotType=="PerformanceMetric_ControlRule", grouped by control rule
        # OutputFile: String containing name of output file where graph is stored
+  
+  # Returns:
+       # Plots containing values for multiple performance metrics across different operating models or control rules
+            # PlotType=="PerformanceMetric_OperatingModel": Grouped bar plot, grouped by operating model
+                 # each group of bars represents performance metric values across operating models under a single control rule
+                 # each bar represents the value for a different performance metric for the given operating model (based on group) and under a single control rule
+            # PlotType=="PerformanceMetric_ControlRule": Grouped bar plot, grouped by control rule
+                 # each group of bars represents performance metric values across control rules for a single operating model
+                 # each bar represents the value for a different performance metric under the given control rule (based on group) and for a single operating model
   
  Data <- read.table(Data)
  Data <- as.matrix(Data)
