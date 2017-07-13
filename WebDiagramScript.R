@@ -1,6 +1,7 @@
 # Web/radar Diagram Script
 
 # plot_indicators function from: https://github.com/r4atlantis/common_scenarios_analysis/blob/master/R/plot_indicators.R
+# Minor changes made to suit our purposes
 plot_indicators <- function(ind,
                             colvec=c("#66c2a5","#fc8d62","#8da0cb"),
                             legend_labels=paste("Scenario ",1:3,sep=""),
@@ -19,7 +20,7 @@ plot_indicators <- function(ind,
     stop("Stopped function plot_indicators for your own sanity")
   }
   
-  # Rescale data for performance metrics ???????? still unfinished
+  # Rescale data for performance metrics ???????? I need to add the remaining performance metrics
   Scaled_ind <- NULL
   
   for(NCol in 1:ncol(ind)){
@@ -37,6 +38,7 @@ plot_indicators <- function(ind,
     } else if(colnames(ind)[NCol] == "Net.Revenue.for.Herring"){
       Scaled_ind <- cbind(Scaled_ind, ind[ ,NCol]/10)
     } else {
+      # Any performance metric not specified above is not scaled
       Scaled_ind <- cbind(Scaled_ind, ind[,NCol])
     }
   }
