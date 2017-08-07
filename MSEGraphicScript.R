@@ -11,6 +11,18 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
        # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
        # ControlRuleNames: Vector of control rule names corresponding to data
        # TranslatedControlRuleVector: Vector of full control rule names, must be same order and length as ControlRuleNames
+            # Below are metrics and corresponding translated label that should be used, other metrics may be used but will not be scaled in any plot (mainly web diagrams)
+               # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+               # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+               # "MedPredAvWt_status"               : "Tuna Weight Status" 
+               # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+               # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+               # "YieldrelMSY"                      : "Yield Relative to MSY"
+               # "Yield"                            : "Yield"
+               # "PropClosure"                      : "Prop Year Closure Occurs"
+               # "p50_NR"                           : "Net Revenue for Herring"
+               # "Yvar"                             : "Interannual Variation in Yield"
+               # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
        # ControlRuleColors: Vector of colors equal in length to ControlRuleNames
             # default = ControlRuleColorsDefault, contains 9 colors
        # CRNumbers: Vector of control rule numbers, must be same order and length as CRNumbers
@@ -46,11 +58,11 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
   
   ################################################ Subset Data For Graphics ######################################################
   ##### Full Subset Data #####
-  CR_BB_Data <- ExtractCRInformation(OriginalDataFile=OriginalDataFile, ChooseYrs = "BB", CRNumbers = CRNumbers, 
-                                     CRNames = ControlRuleNames, TranslatedCRName = TranslatedControlRuleVector)
+  CR_BB_Data <- ExtractCRandOMInformation(OriginalDataFile=OriginalDataFile, ChooseYrs = "BB", CRNumbers = CRNumbers, 
+                                     CRNames = ControlRuleNames, TranslatedCRName = TranslatedControlRuleVector, OperatingModelList = OperatingModelList)
   write.table(CR_BB_Data, file=paste(FilePath, OutputDirectory, "CR_BB_Data", sep="/"))
-  CR_BB3yr_Data <- ExtractCRInformation(OriginalDataFile=OriginalDataFile, ChooseYrs = "BB3yr", CRNumbers = CRNumbers, 
-                                        CRNames = ControlRuleNames, TranslatedCRName = TranslatedControlRuleVector)
+  CR_BB3yr_Data <- ExtractCRandOMInformation(OriginalDataFile=OriginalDataFile, ChooseYrs = "BB3yr", CRNumbers = CRNumbers, 
+                                        CRNames = ControlRuleNames, TranslatedCRName = TranslatedControlRuleVector, OperatingModelList = OperatingModelList)
   write.table(CR_BB3yr_Data, file=paste(FilePath, OutputDirectory, "CR_BB3yr_Data", sep="/"))
   AllSubsettedHerringData <- rbind(CR_BB_Data, CR_BB3yr_Data)
   write.table(AllSubsettedHerringData, paste(FilePath, OutputDirectory, "AllSubsettedHerringData", sep="/"))
@@ -355,11 +367,11 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
 }
 
 
-################################################# Produce Graphs #######################################################
-# Performance metrics to focus on
+################################################# Produce Graphs for MSE #######################################################
+# Performance metrics to focus on for Herring MSE
 # % MSY >= 100%, acceptable level as low as 85%
 # PropSSBrelSSBmsy = Proportion Years Herring SSB < SSBmsy(Median)
-# PropSSBrelhalfSSBmsy = Proportino years herring SSB < 0.5SSBmsy(Median)
+# PropSSBrelhalfSSBmsy = Proportion years herring SSB < 0.5SSBmsy(Median)
 # PropSSBrel3SSBzero = Proportion years herring SSB <0.3SSBf=0 (Median)
 # PropSSBrel75SSBzero = Proportion years herring SSB<0.75SSBf=0 (Median)
 # Variation in annual yield, preferably <10%, as high as <25%
@@ -382,8 +394,9 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
 # Add or remove corresponding items from both
 # OperatingModelList and TranslatedOperatingModel
 
+##### First Draft of Graphics: 4 Performance metrics to narrow control rule options #####
 
-MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A"," 4B"," 4C"," 4D"," 4E"," 4F") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
@@ -391,23 +404,14 @@ MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
 MSE_PerformanceMetricVector <- c("YieldrelMSY", "Yvar", "PropSSBrelhalfSSBmsy", "PropClosure")
 MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a")
 MSE_TranslatedPerfMetVector <- c("Yield Relative to MSY", "Interannual Variation in Yield", "Probability of Overfished", "Prop Year Closure Occurs")   
-MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
                             "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
                             "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
 MSE_OperatingModelColors <- c("#084081", "#0868ac", "#800026", "#bd0026", "#4eb3d3", "#a8ddb5", "#fc4e2a", "#feb24c")
 MSE_TranslatedOperatingModel <- c("A", "B", "C", "D", "E", "F", "G", "H")
 
-
-# Performance metrics of interest
-# MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "PropSSBrel3SSBzero", "PropSSBrel75SSBzero", "Yvar", "YieldrelMSY",
-#                             "p50_IAVNR", "p50_IAVGR", "PropFrelFmsy", "PropClosure")
-# Easily interpreted names of performance metrics, must be same order/length as PerformanceMetricVector, but should be more descriptive
-# MSE_TranslatedPerfMetVector <- c("Prop Years SSB < SSBmsy", "Prop Years SSB < 0.5 SSBmsy", "Prop Years SSB < 0.3 SSBf=0", "Prop Years SSB < 0.75 SSBf=0", "Interannual Variation in Yield",
-#                              "Yield Relative to MSY", "Interannual Variation Net Revenue", "Interannual Variation Gross Revenue", "Prop Years Overfishing Occurs", "Prop Year Closure Occurs")
-
-
-# This formats the data and makes all associated plots for the 4 chosen performance metrics
+# This formats the data and makes all associated plots for the 4 chosen performance metrics (used to narrow control rule options)
 ProducePlots(OriginalDataFile = MSE_OriginalDataFile, 
              ControlRuleNames = MSE_ControlRuleNames, 
              TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
@@ -422,7 +426,9 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile,
              FilePath = MSE_FilePath,
              OutputDirectory = "HerringMSE_Chosen4PerfMet")
 
-MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+##### Second Draft of Graphics: Original 4 performance metrics + a few examples #####
+
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A"," 4B"," 4C"," 4D"," 4E"," 4F") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
@@ -430,7 +436,7 @@ MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
 MSE_PerformanceMetricVector <- c("YieldrelMSY", "Yvar", "PropSSBrelhalfSSBmsy", "PropClosure", "p50_NR", "MedPredAvWt_status")
 MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1")
 MSE_TranslatedPerfMetVector <- c("Yield Relative to MSY", "Interannual Variation in Yield", "Probability of Overfished", "Prop Year Closure Occurs", "Net Revenue for Herring", "Predator Avg Weight: Dogfish")
-MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
                             "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
                             "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
@@ -451,8 +457,39 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile,
              FilePath = MSE_FilePath,
              OutputDirectory = "HerringMSE_AdditionalPerfMet")
 
+##### Third Draft of Graphics: Include all performance metrics for presentation, OM with recent growth, CR 1,2,3,4A, 4E #####
 
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
+MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
+MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
+MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
+MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 5363)
+MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
+                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
+MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1", "#bd0026", "#78c679", "#bcbddc", "#ffeda0")
+MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
+                                 "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
+                                 "Interannual Variation in Yield", "Prop Year Tern Production > 1")
+                                 
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
+MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
+                             "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
+MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
 
+ProducePlots(OriginalDataFile = MSE_OriginalDataFile, 
+             ControlRuleNames = MSE_ControlRuleNames, 
+             TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+             ControlRuleColors = MSE_ControlRuleColors, 
+             CRNumbers = MSE_CRNumbers, 
+             PerformanceMetricVector = MSE_PerformanceMetricVector, 
+             TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+             PerformanceMetricColors = MSE_PerformanceMetricColors, 
+             OperatingModelList = MSE_OperatingModelList,
+             TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+             OperatingModelColors = MSE_OperatingModelColors,
+             FilePath = MSE_FilePath,
+             OutputDirectory = "HerringMSE_AllPerfMetToPresent")
 
 
 ################################################ Produce Decision Tables ######################################################
@@ -518,16 +555,16 @@ MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5"
 
 
 # setwd to file with graphics
-setwd("/Users/arhart/Research/MSE_Graphics/Icons")
+setwd("/Users/ahart2/Research/MSE_Graphics/Icons")
 IconList=c("HerringFishery", "HerringResource", "LobsterFishery", "TunaFishery", "WhaleSeabirdWatching")
 
 
 
 # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-Data <- read.table("/Users/arhart/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet/Data_OM_vs_CR_BB3yr_Yvar")
+Data <- read.table("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet/Data_OM_vs_CR_BB3yr_Yvar")
 Data <- as.matrix(Data)
 
-MakeGraphicDecisionTable(OutputDirectory= "/Users/arhart/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet",
+MakeGraphicDecisionTable(OutputDirectory= "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet",
                          Title="Interannual Variation in Yield", 
                          IconList=c("HerringFishery", "HerringResource", "WhaleSeabirdSealResource", "GroundfishFishery"),
                          RowCategoryName = "Operating \n Models", 
