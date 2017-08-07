@@ -17,6 +17,7 @@ ExtractCRandOMInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRN
        # A matrix containing same columns as original data, only rows associated with 9 control rules of interest
 
   CRSubset_HerringMSEData <- NULL
+  CRandOMSubset_HerringMSEData <- NULL
   
   HerringMSEData <- readRDS(OriginalDataFile)
   
@@ -40,11 +41,11 @@ ExtractCRandOMInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRN
   # Pick subset of chosen control rule data for chosen operating models
   for(num in 1:length(OperatingModelList)){
     # Pick rows from CRSubset_HerringMSEData which contain data for the chosen operating models
-    print(HerringMSEData[,"OM"])
-    print(colnames(HerringMSEData))
-    #print(which(CRSubset_HerringMSEData[,"OM"]=="HiM_LowSteep_NoAssBias_RecWt"))
-    MatrixRows <- which(CRSubset_HerringMSEData[,"OM"] == "HiM_LowSteep_NoAssBias_RecWt")
+    MatrixRows <- which(CRSubset_HerringMSEData[,"OM"] == OperatingModelList[num])
+    # Combine subset with full results matrix
+    CRandOMSubset_HerringMSEData <- rbind(CRandOMSubset_HerringMSEData, CRSubset_HerringMSEData[MatrixRows,])
   }
+  # print(CRandOMSubset_HerringMSEData)
   
   # Return results matrix
   return(CRandOMSubset_HerringMSEData)
