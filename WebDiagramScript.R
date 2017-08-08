@@ -23,12 +23,28 @@ plot_indicators <- function(ind,
   # Rescale data for performance metrics ???????? I need to add the remaining performance metrics
   Scaled_ind <- NULL
   
+  # Below are metrics and corresponding translated label used for scaling
+     # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+     # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+     # "MedPredAvWt_status"               : "Tuna Weight Status" 
+     # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+     # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+     # "YieldrelMSY"                      : "Yield Relative to MSY"
+     # "Yield"                            : "Yield"
+     # "PropClosure"                      : "Prop Year Closure Occurs"
+     # "p50_NR"                           : "Net Revenue for Herring"
+     # "Yvar"                             : "Interannual Variation in Yield"
+     # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
+
   for(NCol in 1:ncol(ind)){
-    if(colnames(ind)[NCol] == "Yield.Relative.to.MSY" | colnames(ind)[NCol] == "Predator.Avg.Weight:.Dogfish"){
+    if(colnames(ind)[NCol] == "Yield.Relative.to.MSY" | colnames(ind)[NCol] == "Tuna.Weight.Status" |
+       colnames(ind)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(ind)[NCol] == "Yield" | 
+       colnames(ind)[NCol] == "Prop Year Tern Production > 1"){
       # No data scaling necessary
       Scaled_ind <- cbind(Scaled_ind, ind[ ,NCol])
       
-    } else if(colnames(ind)[NCol] == "Probability.of.Overfished" | colnames(ind)[NCol] == "Prop.Year.Closure.Occurs"){
+    } else if(colnames(ind)[NCol] == "Probability.of.Overfished.B.<.0.5.Bmsy" | colnames(ind)[NCol] == "Prop.Year.Closure.Occurs" | 
+              colnames(ind)[NCol] ==  "Prop.Year.Biomass.<.Bmsy" | colnames(ind)[NCol] == "Prop.Year.Overfishing.Occurs.F.>.Fmsy"){
       # Scale probability data to: 1-Data
       Scaled_ind <- cbind(Scaled_ind, 1-ind[ ,NCol])
 
@@ -36,6 +52,7 @@ plot_indicators <- function(ind,
       # Scale data to: 1/Data
       Scaled_ind <- cbind(Scaled_ind, 1/ind[ ,NCol])
     } else if(colnames(ind)[NCol] == "Net.Revenue.for.Herring"){
+      # Scale data to: Data/10
       Scaled_ind <- cbind(Scaled_ind, ind[ ,NCol]/10)
     } else {
       # Any performance metric not specified above is not scaled
