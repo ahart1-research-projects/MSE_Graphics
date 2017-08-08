@@ -1,7 +1,7 @@
 # This script subsets the herring data
 
 ##### First define the function which picks out the subset of data we are interested in #####
-ExtractCRInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRNumbers=NULL, CRNames = NULL, TranslatedCRName=NULL){
+ExtractCRandOMInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRNumbers=NULL, CRNames = NULL, TranslatedCRName=NULL, OperatingModelList=NULL){
   # This script extracts the 9 control rules from all available data based on CR and CRnum information 
   # and appends a column containing control rule names and operating model numbered (arbitrary but consistent)
   
@@ -11,15 +11,18 @@ ExtractCRInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRNumber
        # CRNumbers: Vector containing different numbers for control rules, must be same length and order as CRNames
        # CRNames: Vector containing strings of different control rules, must be same length and order as CRnumInfo
        # TranslatedCRName: Vector of full control rule names, must be same order and length as CRNames
+       # OperatingModelList: Vector of operating model names corresponding to data
        
   # Returns: 
        # A matrix containing same columns as original data, only rows associated with 9 control rules of interest
-  
+
   CRSubset_HerringMSEData <- NULL
+  CRandOMSubset_HerringMSEData <- NULL
   
   HerringMSEData <- readRDS(OriginalDataFile)
   
-  for(num in 1:length(CRNumbers)){ # this messes everything up, everything in the forloop is fine, it is wrong once the for loop is included
+  # Pick subset of data for chosen control rules
+  for(num in 1:length(CRNumbers)){ 
     # Pick rows from HerringMSEData matrix where CR and CRnum match chosen combination (data for each control rule= number control rule x2 since BB and BB3yr data available)
     MatrixRows <- which(HerringMSEData[,which(colnames(HerringMSEData)=="CR")]==ChooseYrs & HerringMSEData[,which(colnames(HerringMSEData)=="CRnum")]==CRNumbers[num])
     # Repeat CRName and TranslatedCRName associated with CRnumVectorInfo[num]
@@ -27,17 +30,25 @@ ExtractCRInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRNumber
     # print(CRName)
     TranslatedCRName <- rep(TranslatedCRName[num], length(MatrixRows))
 
-    
     # Combine labels column with corresponding row in HerringMSEData
     LabeledCRData <- cbind(CRName, TranslatedCRName, HerringMSEData[MatrixRows,])
     # print(LabeledCRData)
     
     # Combine subset with results matrix
     CRSubset_HerringMSEData <- rbind(CRSubset_HerringMSEData, LabeledCRData)
-    # print(CRSubset_HerringMSEData)
+     #print(CRSubset_HerringMSEData)
   }
+  # Pick subset of chosen control rule data for chosen operating models
+  for(num in 1:length(OperatingModelList)){
+    # Pick rows from CRSubset_HerringMSEData which contain data for the chosen operating models
+    MatrixRows <- which(CRSubset_HerringMSEData[,"OM"] == OperatingModelList[num])
+    # Combine subset with full results matrix
+    CRandOMSubset_HerringMSEData <- rbind(CRandOMSubset_HerringMSEData, CRSubset_HerringMSEData[MatrixRows,])
+  }
+  # print(CRandOMSubset_HerringMSEData)
+  
   # Return results matrix
-  return(CRSubset_HerringMSEData)
+  return(CRandOMSubset_HerringMSEData)
 }
 
 
@@ -64,7 +75,7 @@ Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=N
   
   # Read in data
   Data <- read.table(Data)
-  print(Data) # for some reason as.matrix turns everything into a string
+  # print(Data) # for some reason as.matrix turns everything into a string
   Data <- as.matrix(Data)
 
   # Set up matrix
@@ -78,7 +89,7 @@ Make_OM_vs_CR_Matrix <- function(OperatingModels=NULL, ControlRules=NULL, Data=N
   colnames(Data_OM_vs_CR) <- TranslatedCRName
   
   OutputFileName <- paste(FilePath, OutputDirectory, paste("Data_OM_vs_CR", ChooseYrs, PerformanceMetric, sep="_"), sep="/")
-  print(OutputFileName) # problem with FilePath
+  # print(OutputFileName) # problem with FilePath
   # Write data to file
   # write.table(Data_OM_vs_CR, file=paste(FilePath, OutputDirectory, paste("Data_OM_vs_CR", ChooseYrs, PerformanceMetric, sep="_"), sep="/"))
   write.table(Data_OM_vs_CR, file=OutputFileName)
@@ -107,9 +118,12 @@ Make_OM_vs_PerfMet_Matrix <- function(OperatingModels=NULL, ControlRule=NULL, Da
   # Read in data
   Data <- read.table(Data)
   Data <- as.matrix(Data)
+  #print(Data[,"OM"])
   
   # Set up matrix
   Data_PerfMet_vs_OM <- matrix(NA, length(PerformanceMetrics), length(OperatingModels))
+  
+  #print (Data[which(Data[,"CRName"]== ControlRule),PerformanceMetrics[10]])
   
   # Fill matrix with data corresponding to chosen Control Rule
   for(metric in 1:length(PerformanceMetrics)){
