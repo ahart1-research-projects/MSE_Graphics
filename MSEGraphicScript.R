@@ -428,7 +428,7 @@ MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A"," 4B"," 4C"," 4D"," 4E
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
 MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
 MSE_PerformanceMetricVector <- c("YieldrelMSY", "Yvar", "PropSSBrelhalfSSBmsy", "PropClosure", "p50_NR", "MedPredAvWt_status")
-MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1")
+MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443")
 MSE_TranslatedPerfMetVector <- c("Yield Relative to MSY", "Interannual Variation in Yield", "Probability of Overfished", "Prop Year Closure Occurs", "Net Revenue for Herring", "Predator Avg Weight: Dogfish")
 MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
@@ -454,103 +454,4 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile,
 
 
 
-
-################################################ Produce Decision Tables ######################################################
-
-# Make sure DecisionTableFunctions.R file is sourced
-
-#GraphicLayout information for all 9 control rules and 8 operating models
-GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  2,  3,  4,  5,  6,  7,  8,
-                           9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,
-                          10, 11, 11, 11, 11, 11, 11, 11, 11, 11,  8,
-                          10, 12, 12, 12, 12, 12, 12, 12, 12, 12,  12,
-                          10, 13, 14, 15, 16, 17, 18, 19, 20, 21,  8,
-                          22, 22, 22, 22, 22, 22, 22, 22, 22, 22,  22,
-                          23, 24, 25, 26, 27, 28, 29, 30, 31, 32,  8,
-                          33, 33, 33, 33, 33, 33, 33, 33, 33, 33,  33,
-                          34, 35, 36, 37, 38, 39, 40, 41, 42, 43,  8,
-                          44, 44, 44, 44, 44, 44, 44, 44, 44, 44,  44,
-                          45, 46, 47, 48, 49, 50, 51, 52, 53, 54,  8,
-                          55, 55, 55, 55, 55, 55, 55, 55, 55, 55,  55,
-                          56, 57, 58, 59, 60, 61, 62, 63, 64, 65,  8,
-                          66, 66, 66, 66, 66, 66, 66, 66, 66, 66,  66,
-                          67, 68, 69, 70, 71, 72, 73, 74, 75, 76,  8,
-                          77, 77, 77, 77, 77, 77, 77, 77, 77, 77,  77,
-                          78, 79, 80, 81, 82, 83, 84, 85, 86, 87,  8,
-                          88, 88, 88, 88, 88, 88, 88, 88, 88, 88,  88,
-                          89, 90, 91, 92, 93, 94, 95, 96, 97, 98,  8,
-                          99, 99, 99, 99, 99, 99, 99, 99, 99, 99,  99,
-                         100,101,102,103,104,105,106,107,108,109,  8,
-                         110,110,110,110,110,110,110,110,110,110,  110)
-
-# # This didn't fix the problem with the horizontal lines touching the edge
-# GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  2,  3,  4,  5,  6,  7,  8,
-#                            9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,
-#                           10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
-#                           10, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
-#                           10, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-#                           23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
-#                           24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-#                           35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-#                           36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46,
-#                           47, 47, 47, 47, 47, 47, 47, 47, 47, 47, 47,
-#                           48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 
-#                           59, 59, 59, 59, 59, 59, 59, 59, 59, 59, 59,
-#                           60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
-#                           71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71,
-#                           72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82,
-#                           83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83,
-#                           84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94,
-#                           95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95, 
-#                           96, 97, 98, 99,100,101,102,103,104,105,106,
-#                          107,107,107,107,107,107,107,107,107,107,107,
-#                          108,109,110,111,112,113,114,115,116,117,118,
-#                          119,119,119,119,119,119,119,119,119,119,119)
-
-GraphicRowsAllOMs <- 22
-GraphicColumnsAllOMs <- 11
-GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
-GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
-
-MSE_TranslatedOperatingModel <- c("A", "B", "C", "D", "E", "F", "G", "H")
-MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
-
-
-# setwd to file with graphics
-setwd("/Users/arhart/Research/MSE_Graphics/Icons")
-IconList=c("HerringFishery", "HerringResource", "LobsterFishery", "TunaFishery", "WhaleSeabirdWatching")
-
-
-
-# Extract data for barplots from Data_OM_vs_CR_BB3yr file
-Data <- read.table("/Users/arhart/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet/Data_OM_vs_CR_BB3yr_Yvar")
-Data <- as.matrix(Data)
-
-MakeGraphicDecisionTable(OutputDirectory= "/Users/arhart/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet",
-                         Title="Interannual Variation in Yield", 
-                         IconList=c("HerringFishery", "HerringResource", "WhaleSeabirdSealResource", "GroundfishFishery"),
-                         RowCategoryName = "Operating \n Models", 
-                         ColumnCategoryName = "Control Rule Options", 
-                         RowNames = MSE_TranslatedOperatingModel,
-                         ColumnNames = MSE_TranslatedControlRuleVector,
-                         GraphicLayout = GraphicLayoutAllOMs, 
-                         GraphicNRow = GraphicRowsAllOMs, 
-                         GraphicNCol = GraphicColumnsAllOMs, 
-                         GraphicHeights = GraphicHeightsAllOMs,
-                         GraphicWidths = GraphicWidthsALLOMs,
-                         
-                         VerticalBarData = Data, VerticalBarWidths = 0.5,
-                         VerticalBarColors=MSE_ControlRuleColors, VerticalBarXLabel="Test", VerticalBarYLabel="YVar",
-                         VerticalBarAxes = TRUE,
-                         OutputFileName = "Example_DecisionTable_IAV_Yield"
-                         
-                         # VerticalBarData = TestList, VerticalBarWidths = rep(1,ncol(Data)),
-                         # VerticalBarColors=MSE_ControlRuleColors, VerticalBarXLabel=paste(TestList[[1]][1], sep=""), VerticalBarYLabel="YVar",
-                         # VerticalBarAxes = TRUE,
-                         
-                         #VerticalBarData = TestList[1], VerticalBarWidths = rep(1,ncol(Data)),
-                         #VerticalBarColors=MSE_ControlRuleColors, VerticalBarXLabel=paste(TestList[[2]][1], sep=""), VerticalBarYLabel="YVar",
-                         #VerticalBarAxes = TRUE
-                         )
 
