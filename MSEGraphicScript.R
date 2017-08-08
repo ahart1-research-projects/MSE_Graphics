@@ -491,6 +491,3 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile,
              FilePath = MSE_FilePath,
              OutputDirectory = "HerringMSE_AllPerfMetToPresent")
 
-
-
-
