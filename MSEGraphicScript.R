@@ -1,7 +1,7 @@
 # MSE graphic code
 
 ######################## Functions which produces plots ###################################
-ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=NULL, ControlRuleNames=NULL, TranslatedControlRuleVector=NULL, ControlRuleColors=NULL, 
+ProduceBarPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=NULL, ControlRuleNames=NULL, TranslatedControlRuleVector=NULL, ControlRuleColors=NULL, 
                          CRNumbers=NULL, PerformanceMetricVector=NULL, PerformanceMetricColors=PerformanceMetricColorsDefault,
                          TranslatedPerfMetVector=NULL, OperatingModelList=NULL, 
                          OperatingModelColors=OperatingModelColorsDefault, TranslatedOperatingModel=NULL){
@@ -14,6 +14,7 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
             # Below are metrics and corresponding translated label that should be used, other metrics may be used but will not be scaled in any plot (mainly web diagrams)
                # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
                # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+               # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
                # "MedPredAvWt_status"               : "Tuna Weight Status" 
                # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
                # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
@@ -39,8 +40,7 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
        # PNG files of different graphics for both BB and BB3yr implementation of control rule
             # Graphs multi-performance metrics, 1 operating model, grouped by control rule
             # Graphs multi-performance metrics, 1 control rule, grouped by operating model
-            # Web/radar diagram, 1 operating model, web = multiple control rules, data = 1 performance metric
-            # Web/radar diagram, 1 control rule, web = multiple operating models, data = 1 performance metric
+            
   
   # Defaults
   ControlRuleColorsDefault <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
@@ -51,7 +51,6 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
   # Source files containing files containing functions
   source(paste(FilePath, "FormatHerringData.R", sep="/"))
   source(paste(FilePath, "BarPlotScript.R", sep="/"))
-  source(paste(FilePath, "WebDiagramScript.R", sep="/"))
   
   # Create output directory
   dir.create(paste(FilePath, OutputDirectory, sep="/"))
@@ -145,58 +144,6 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
                               TranslatedCRName=TranslatedControlRuleVector,
                               OutputDirectory = OutputDirectory,
                               FilePath = FilePath)
-  }
-  
-  ##### Make Web diagram Performance metric vs. CR for 1 OM files
-  # Loop over operating models for BB data
-  for(i in 1:length(OperatingModelList)){
-    Make_WebDiagram_Matrix_1_OM(OperatingModel=OperatingModelList[i], 
-                                ControlRule=ControlRuleNames, 
-                                Data=paste(FilePath, OutputDirectory, "CR_BB_Data", sep="/"), 
-                                PerformanceMetrics=PerformanceMetricVector, 
-                                ChooseYrs = "BB",
-                                TranslatedPerfMetVector=TranslatedPerfMetVector, 
-                                TranslatedCRName=TranslatedControlRuleVector,
-                                OutputDirectory = OutputDirectory,
-                                FilePath = FilePath)
-  }
-  # Loop over operating models for BB3yr data
-  for(i in 1:length(OperatingModelList)){
-    Make_WebDiagram_Matrix_1_OM(OperatingModel=OperatingModelList[i], 
-                                ControlRule=ControlRuleNames, 
-                                Data=paste(FilePath, OutputDirectory, "CR_BB3yr_Data", sep="/"), 
-                                PerformanceMetrics=PerformanceMetricVector, 
-                                ChooseYrs = "BB3yr",
-                                TranslatedPerfMetVector=TranslatedPerfMetVector, 
-                                TranslatedCRName=TranslatedControlRuleVector,
-                                OutputDirectory = OutputDirectory,
-                                FilePath = FilePath)
-  }
-  
-  ##### Make Web diagram Performance metric vs. OM for 1 CR files
-  # Loop over control rules for BB data
-  for(i in 1: length(ControlRuleNames)){
-    Make_WebDiagram_Matrix_1_CR(OperatingModels=OperatingModelList, 
-                                ControlRule=ControlRuleNames[i], 
-                                Data=paste(FilePath, OutputDirectory, "CR_BB_Data", sep="/"), 
-                                PerformanceMetrics=PerformanceMetricVector, 
-                                ChooseYrs = "BB",
-                                TranslatedOperatingModel=TranslatedOperatingModel, 
-                                TranslatedPerfMetVector=TranslatedPerfMetVector,
-                                OutputDirectory = OutputDirectory,
-                                FilePath = FilePath)
-  }
-  # Loop over control rules for BB3yr data
-  for(i in 1: length(ControlRuleNames)){
-    Make_WebDiagram_Matrix_1_CR(OperatingModels=OperatingModelList, 
-                                ControlRule=ControlRuleNames[i], 
-                                Data=paste(FilePath, OutputDirectory, "CR_BB3yr_Data", sep="/"), 
-                                PerformanceMetrics=PerformanceMetricVector, 
-                                ChooseYrs = "BB3yr",
-                                TranslatedOperatingModel=TranslatedOperatingModel, 
-                                TranslatedPerfMetVector=TranslatedPerfMetVector,
-                                OutputDirectory = OutputDirectory,
-                                FilePath = FilePath)
   }
   
   ########## Make Bargraphs ##########
@@ -296,7 +243,344 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
   #                         PlotColor = OperatingModelColors,
   #                         OutputFile = OutputFileName)
   # }
+}
 
+ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=NULL, ControlRuleNames=NULL, TranslatedControlRuleVector=NULL, ControlRuleColors=NULL, 
+                              CRNumbers=NULL, PerformanceMetricVector=NULL, PerformanceMetricColors=PerformanceMetricColorsDefault,
+                              TranslatedPerfMetVector=NULL, OperatingModelList=NULL, 
+                              OperatingModelColors=OperatingModelColorsDefault, TranslatedOperatingModel=NULL){
+    # Args:
+         # OriginalDataFile: Matrix with a column for every performance metric, contains all data, RDS file type
+         # FilePath: File path to MSE_Graphics project
+         # OutputDirectory: string containing folder name to store all formatted data matrices and corresponding graphics
+         # ControlRuleNames: Vector of control rule names corresponding to data
+         # TranslatedControlRuleVector: Vector of full control rule names, must be same order and length as ControlRuleNames
+            # Below are metrics and corresponding translated label that should be used, other metrics may be used but will not be scaled in any plot (mainly web diagrams)
+                 # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+                 # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+                 # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+                 # "MedPredAvWt_status"               : "Tuna Weight Status" 
+                 # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+                 # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+                 # "YieldrelMSY"                      : "Yield Relative to MSY"
+                 # "Yield"                            : "Yield"
+                 # "PropClosure"                      : "Prop Year Closure Occurs"
+                 # "p50_NR"                           : "Net Revenue for Herring"
+                 # "Yvar"                             : "Interannual Variation in Yield"
+                 # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
+         # ControlRuleColors: Vector of colors equal in length to ControlRuleNames
+         # default = ControlRuleColorsDefault, contains 9 colors
+         # CRNumbers: Vector of control rule numbers, must be same order and length as CRNumbers
+         # PerformanceMetricVector: Vector of performance metric names corresponding to data
+         # PerformanceMetricColors: Vector of colors equal in length to PerformanceMetricVector
+              # default = PerformanceMetricColorsDefault, contains 10 colors
+         # TranslatedPerfMetVector: Vector of full performance metric names, must be same order and length of PerformanceMetrics
+         # OperatingModelList: Vector of operating model names corresponding to data
+         # OperatingModelColors: Vector of colors equal in length to OperatingModelList
+              # default = OperatingModelColorsDefault, contains 8 colors
+         # TranslatedOperatingModel: Vector of full operating model names, must be same order and length as OperatingModelList
+  
+    # Returns:
+         # Formatted data matrices used for producing graphics
+         # PNG files of different graphics for both BB and BB3yr implementation of control rule
+         # Web/radar diagram, 1 operating model, web = multiple control rules, data = 1 performance metric
+         # Web/radar diagram, 1 control rule, web = multiple operating models, data = 1 performance metric
+    
+    # Defaults
+    ControlRuleColorsDefault <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
+    OperatingModelColorsDefault <- c("#084081", "#0868ac", "#800026", "#bd0026", "#4eb3d3", "#a8ddb5", "#fc4e2a", "#feb24c")
+    PerformanceMetricColorsDefault <- c("#084081", "#0868ac", "#800026", "#bd0026", "#4eb3d3", "#a8ddb5", "#fc4e2a", "#feb24c", "#238443", "#f768a1")
+    # ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#0868ac" , "#2b8cbe", "#7bccc4")
+    
+    # Source files containing files containing functions
+    source(paste(FilePath, "FormatHerringData.R", sep="/"))
+    source(paste(FilePath, "WebDiagramScript.R", sep="/"))
+    
+    # Create output directory
+    dir.create(paste(FilePath, OutputDirectory, sep="/"))
+    
+    ################################################ Subset Data For Graphics ######################################################
+    ##### Full Subset Data #####
+    CR_BB_Data <- ExtractCRandOMInformation(OriginalDataFile=OriginalDataFile, ChooseYrs = "BB", CRNumbers = CRNumbers, 
+                                            CRNames = ControlRuleNames, TranslatedCRName = TranslatedControlRuleVector, OperatingModelList = OperatingModelList)
+    write.table(CR_BB_Data, file=paste(FilePath, OutputDirectory, "CR_BB_Data", sep="/"))
+    CR_BB3yr_Data <- ExtractCRandOMInformation(OriginalDataFile=OriginalDataFile, ChooseYrs = "BB3yr", CRNumbers = CRNumbers, 
+                                               CRNames = ControlRuleNames, TranslatedCRName = TranslatedControlRuleVector, OperatingModelList = OperatingModelList)
+    write.table(CR_BB3yr_Data, file=paste(FilePath, OutputDirectory, "CR_BB3yr_Data", sep="/"))
+    AllSubsettedHerringData <- rbind(CR_BB_Data, CR_BB3yr_Data)
+    write.table(AllSubsettedHerringData, paste(FilePath, OutputDirectory, "AllSubsettedHerringData", sep="/"))
+    
+    ##### Make Web diagram Performance metric vs. CR for 1 OM files
+    # Loop over operating models for BB data
+    for(i in 1:length(OperatingModelList)){
+      Make_WebDiagram_Matrix_1_OM(OperatingModel=OperatingModelList[i], 
+                                  ControlRule=ControlRuleNames, 
+                                  Data=paste(FilePath, OutputDirectory, "CR_BB_Data", sep="/"), 
+                                  PerformanceMetrics=PerformanceMetricVector, 
+                                  ChooseYrs = "BB",
+                                  TranslatedPerfMetVector=TranslatedPerfMetVector, 
+                                  TranslatedCRName=TranslatedControlRuleVector,
+                                  OutputDirectory = OutputDirectory,
+                                  FilePath = FilePath)
+    }
+    # Loop over operating models for BB3yr data
+    for(i in 1:length(OperatingModelList)){
+      Make_WebDiagram_Matrix_1_OM(OperatingModel=OperatingModelList[i], 
+                                  ControlRule=ControlRuleNames, 
+                                  Data=paste(FilePath, OutputDirectory, "CR_BB3yr_Data", sep="/"), 
+                                  PerformanceMetrics=PerformanceMetricVector, 
+                                  ChooseYrs = "BB3yr",
+                                  TranslatedPerfMetVector=TranslatedPerfMetVector, 
+                                  TranslatedCRName=TranslatedControlRuleVector,
+                                  OutputDirectory = OutputDirectory,
+                                  FilePath = FilePath)
+    }
+    
+    ##### Make Web diagram Performance metric vs. OM for 1 CR files
+    # Loop over control rules for BB data
+    for(i in 1: length(ControlRuleNames)){
+      Make_WebDiagram_Matrix_1_CR(OperatingModels=OperatingModelList, 
+                                  ControlRule=ControlRuleNames[i], 
+                                  Data=paste(FilePath, OutputDirectory, "CR_BB_Data", sep="/"), 
+                                  PerformanceMetrics=PerformanceMetricVector, 
+                                  ChooseYrs = "BB",
+                                  TranslatedOperatingModel=TranslatedOperatingModel, 
+                                  TranslatedPerfMetVector=TranslatedPerfMetVector,
+                                  OutputDirectory = OutputDirectory,
+                                  FilePath = FilePath)
+    }
+    # Loop over control rules for BB3yr data
+    for(i in 1: length(ControlRuleNames)){
+      Make_WebDiagram_Matrix_1_CR(OperatingModels=OperatingModelList, 
+                                  ControlRule=ControlRuleNames[i], 
+                                  Data=paste(FilePath, OutputDirectory, "CR_BB3yr_Data", sep="/"), 
+                                  PerformanceMetrics=PerformanceMetricVector, 
+                                  ChooseYrs = "BB3yr",
+                                  TranslatedOperatingModel=TranslatedOperatingModel, 
+                                  TranslatedPerfMetVector=TranslatedPerfMetVector,
+                                  OutputDirectory = OutputDirectory,
+                                  FilePath = FilePath)
+    }
+   ################################################################################################################
+    
+    # ID max values to set scale axis labels diagrams so they are comparable (min value is 0) for PerfMet vs OM web diagrams
+         # BB and BB3yr will be scaled the same
+
+    MaxAxisVals <- NULL
+    
+    # BB Data
+    MaxVals <- NULL
+    
+    for(i in 1:length(ControlRuleNames)){
+      BB_Data <- read.table(paste(paste(FilePath, OutputDirectory, "Data_Web_PerfMet_vs_OM_BB", sep="/"), ControlRuleNames[i], sep="_" ))
+      BB_Data <- as.data.frame(BB_Data)
+      # Rescale data for performance metrics 
+      Scaled_ind <- NULL
+      
+      # Below are metrics and corresponding translated label used for scaling
+      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+      # "MedPredAvWt_status"               : "Tuna Weight Status" 
+      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+      # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+      # "YieldrelMSY"                      : "Yield Relative to MSY"
+      # "Yield"                            : "Yield"
+      # "PropClosure"                      : "Prop Year Closure Occurs"
+      # "p50_NR"                           : "Net Revenue for Herring"
+      # "Yvar"                             : "Interannual Variation in Yield"
+      # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
+      
+      for(NCol in 1:ncol(BB_Data)){
+        if(colnames(BB_Data)[NCol] == "Yield.Relative.to.MSY" | colnames(BB_Data)[NCol] == "Tuna.Weight.Status" |
+           colnames(BB_Data)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(BB_Data)[NCol] == "Yield" | 
+           colnames(BB_Data)[NCol] == "Prop Year Tern Production > 1" | colnames(BB_Data)[NCol] == "SSB.Relative.to.Unfished.Biomass"){
+          # No data scaling necessary
+          Scaled_ind <- cbind(Scaled_ind, BB_Data[ ,NCol])
+          
+        } else if(colnames(BB_Data)[NCol] == "Probability.of.Overfished.B.<.0.5.Bmsy" | colnames(BB_Data)[NCol] == "Prop.Year.Closure.Occurs" | 
+                  colnames(BB_Data)[NCol] ==  "Prop.Year.Biomass.<.Bmsy" | colnames(BB_Data)[NCol] == "Prop.Year.Overfishing.Occurs.F.>.Fmsy"){
+          # Scale probability data to: 1-Data
+          Scaled_ind <- cbind(Scaled_ind, 1-BB_Data[ ,NCol])
+          
+        } else if(colnames(BB_Data)[NCol] == "Interannual.Variation.in.Yield"){
+          # Scale data to: 1/Data
+          Scaled_ind <- cbind(Scaled_ind, 1/BB_Data[ ,NCol])
+          
+        } else if(colnames(BB_Data)[NCol] == "Net.Revenue.for.Herring"){
+          # Scale data to: Data/10
+          Scaled_ind <- cbind(Scaled_ind, BB_Data[ ,NCol]/10)
+          
+        } else {
+          # Any performance metric not specified above is not scaled
+          Scaled_ind <- cbind(Scaled_ind, BB_Data[,NCol])
+        }
+      }
+      MaxVals[i] <- max(Scaled_ind, na.rm=TRUE)
+    }
+    
+    # BB3yr Data
+    
+    for(i in 1:length(ControlRuleNames)){
+      BB3yr_Data <- read.table(paste(paste(FilePath, OutputDirectory, "Data_Web_PerfMet_vs_OM_BB3yr", sep="/"), ControlRuleNames[i], sep="_" ))
+      BB3yr_Data <- as.data.frame(BB3yr_Data)
+      
+      # Below are metrics and corresponding translated label used for scaling
+      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+      # "MedPredAvWt_status"               : "Tuna Weight Status" 
+      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+      # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+      # "YieldrelMSY"                      : "Yield Relative to MSY"
+      # "Yield"                            : "Yield"
+      # "PropClosure"                      : "Prop Year Closure Occurs"
+      # "p50_NR"                           : "Net Revenue for Herring"
+      # "Yvar"                             : "Interannual Variation in Yield"
+      # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
+      
+      for(NCol in 1:ncol(BB3yr_Data)){
+        if(colnames(BB3yr_Data)[NCol] == "Yield.Relative.to.MSY" | colnames(BB3yr_Data)[NCol] == "Tuna.Weight.Status" |
+           colnames(BB3yr_Data)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(BB3yr_Data)[NCol] == "Yield" | 
+           colnames(BB3yr_Data)[NCol] == "Prop Year Tern Production > 1" | colnames(BB3yr_Data)[NCol] == "SSB.Relative.to.Unfished.Biomass"){
+          # No data scaling necessary
+          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[ ,NCol])
+          
+        } else if(colnames(BB3yr_Data)[NCol] == "Probability.of.Overfished.B.<.0.5.Bmsy" | colnames(BB3yr_Data)[NCol] == "Prop.Year.Closure.Occurs" | 
+                  colnames(BB3yr_Data)[NCol] ==  "Prop.Year.Biomass.<.Bmsy" | colnames(BB3yr_Data)[NCol] == "Prop.Year.Overfishing.Occurs.F.>.Fmsy"){
+          # Scale probability data to: 1-Data
+          Scaled_ind <- cbind(Scaled_ind, 1-BB3yr_Data[ ,NCol])
+          
+        } else if(colnames(BB3yr_Data)[NCol] == "Interannual.Variation.in.Yield"){
+          # Scale data to: 1/Data
+          Scaled_ind <- cbind(Scaled_ind, 1/BB3yr_Data[ ,NCol])
+          
+        } else if(colnames(BB3yr_Data)[NCol] == "Net.Revenue.for.Herring"){
+          # Scale data to: Data/10
+          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[ ,NCol]/10)
+          
+        } else {
+          # Any performance metric not specified above is not scaled
+          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[,NCol])
+        }
+      }
+      
+      MaxVals[i+length(ControlRuleNames)] <- max(Scaled_ind, na.rm=TRUE)
+    }
+    
+    # Save max for Perfmet vs OM web diagram axis
+    MaxAxisVals$Web_PerfMet_vs_OM <- max(MaxVals)
+    
+    ################################################################################################################ 
+    # ID max values to set scale axis labels diagrams so they are comparable (min value is 0) for PerfMet vs CR web diagrams
+    # BB and BB3yr will be scaled the same
+    
+    # BB Data
+    MaxVals <- NULL
+    
+    for(i in 1:length(OperatingModelList)){
+      BB_Data <- read.table(paste(paste(FilePath, OutputDirectory, "Data_Web_PerfMet_vs_CR_BB", sep="/"), OperatingModelList[i], sep="_" ))
+      BB_Data <- as.data.frame(BB_Data)
+      
+      # Rescale data for performance metrics 
+      Scaled_ind <- NULL
+      
+      # Below are metrics and corresponding translated label used for scaling
+      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+      # "MedPredAvWt_status"               : "Tuna Weight Status" 
+      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+      # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+      # "YieldrelMSY"                      : "Yield Relative to MSY"
+      # "Yield"                            : "Yield"
+      # "PropClosure"                      : "Prop Year Closure Occurs"
+      # "p50_NR"                           : "Net Revenue for Herring"
+      # "Yvar"                             : "Interannual Variation in Yield"
+      # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
+      
+      for(NCol in 1:ncol(BB_Data)){
+        if(colnames(BB_Data)[NCol] == "Yield.Relative.to.MSY" | colnames(BB_Data)[NCol] == "Tuna.Weight.Status" |
+           colnames(BB_Data)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(BB_Data)[NCol] == "Yield" | 
+           colnames(BB_Data)[NCol] == "Prop Year Tern Production > 1" | colnames(BB_Data)[NCol] == "SSB.Relative.to.Unfished.Biomass"){
+          # No data scaling necessary
+          Scaled_ind <- cbind(Scaled_ind, BB_Data[ ,NCol])
+          
+        } else if(colnames(BB_Data)[NCol] == "Probability.of.Overfished.B.<.0.5.Bmsy" | colnames(BB_Data)[NCol] == "Prop.Year.Closure.Occurs" | 
+                  colnames(BB_Data)[NCol] ==  "Prop.Year.Biomass.<.Bmsy" | colnames(BB_Data)[NCol] == "Prop.Year.Overfishing.Occurs.F.>.Fmsy"){
+          # Scale probability data to: 1-Data
+          Scaled_ind <- cbind(Scaled_ind, 1-BB_Data[ ,NCol])
+          
+        } else if(colnames(BB_Data)[NCol] == "Interannual.Variation.in.Yield"){
+          # Scale data to: 1/Data
+          Scaled_ind <- cbind(Scaled_ind, 1/BB_Data[ ,NCol])
+          
+        } else if(colnames(BB_Data)[NCol] == "Net.Revenue.for.Herring"){
+          # Scale data to: Data/10
+          Scaled_ind <- cbind(Scaled_ind, BB_Data[ ,NCol]/10)
+          
+        } else {
+          # Any performance metric not specified above is not scaled
+          Scaled_ind <- cbind(Scaled_ind, BB_Data[,NCol])
+        }
+      }
+      MaxVals[i] <- max(Scaled_ind, na.rm=TRUE)
+    }
+    
+    # BB3yr Data
+    
+    for(i in 1:length(OperatingModelList)){
+      BB3yr_Data <- read.table(paste(paste(FilePath, OutputDirectory, "Data_Web_PerfMet_vs_CR_BB3yr", sep="/"), OperatingModelList[i], sep="_" ))
+      BB3yr_Data <- as.data.frame(BB3yr_Data)
+      
+      # Below are metrics and corresponding translated label used for scaling
+      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+      # "MedPredAvWt_status"               : "Tuna Weight Status" 
+      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+      # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+      # "YieldrelMSY"                      : "Yield Relative to MSY"
+      # "Yield"                            : "Yield"
+      # "PropClosure"                      : "Prop Year Closure Occurs"
+      # "p50_NR"                           : "Net Revenue for Herring"
+      # "Yvar"                             : "Interannual Variation in Yield"
+      # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
+      
+      for(NCol in 1:ncol(BB3yr_Data)){
+        if(colnames(BB3yr_Data)[NCol] == "Yield.Relative.to.MSY" | colnames(BB3yr_Data)[NCol] == "Tuna.Weight.Status" |
+           colnames(BB3yr_Data)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(BB3yr_Data)[NCol] == "Yield" | 
+           colnames(BB3yr_Data)[NCol] == "Prop Year Tern Production > 1" | colnames(BB3yr_Data)[NCol] == "SSB.Relative.to.Unfished.Biomass"){
+          # No data scaling necessary
+          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[ ,NCol])
+          
+        } else if(colnames(BB3yr_Data)[NCol] == "Probability.of.Overfished.B.<.0.5.Bmsy" | colnames(BB3yr_Data)[NCol] == "Prop.Year.Closure.Occurs" | 
+                  colnames(BB3yr_Data)[NCol] ==  "Prop.Year.Biomass.<.Bmsy" | colnames(BB3yr_Data)[NCol] == "Prop.Year.Overfishing.Occurs.F.>.Fmsy"){
+          # Scale probability data to: 1-Data
+          Scaled_ind <- cbind(Scaled_ind, 1-BB3yr_Data[ ,NCol])
+          
+        } else if(colnames(BB3yr_Data)[NCol] == "Interannual.Variation.in.Yield"){
+          # Scale data to: 1/Data
+          Scaled_ind <- cbind(Scaled_ind, 1/BB3yr_Data[ ,NCol])
+          
+        } else if(colnames(BB3yr_Data)[NCol] == "Net.Revenue.for.Herring"){
+          # Scale data to: Data/10
+          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[ ,NCol]/10)
+          
+        } else {
+          # Any performance metric not specified above is not scaled
+          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[,NCol])
+        }
+      }
+      
+      MaxVals[i+length(OperatingModelList)] <- max(Scaled_ind, na.rm=TRUE)
+    }
+    
+    # Save max for Perfmet vs OM web diagram axis
+    MaxAxisVals$Web_PerfMet_vs_CR <- max(MaxVals)   
+
+    ################################################################################################################  
+     
   ########## Make Web/Radar Diagrams ##########
   source(paste(FilePath, "WebDiagramScript.R", sep="/"))
 
@@ -308,7 +592,8 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
                     LegendLabels = paste("Operating Model", TranslatedOperatingModel),
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"), sep="/"),
-                    MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "))
+                    MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "),
+                    MaxAxis = MaxAxisVals$Web_PerfMet_vs_OM)
   }
   # Loop over control rules for BB3yr data
   for(cr in 1:length(ControlRuleNames)){
@@ -317,9 +602,10 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
                     LegendLabels = paste("Operating Model", TranslatedOperatingModel),
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"), sep="/"),
-                    MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "))
+                    MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "),
+                    MaxAxis = MaxAxisVals$Web_PerfMet_vs_OM)
   }
-
+  
   ##### Make web diagrams, each web= performance metrics for one control rule under the same operating model #####          THESE 2 WORK
   # Loop over operating models for BB data
   for(om in 1:length(OperatingModelList)){
@@ -328,7 +614,8 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
                     LegendLabels = paste("Control Rule", TranslatedControlRuleVector),
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"), sep="/"),
-                    MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "))
+                    MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "),
+                    MaxAxis = MaxAxisVals$Web_PerfMet_vs_CR)
   }
   # Loop over operating models for BB3yr data
   for(om in 1:length(OperatingModelList)){
@@ -337,33 +624,9 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
                     LegendLabels = paste("Control Rule", TranslatedControlRuleVector),
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"), sep="/"),
-                    MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "))
+                    MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "),
+                    MaxAxis = MaxAxisVals$Web_PerfMet_vs_CR)
   }
-  
-  # This doesnt work currently ??????????????????
-  # ##### Make multipanel plot with one performance metric vs. multiple operating model for one control rule #####            # THESE 2 DONT WORK
-  # # Loop over performance metrics for BB data
-  # for(pm in 1: length(PerformanceMetricVector)){
-  #   png(filename = paste("Graph_Multipanel_One_CR_vs_OM_BB", PerformanceMetricVector[pm], ".png", sep="_"))
-  #   SinglePerfMetricPlots(Data=paste(paste(FilePath, "Data_OM_vs_CR_BB", sep="/"), PerformanceMetricVector[pm], sep="_"),
-  #                         ylab= TranslatedPerfMetVector[pm],
-  #                         main= TranslatedPerfMetVector[pm],
-  #                         PlotType= "MultiPanel_1_ControlRule_MultipleOperatingModel",
-  #                         ControlRuleVector = ControlRuleNames,
-  #                         PlotColor = OperatingModelColors)
-  #   dev.off()
-  # }
-  # # Loop over performance metrics for BB3yr
-  # for(pm in 1:length(PerformanceMetricVector)){
-  #   png(filename = paste("Graph_Multipanel_One_CR_vs_OM_BB3yr", sep="/"), PerformanceMetricVector[pm], ".png", sep="_")
-  #   SinglePerfMetricPlots(Data=paste(paste(FilePath, "Data_OM_vs_CR_BB3yr", sep="/"), PerformanceMetricVector[pm], sep="_"),
-  #                         ylab= TranslatedPerfMetVector[pm],
-  #                         main= TranslatedPerfMetVector[pm],
-  #                         PlotType= "MultiPanel_1_ControlRule_MultipleOperatingModel",
-  #                         ControlRuleVector = ControlRuleNames,
-  #                         PlotColor = OperatingModelColors)
-  #   dev.off()
-  # }
 }
 
 
@@ -396,7 +659,7 @@ ProducePlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=N
 
 ##### First Draft of Graphics: 4 Performance metrics to narrow control rule options #####
 
-MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A"," 4B"," 4C"," 4D"," 4E"," 4F") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
@@ -404,7 +667,7 @@ MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
 MSE_PerformanceMetricVector <- c("YieldrelMSY", "Yvar", "PropSSBrelhalfSSBmsy", "PropClosure")
 MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a")
 MSE_TranslatedPerfMetVector <- c("Yield Relative to MSY", "Interannual Variation in Yield", "Probability of Overfished", "Prop Year Closure Occurs")   
-MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
                             "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
                             "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
@@ -428,7 +691,7 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile,
 
 ##### Second Draft of Graphics: Original 4 performance metrics + a few examples #####
 
-MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A"," 4B"," 4C"," 4D"," 4E"," 4F") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
@@ -436,7 +699,7 @@ MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
 MSE_PerformanceMetricVector <- c("YieldrelMSY", "Yvar", "PropSSBrelhalfSSBmsy", "PropClosure", "p50_NR", "MedPredAvWt_status")
 MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443")
 MSE_TranslatedPerfMetVector <- c("Yield Relative to MSY", "Interannual Variation in Yield", "Probability of Overfished", "Prop Year Closure Occurs", "Net Revenue for Herring", "Predator Avg Weight: Dogfish")
-MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
                             "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
                             "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
@@ -459,25 +722,25 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile,
 
 ##### Third Draft of Graphics: Include all performance metrics for presentation, OM with recent growth, CR 1,2,3,4A, 4E #####
 
-MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
 MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 5363)
-MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
+MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
                                  "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
 MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1", "#bd0026", "#78c679", "#bcbddc", "#ffeda0")
-MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
+MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
                                  "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
                                  "Interannual Variation in Yield", "Prop Year Tern Production > 1")
                                  
-MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
 MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
                              "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
 MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
 MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
 
-ProducePlots(OriginalDataFile = MSE_OriginalDataFile, 
+ProduceBarPlots(OriginalDataFile = MSE_OriginalDataFile, 
              ControlRuleNames = MSE_ControlRuleNames, 
              TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
              ControlRuleColors = MSE_ControlRuleColors, 
@@ -490,4 +753,75 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile,
              OperatingModelColors = MSE_OperatingModelColors,
              FilePath = MSE_FilePath,
              OutputDirectory = "HerringMSE_AllPerfMetToPresent")
+
+
+MSE_FirstHalfPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf")
+
+ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_FirstHalfPerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = "HerringMSE_AllPerfMetToPresent")
+
+MSE_SecondHalfPerformanceMetricVector <- c("PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
+
+ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_SecondHalfPerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = "HerringMSE_AllPerfMetToPresent")
+
+# Run when axis scale set to 2 (autodetect=FALSE web script)
+MSE_ALLPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
+                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
+
+ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_ALLPerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = "HerringMSE_AllPerfMetToPresent")
+
+
+# Run when axis scale set to max value (autodetect=TRUE in web script)
+MSE_ALLPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
+                                    "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
+
+ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_ALLPerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = "HerringMSE_AllPerfMetToPresent_MaxAxisUsed")
+
 
