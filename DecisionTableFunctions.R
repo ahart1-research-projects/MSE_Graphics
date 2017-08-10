@@ -78,25 +78,26 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
   # Title
   par(mar=c(0,0,0,0))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
-  text(1,1,labels=c(Title), cex=2)
+  text(1,1,labels=c(Title), cex=2.5)
   
   # Optional printed icons to right of title, may not exceed (GraphicNCol - 4)
   # need a way to say if not all empty spaces used print empty, if more than empty in icon list stop printing ??????
-  library(raster)
-  library(png)
-  for(icon in 1:length(IconList)){ 
-    IconImage <- readPNG(paste(IconList[icon], ".png", sep=""))
-    plot(1,1, axes=FALSE, ann=FALSE) # Sets up empty plot
-    lim <- par() # Gets boundaries of plot space
-    rasterImage(IconImage, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4]) # Plots raster image in plot space bounded by lim
-  }
-  if(length(IconList) < (GraphicNCol-5)){ # This fills remaining slots in first row with empty plots if fewer icons than slots
-    for(empty in 1:(GraphicNCol-5-length(IconList))){
-      par(mar=c(0,0,0,0))
-      plot(1,1,type="n", axes=FALSE, ann=FALSE)
-      print("Empty Plot Icon" )
-    }
-  }
+  # library(raster)
+  # library(png)
+  # for(icon in 1:length(IconList)){
+  #   IconImage <- readPNG(paste(IconList[icon], ".png", sep=""))
+  #   plot(1,1, axes=FALSE, ann=FALSE) # Sets up empty plot
+  #   lim <- par() # Gets boundaries of plot space
+  #   rasterImage(IconImage, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4]) # Plots raster image in plot space bounded by lim
+  # }
+  # Need the line below for standard graphic 
+  # if(length(IconList) < (GraphicNCol-5)){ # This fills remaining slots in first row with empty plots if fewer icons than slots
+  #   for(empty in 1:(GraphicNCol-5-length(IconList))){
+  #     par(mar=c(0,0,0,0))
+  #     plot(1,1,type="n", axes=FALSE, ann=FALSE)
+  #     print("Empty Plot Icon" )
+  #   }
+  # }
   
   # Plot empty space on right side of graph
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
@@ -109,12 +110,12 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
   # RowCategoryName
   par(mar=c(0,0,0,0))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
-  text(1,1,labels=c(RowCategoryName), cex=1.5) 
+  text(1,1,labels=c(RowCategoryName), cex=2) 
   
   # ColumnCategoryName
   par(mar=c(0,0,0,0))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
-  text(1,1,labels=c(ColumnCategoryName), cex=1.5) 
+  text(1,1,labels=c(ColumnCategoryName), cex=2) 
   
   # Plot horizontal division line
   par(mar=c(0,0.5,0,0.5))
@@ -124,7 +125,7 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
   # Plot ColumnNames
   for(Name in 1:length(ColumnNames)){
     plot(1,1,type = "n", axes = FALSE, ann = FALSE)
-    text(1,1, labels = ColumnNames[Name], cex=1.3)
+    text(1,1, labels = ColumnNames[Name], cex=2)
   }
   
   ##### Repeating information in the table #####
@@ -136,30 +137,41 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
     
     # Plot RowName
     plot(1,1,type="n", axes=FALSE, ann=FALSE)
-    text(1,1,labels=RowNames[row], cex=1.3)
+    text(1,1,labels=RowNames[row], cex=2)
     
     # Plot graphs specified by PlotOrder
     ExtraArguments <- list(...) # This turns data passed as extra arguments into a list for graphs to use
     
-   # if(PlotOrder=="FullMatrix_VerticalBoxplot"){
+
       for(i in 1:ncol(ExtraArguments$VerticalBarData)){
         #par(mar=c(0,0,0,0), xpd=TRUE)
-        par(mar=c(1.8,2,0,0), xpd=TRUE)
+        # Rank from high to low
+        Rank <- rank(ExtraArguments$VerticalBarData[row,])
+        Colors <- ExtraArguments$VerticalBarColors
+        print(as.factor(Colors))
+        #print(Rank)
+        #print(ExtraArguments$VerticalBarData[row,])
+        par(mar=c(2,3,0,0), xpd=TRUE) # /?????????? probably need to adjust
         barplot(height=ExtraArguments$VerticalBarData[row,i], 
                 width=ExtraArguments$VerticalBarWidths, 
                 space=0, 
                 horiz=FALSE, 
-                col=ExtraArguments$VerticalBarColors[i], 
-                # xlab=paste(round(ExtraArguments$VerticalBarData[row,i], digits=2)),
+                col=Colors[Rank[i]],
+                #col=ExtraArguments$VerticalBarColors[i], 
+                # xlab=Labels,
                 # ylab=ExtraArguments$VerticalBarYLabel,
-                ylim=c(0,1.1*max(ExtraArguments$VerticalBarData)),
+                ylim=c(0,1.1*max(ExtraArguments$VerticalBarData[row,])),
                 # axes=ExtraArguments$VerticalBarAxes, 
                 cex.axis=1, 
                 cex.names=1, 
                 offset=0)
-        text(0.23,-0.13,labels=paste(round(ExtraArguments$VerticalBarData[row,i], digits=2)), cex=1.5)
+
+        Labels <- round(ExtraArguments$VerticalBarData[row,i], digits=2)
+        # text(0.23,-0.13,labels=paste(Labels), cex=1.5)
+        # text (0.23,-0.5, labels = Labels, cex=1.5)
+        mtext(Labels, side=1, cex=1.2, line=1)
       }
-    #}
+
 
     # The commented section below works, but each option can only be called once in the decision table
     # Additionally, the same plot will be plotted across the entire row, although plots will vary between rows
@@ -190,7 +202,7 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
   }
   
   # Plot last horizontal division
-  par(mar=c(0.25,0.5,0.5,0.5))
+  par(mar=c(0,0.5,0,0.5))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   abline(h=1, col="black", lwd=2)
   
