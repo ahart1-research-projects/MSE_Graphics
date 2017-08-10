@@ -361,226 +361,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                                   OutputDirectory = OutputDirectory,
                                   FilePath = FilePath)
     }
-   ################################################################################################################
-    
-    # ID max values to set scale axis labels diagrams so they are comparable (min value is 0) for PerfMet vs OM web diagrams
-         # BB and BB3yr will be scaled the same
-
-    MaxAxisVals <- NULL
-    
-    # BB Data
-    MaxVals <- NULL
-    
-    for(i in 1:length(ControlRuleNames)){
-      BB_Data <- read.table(paste(paste(FilePath, OutputDirectory, "Data_Web_PerfMet_vs_OM_BB", sep="/"), ControlRuleNames[i], sep="_" ))
-      BB_Data <- as.data.frame(BB_Data)
-      # Rescale data for performance metrics 
-      Scaled_ind <- NULL
-      
-      # Below are metrics and corresponding translated label used for scaling
-      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
-      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
-      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
-      # "MedPredAvWt_status"               : "Tuna Weight Status" 
-      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
-      # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
-      # "YieldrelMSY"                      : "Yield Relative to MSY"
-      # "Yield"                            : "Yield"
-      # "PropClosure"                      : "Prop Year Closure Occurs"
-      # "p50_NR"                           : "Net Revenue for Herring"
-      # "Yvar"                             : "Interannual Variation in Yield"
-      # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
-      
-      for(NCol in 1:ncol(BB_Data)){
-        if(colnames(BB_Data)[NCol] == "Yield.Relative.to.MSY" | colnames(BB_Data)[NCol] == "Tuna.Weight.Status" |
-           colnames(BB_Data)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(BB_Data)[NCol] == "Yield" | 
-           colnames(BB_Data)[NCol] == "Prop Year Tern Production > 1" | colnames(BB_Data)[NCol] == "SSB.Relative.to.Unfished.Biomass"){
-          # No data scaling necessary
-          Scaled_ind <- cbind(Scaled_ind, BB_Data[ ,NCol])
-          
-        } else if(colnames(BB_Data)[NCol] == "Probability.of.Overfished.B.<.0.5.Bmsy" | colnames(BB_Data)[NCol] == "Prop.Year.Closure.Occurs" | 
-                  colnames(BB_Data)[NCol] ==  "Prop.Year.Biomass.<.Bmsy" | colnames(BB_Data)[NCol] == "Prop.Year.Overfishing.Occurs.F.>.Fmsy"){
-          # Scale probability data to: 1-Data
-          Scaled_ind <- cbind(Scaled_ind, 1-BB_Data[ ,NCol])
-          
-        } else if(colnames(BB_Data)[NCol] == "Interannual.Variation.in.Yield"){
-          # Scale data to: 1/Data
-          Scaled_ind <- cbind(Scaled_ind, 1/BB_Data[ ,NCol])
-          
-        } else if(colnames(BB_Data)[NCol] == "Net.Revenue.for.Herring"){
-          # Scale data to: Data/10
-          Scaled_ind <- cbind(Scaled_ind, BB_Data[ ,NCol]/10)
-          
-        } else {
-          # Any performance metric not specified above is not scaled
-          Scaled_ind <- cbind(Scaled_ind, BB_Data[,NCol])
-        }
-      }
-      MaxVals[i] <- max(Scaled_ind, na.rm=TRUE)
-    }
-    
-    # BB3yr Data
-    
-    for(i in 1:length(ControlRuleNames)){
-      BB3yr_Data <- read.table(paste(paste(FilePath, OutputDirectory, "Data_Web_PerfMet_vs_OM_BB3yr", sep="/"), ControlRuleNames[i], sep="_" ))
-      BB3yr_Data <- as.data.frame(BB3yr_Data)
-      
-      # Below are metrics and corresponding translated label used for scaling
-      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
-      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
-      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
-      # "MedPredAvWt_status"               : "Tuna Weight Status" 
-      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
-      # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
-      # "YieldrelMSY"                      : "Yield Relative to MSY"
-      # "Yield"                            : "Yield"
-      # "PropClosure"                      : "Prop Year Closure Occurs"
-      # "p50_NR"                           : "Net Revenue for Herring"
-      # "Yvar"                             : "Interannual Variation in Yield"
-      # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
-      
-      for(NCol in 1:ncol(BB3yr_Data)){
-        if(colnames(BB3yr_Data)[NCol] == "Yield.Relative.to.MSY" | colnames(BB3yr_Data)[NCol] == "Tuna.Weight.Status" |
-           colnames(BB3yr_Data)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(BB3yr_Data)[NCol] == "Yield" | 
-           colnames(BB3yr_Data)[NCol] == "Prop Year Tern Production > 1" | colnames(BB3yr_Data)[NCol] == "SSB.Relative.to.Unfished.Biomass"){
-          # No data scaling necessary
-          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[ ,NCol])
-          
-        } else if(colnames(BB3yr_Data)[NCol] == "Probability.of.Overfished.B.<.0.5.Bmsy" | colnames(BB3yr_Data)[NCol] == "Prop.Year.Closure.Occurs" | 
-                  colnames(BB3yr_Data)[NCol] ==  "Prop.Year.Biomass.<.Bmsy" | colnames(BB3yr_Data)[NCol] == "Prop.Year.Overfishing.Occurs.F.>.Fmsy"){
-          # Scale probability data to: 1-Data
-          Scaled_ind <- cbind(Scaled_ind, 1-BB3yr_Data[ ,NCol])
-          
-        } else if(colnames(BB3yr_Data)[NCol] == "Interannual.Variation.in.Yield"){
-          # Scale data to: 1/Data
-          Scaled_ind <- cbind(Scaled_ind, 1/BB3yr_Data[ ,NCol])
-          
-        } else if(colnames(BB3yr_Data)[NCol] == "Net.Revenue.for.Herring"){
-          # Scale data to: Data/10
-          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[ ,NCol]/10)
-          
-        } else {
-          # Any performance metric not specified above is not scaled
-          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[,NCol])
-        }
-      }
-      
-      MaxVals[i+length(ControlRuleNames)] <- max(Scaled_ind, na.rm=TRUE)
-    }
-    
-    # Save max for Perfmet vs OM web diagram axis
-    MaxAxisVals$Web_PerfMet_vs_OM <- max(MaxVals)
-    
-    ################################################################################################################ 
-    # ID max values to set scale axis labels diagrams so they are comparable (min value is 0) for PerfMet vs CR web diagrams
-    # BB and BB3yr will be scaled the same
-    
-    # BB Data
-    MaxVals <- NULL
-    
-    for(i in 1:length(OperatingModelList)){
-      BB_Data <- read.table(paste(paste(FilePath, OutputDirectory, "Data_Web_PerfMet_vs_CR_BB", sep="/"), OperatingModelList[i], sep="_" ))
-      BB_Data <- as.data.frame(BB_Data)
-      
-      # Rescale data for performance metrics 
-      Scaled_ind <- NULL
-      
-      # Below are metrics and corresponding translated label used for scaling
-      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
-      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
-      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
-      # "MedPredAvWt_status"               : "Tuna Weight Status" 
-      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
-      # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
-      # "YieldrelMSY"                      : "Yield Relative to MSY"
-      # "Yield"                            : "Yield"
-      # "PropClosure"                      : "Prop Year Closure Occurs"
-      # "p50_NR"                           : "Net Revenue for Herring"
-      # "Yvar"                             : "Interannual Variation in Yield"
-      # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
-      
-      for(NCol in 1:ncol(BB_Data)){
-        if(colnames(BB_Data)[NCol] == "Yield.Relative.to.MSY" | colnames(BB_Data)[NCol] == "Tuna.Weight.Status" |
-           colnames(BB_Data)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(BB_Data)[NCol] == "Yield" | 
-           colnames(BB_Data)[NCol] == "Prop Year Tern Production > 1" | colnames(BB_Data)[NCol] == "SSB.Relative.to.Unfished.Biomass"){
-          # No data scaling necessary
-          Scaled_ind <- cbind(Scaled_ind, BB_Data[ ,NCol])
-          
-        } else if(colnames(BB_Data)[NCol] == "Probability.of.Overfished.B.<.0.5.Bmsy" | colnames(BB_Data)[NCol] == "Prop.Year.Closure.Occurs" | 
-                  colnames(BB_Data)[NCol] ==  "Prop.Year.Biomass.<.Bmsy" | colnames(BB_Data)[NCol] == "Prop.Year.Overfishing.Occurs.F.>.Fmsy"){
-          # Scale probability data to: 1-Data
-          Scaled_ind <- cbind(Scaled_ind, 1-BB_Data[ ,NCol])
-          
-        } else if(colnames(BB_Data)[NCol] == "Interannual.Variation.in.Yield"){
-          # Scale data to: 1/Data
-          Scaled_ind <- cbind(Scaled_ind, 1/BB_Data[ ,NCol])
-          
-        } else if(colnames(BB_Data)[NCol] == "Net.Revenue.for.Herring"){
-          # Scale data to: Data/10
-          Scaled_ind <- cbind(Scaled_ind, BB_Data[ ,NCol]/10)
-          
-        } else {
-          # Any performance metric not specified above is not scaled
-          Scaled_ind <- cbind(Scaled_ind, BB_Data[,NCol])
-        }
-      }
-      MaxVals[i] <- max(Scaled_ind, na.rm=TRUE)
-    }
-    
-    # BB3yr Data
-    
-    for(i in 1:length(OperatingModelList)){
-      BB3yr_Data <- read.table(paste(paste(FilePath, OutputDirectory, "Data_Web_PerfMet_vs_CR_BB3yr", sep="/"), OperatingModelList[i], sep="_" ))
-      BB3yr_Data <- as.data.frame(BB3yr_Data)
-      
-      # Below are metrics and corresponding translated label used for scaling
-      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
-      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
-      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
-      # "MedPredAvWt_status"               : "Tuna Weight Status" 
-      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
-      # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
-      # "YieldrelMSY"                      : "Yield Relative to MSY"
-      # "Yield"                            : "Yield"
-      # "PropClosure"                      : "Prop Year Closure Occurs"
-      # "p50_NR"                           : "Net Revenue for Herring"
-      # "Yvar"                             : "Interannual Variation in Yield"
-      # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
-      
-      for(NCol in 1:ncol(BB3yr_Data)){
-        if(colnames(BB3yr_Data)[NCol] == "Yield.Relative.to.MSY" | colnames(BB3yr_Data)[NCol] == "Tuna.Weight.Status" |
-           colnames(BB3yr_Data)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(BB3yr_Data)[NCol] == "Yield" | 
-           colnames(BB3yr_Data)[NCol] == "Prop Year Tern Production > 1" | colnames(BB3yr_Data)[NCol] == "SSB.Relative.to.Unfished.Biomass"){
-          # No data scaling necessary
-          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[ ,NCol])
-          
-        } else if(colnames(BB3yr_Data)[NCol] == "Probability.of.Overfished.B.<.0.5.Bmsy" | colnames(BB3yr_Data)[NCol] == "Prop.Year.Closure.Occurs" | 
-                  colnames(BB3yr_Data)[NCol] ==  "Prop.Year.Biomass.<.Bmsy" | colnames(BB3yr_Data)[NCol] == "Prop.Year.Overfishing.Occurs.F.>.Fmsy"){
-          # Scale probability data to: 1-Data
-          Scaled_ind <- cbind(Scaled_ind, 1-BB3yr_Data[ ,NCol])
-          
-        } else if(colnames(BB3yr_Data)[NCol] == "Interannual.Variation.in.Yield"){
-          # Scale data to: 1/Data
-          Scaled_ind <- cbind(Scaled_ind, 1/BB3yr_Data[ ,NCol])
-          
-        } else if(colnames(BB3yr_Data)[NCol] == "Net.Revenue.for.Herring"){
-          # Scale data to: Data/10
-          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[ ,NCol]/10)
-          
-        } else {
-          # Any performance metric not specified above is not scaled
-          Scaled_ind <- cbind(Scaled_ind, BB3yr_Data[,NCol])
-        }
-      }
-      
-      MaxVals[i+length(OperatingModelList)] <- max(Scaled_ind, na.rm=TRUE)
-    }
-    
-    # Save max for Perfmet vs OM web diagram axis
-    MaxAxisVals$Web_PerfMet_vs_CR <- max(MaxVals)   
-
-    ################################################################################################################  
-     
+       
   ########## Make Web/Radar Diagrams ##########
   source(paste(FilePath, "WebDiagramScript.R", sep="/"))
 
@@ -592,8 +373,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                     LegendLabels = paste("Operating Model", TranslatedOperatingModel),
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"), sep="/"),
-                    MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "),
-                    MaxAxis = MaxAxisVals$Web_PerfMet_vs_OM)
+                    MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "))
   }
   # Loop over control rules for BB3yr data
   for(cr in 1:length(ControlRuleNames)){
@@ -602,8 +382,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                     LegendLabels = paste("Operating Model", TranslatedOperatingModel),
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"), sep="/"),
-                    MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "),
-                    MaxAxis = MaxAxisVals$Web_PerfMet_vs_OM)
+                    MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "))
   }
   
   ##### Make web diagrams, each web= performance metrics for one control rule under the same operating model #####          THESE 2 WORK
@@ -614,8 +393,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                     LegendLabels = paste("Control Rule", TranslatedControlRuleVector),
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"), sep="/"),
-                    MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "),
-                    MaxAxis = MaxAxisVals$Web_PerfMet_vs_CR)
+                    MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "))
   }
   # Loop over operating models for BB3yr data
   for(om in 1:length(OperatingModelList)){
@@ -624,8 +402,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                     LegendLabels = paste("Control Rule", TranslatedControlRuleVector),
                     AxisLabels = TranslatedPerfMetVector,
                     OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"), sep="/"),
-                    MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "),
-                    MaxAxis = MaxAxisVals$Web_PerfMet_vs_CR)
+                    MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "))
   }
 }
 
@@ -805,10 +582,26 @@ ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile,
                 FilePath = MSE_FilePath,
                 OutputDirectory = "HerringMSE_AllPerfMetToPresent")
 
+################################# Used for 2nd Herring PDT #############################
+# Web diagrams for 4 OM and all performance metrics
 
-# Run when axis scale set to max value (autodetect=TRUE in web script)
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
+MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
+MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
+MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 5363)
 MSE_ALLPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
                                     "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
+MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1", "#bd0026", "#78c679", "#bcbddc", "#ffeda0")
+MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
+                                 "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
+                                 "Interannual Variation in Yield", "Prop Year Tern Production > 1")
+
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
+                             "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
+MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
 
 ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
                 ControlRuleNames = MSE_ControlRuleNames, 
@@ -823,5 +616,76 @@ ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile,
                 OperatingModelColors = MSE_OperatingModelColors,
                 FilePath = MSE_FilePath,
                 OutputDirectory = "HerringMSE_AllPerfMetToPresent_MaxAxisUsed")
+
+# Web diagrams for 4 OM and 6 performance metrics to highlight tradeoffs
+
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
+MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
+MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
+MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 5363)
+MSE_PerformanceMetricVector <- c("MedPropYrs_goodProd_Targplustern", "p50_NR", "YieldrelMSY", "Yvar", "PropClosure","PropFrelFmsy")
+MSE_PerformanceMetricColors <- c("#ffeda0", "#78c679", "#238443", "#bcbddc", "#bd0026", "#a8ddb5" )
+MSE_TranslatedPerfMetVector <- c("Prop Year Tern Production > 1", "Net Revenue for Herring", "Yield Relative to MSY", 
+                                 "Interannual Variation in Yield", "Prop Year Closure Occurs", "Prop Year Overfishing Occurs F > Fmsy")
+
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
+                             "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
+MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
+
+ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_PerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = "HerringMSE_AllPerfMetToPresent_MaxAxisUsed_SubsetPerfMet")
+
+
+
+
+
+# Run for Tuna bargraph for Growth senario all 8 OM
+
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
+MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
+MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
+MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 5363)
+MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
+                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
+MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1", "#bd0026", "#78c679", "#bcbddc", "#ffeda0")
+MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
+                                 "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
+                                 "Interannual Variation in Yield", "Prop Year Tern Production > 1")
+
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
+                            "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
+                            "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_OperatingModelColors <- c("#084081", "#0868ac", "#800026", "#bd0026", "#4eb3d3", "#a8ddb5", "#fc4e2a", "#feb24c")
+MSE_TranslatedOperatingModel <- c("A", "B", "C", "D", "E", "F", "G", "H")
+
+ProduceBarPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_PerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = "HerringMSE_AllPerfMetToPresent_AllOM")
 
 
