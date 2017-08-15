@@ -92,12 +92,48 @@ MakeGraphicDecisionTable(OutputDirectory= "/Users/arhart/Research/MSE_Graphics/H
 
 
 
+
+
+
+# Format data for Decision tables using barplot function
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
+MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
+MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
+MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 5363)
+MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", 
+                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "Yvar",
+                                 "PropClosure", "p50_NR",
+                                 "MedPredAvWt_status", "AvPropYrs_okBstatusgf", "MedPropYrs_goodProd_Targplustern")
+MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1", "#bd0026", "#78c679", "#bcbddc", "#ffeda0")
+MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", 
+                                 "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Interannual Variation in Yield",
+                                 "Prop Year Closure Occurs", "Net Revenue for Herring", 
+                                 "Tuna Weight Status", "Prop Year Good \n Dogfish Biomass", "Prop Year Tern Production > 1")
+
+
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
+                             "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
+MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
+
+ProduceBarPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_PerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = "HerringMSE_AllPerfMetToPresent_DecisionTableData")
+
 ##### Make Decision Table for 1 operating model, 5 control rules, all 12 performance metrics #####
 # Info to automate decision table production
-# MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"  ?????? use in for loop)
-MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
-                            "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
-
 
 # GraphicLayout information for 5 control rules and 4 operating models
 GraphicLayout_HalfOMs <- c( 1,  1,  1,  1,  1,  1,  3,
@@ -165,7 +201,7 @@ GraphicLayout_HalfOMs <- c( 1,  1,  1,  1,  1,  1,  3,
 GraphicRows_HalfOMs <- 30
 GraphicColumns_HalfOMs <- 7
 GraphicHeights_HalfOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRows_HalfOMs/2-3))
-GraphicWidths_HalfOMs <- c(6,rep(4, GraphicColumns_HalfOMs-1),0.25)
+GraphicWidths_HalfOMs <- c(17,rep(5, GraphicColumns_HalfOMs-1),0.25)
 
 # MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
 # MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
@@ -175,13 +211,14 @@ MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E")
 # MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
 #                                  "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
 # MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1", "#bd0026", "#78c679", "#bcbddc", "#ffeda0")
-MSE_TranslatedPerfMetVector <- c("Prop Year \n Biomass < Bmsy", "Probability of Overfished \n B < 0.5 Bmsy", "SSB Relative to \n Unfished Biomass", "Tuna Weight Status", "Prop Year Good \n Dogfish Biomass",
-                                 "Prop Year Overfishing \n Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure \n Occurs", "Net Revenue for \n Herring",
-                                 "Interannual Variation \n in Yield", "Prop Year Tern \n Production > 1")
+MSE_TranslatedPerfMetVector <- c("Prop Year \n Biomass < Bmsy", "Probability of Overfished \n B < 0.5 Bmsy", "SSB Relative to \n Unfished Biomass", 
+                                 "Prop Year Overfishing \n Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Interannual Variation \n in Yield",
+                                 "Prop Year Closure \n Occurs", "Net Revenue for \n Herring", 
+                                 "Tuna Weight Status", "Prop Year Good \n Dogfish Biomass", "Prop Year Tern \n Production > 1")
 
 
 # MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
-# MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
+
 
 #PerfMetNames <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
  #                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
@@ -191,25 +228,39 @@ ColorScale <- c("#ffffcc", "#d9f0a3", "#addd8e", "#78c679", "#31a354", "#006837"
 # setwd to file with graphics
 setwd("/Users/arhart/Research/MSE_Graphics/Icons")
 
-Data <- read.table("/Users/arhart/Research/MSE_Graphics/HerringMSE_AllPerfMetToPresent/Data_PerfMet_vs_CR_BB3yr_HiM_LowSteep_AssBias_RecWt")
-Data <- as.matrix(Data)
+# MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"  ?????? use in for loop)
+MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
+                            "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
+ 
 
-MakeGraphicDecisionTable(OutputDirectory= "/Users/arhart/Research/MSE_Graphics/HerringMSE_AllPerfMetToPresent",
-                         Title="Operating Model B", 
-                         IconList=c(),
-                         RowCategoryName = "Performance \n Metrics", 
-                         ColumnCategoryName = "Control Rule Options", 
-                         RowNames = MSE_TranslatedPerfMetVector,
-                         ColumnNames = MSE_TranslatedControlRuleVector,
-                         GraphicLayout = GraphicLayout_HalfOMs, 
-                         GraphicNRow = GraphicRows_HalfOMs, 
-                         GraphicNCol = GraphicColumns_HalfOMs, 
-                         GraphicHeights = GraphicHeights_HalfOMs,
-                         GraphicWidths = GraphicWidths_HalfOMs,
-                         
-                         VerticalBarData = Data, 
-                         VerticalBarWidths = 0.4,
-                         VerticalBarColors = ColorScale,
-                         VerticalBarAxes = TRUE,
-                         OutputFileName = "Test_Decision_Tables6")
+for(i in 1:length(MSE_OperatingModelList)){
+                     Data <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_AllPerfMetToPresent_DecisionTableData/Data_PerfMet_vs_CR_BB3yr", MSE_OperatingModelList[i], sep="_"))
+                     Data <- as.matrix(Data)
+                     
+                     MakeGraphicDecisionTable(OutputDirectory= "/Users/arhart/Research/MSE_Graphics/HerringMSE_AllPerfMetToPresent",
+                                              Title=paste("Operating Model", MSE_TranslatedOperatingModel[i], sep=" "), 
+                                              IconList=c(),
+                                              RowCategoryName = "Performance \n Metrics", 
+                                              ColumnCategoryName = "Control Rule Options", 
+                                              RowNames = MSE_TranslatedPerfMetVector,
+                                              ColumnNames = MSE_TranslatedControlRuleVector,
+                                              GraphicLayout = GraphicLayout_HalfOMs, 
+                                              GraphicNRow = GraphicRows_HalfOMs, 
+                                              GraphicNCol = GraphicColumns_HalfOMs, 
+                                              GraphicHeights = GraphicHeights_HalfOMs,
+                                              GraphicWidths = GraphicWidths_HalfOMs,
+                                              
+                                              VerticalBarData = Data, 
+                                              VerticalBarWidths = 0.4,
+                                              VerticalBarColors = ColorScale,
+                                              VerticalBarAxes = TRUE,
+                                              OutputFileName = paste("DecisionTable_OM", MSE_TranslatedOperatingModel[i], sep=""))
+}
 
+
+
+
+# fix if statement for colors
+# group perf met by category (see ppt slides)
+# produce decision tables
