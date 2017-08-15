@@ -29,6 +29,7 @@ plot_indicators <- function(ind,
      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+     # "SurpProd"                         : "Surplus Production"
      # "MedPredAvWt_status"               : "Tuna Weight Status" 
      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
      # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
@@ -42,48 +43,43 @@ plot_indicators <- function(ind,
   for(NCol in 1:ncol(ind)){
     if(colnames(ind)[NCol] == "Yield.Relative.to.MSY" | colnames(ind)[NCol] == "Tuna.Weight.Status" |
        colnames(ind)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(ind)[NCol] == "Yield" |
-       colnames(ind)[NCol] == "Prop.Year.Tern.Production...1" | colnames(ind)[NCol] == "SSB.Relative.to.Unfished.Biomass"){
-      # No data scaling necessary
+       colnames(ind)[NCol] == "Prop.Year.Tern.Production...1" | colnames(ind)[NCol] == "SSB.Relative.to.Unfished.Biomass" |
+       colnames(ind)[NCol] == "Surplus.Production"){
+      # No data scaling necessary, larger value is preferred
       Scaled_ind <- cbind(Scaled_ind, ind[ ,NCol])
-
+      
       MaxAxis <- c(MaxAxis, ceiling(max(Scaled_ind[ ,NCol])))
-      print("batman")
       
     } else if(colnames(ind)[NCol] == "Probability.of.Overfished.B...0.5.Bmsy" | colnames(ind)[NCol] == "Prop.Year.Closure.Occurs" | 
               colnames(ind)[NCol] ==  "Prop.Year.Biomass...Bmsy" | colnames(ind)[NCol] == "Prop.Year.Overfishing.Occurs.F...Fmsy"){
       # Scale probability data to: 1-Data
       Scaled_ind <- cbind(Scaled_ind, 1-ind[ ,NCol]) # I don't think these transformations are working
       
-      print(1-ind[,NCol])
-      print(ind[,NCol])
+      # print(1-ind[,NCol])
+      # print(ind[,NCol])
       MaxAxis <- c(MaxAxis, ceiling(max(Scaled_ind[ ,NCol])))
-
-      print("robin")
 
     } else if(colnames(ind)[NCol] == "Interannual.Variation.in.Yield"){
       # Scale data to: 1/Data
       Scaled_ind <- cbind(Scaled_ind, 1/ind[ ,NCol])
       MaxAxis <- c(MaxAxis, ceiling(max(Scaled_ind[ ,NCol])))
-      print("batgirl")
       
     } else if(colnames(ind)[NCol] == "Net.Revenue.for.Herring"){
       # Scale data to: Data/10
       Scaled_ind <- cbind(Scaled_ind, ind[ ,NCol]/10)
       MaxAxis <- c(MaxAxis, ceiling(max(Scaled_ind[ ,NCol])))
-      print("joker")
+
     } else {
-      print("Wrong")
       print(colnames(ind)[NCol])
       # Any performance metric not specified above is not scaled
       Scaled_ind <- cbind(Scaled_ind, ind[,NCol])
       MaxAxis <- c(MaxAxis, ceiling(max(Scaled_ind[ ,NCol])))
-      print("scarecrow")
     }
   }
-  print(colnames(ind))
-  colnames(Scaled_ind) <- MSE_PerformanceMetricVector
-  print(Scaled_ind)
-  print(ind)
+  
+  colnames(Scaled_ind) <- colnames(ind) #MSE_PerformanceMetricVector
+  #print(Scaled_ind)
+  #print(ind)
   ##################
   # print(ind[,1])   # Check data format
   # print(1/ind[,2])
@@ -107,22 +103,16 @@ plot_indicators <- function(ind,
   # numOf0pt5Segments <- ceiling(max(Scaled_ind,na.rm=TRUE)/0.5)
   # numOf0pt5Segments <- ceiling(MaxAxis/0.5) # instead scale to provided MaxAxis value (standardizes axis across diagrams rather than just picking best for 1 diagram)
   
-  print("London")
-  
   if (standardized) {
     aa1[] <- 2.0
     aa0[] <- 0
     aa3 <- rep(1,length(aa1))
   }
   
-  print("Paris")
-  
   if (autodetectAxisLimits)  #IK HACK to make it automatically fit plot to axis limits of radar
   {
     aa1[] <- 0.5*numOf0pt5Segments   
   }
-  
-  print("Stockholm")
   
   #combine to 
   new_dat <- as.data.frame(rbind(aa1,aa0,aa2)) # max, min, data
@@ -134,15 +124,11 @@ plot_indicators <- function(ind,
     lwd_use <- c(0.5,lwd_use)
   }
   
-  print("Amsterdam")
-  
   #axis_labels <- names(new_dat)
   axis_labels <- rep(axis_labels,length=ncol(new_dat))
   #legend_labels <- Scaled_ind[,1]
   legend_labels <- rep(legend_labels,length=nrow(Scaled_ind))
-  
-  print("Berlin")
-  
+ 
   if (autodetectAxisLimits)
   {
     plotfile <- sub("IndicatorPlot","IndicatorPlotAutoAxis", plotfile)
@@ -151,9 +137,7 @@ plot_indicators <- function(ind,
   png(file=plotfile)
 
   par(mar=c(0,3,3,0), oma=c(0,0,0,0), xpd=TRUE)
-  
-  print("Oslo")
-  
+
   # Original:
   # if (autodetectAxisLimits) # Set axes labels automatically when autodetectAxisLimits = TRUE ### for some reason the true option is not working
   # {
@@ -176,9 +160,6 @@ plot_indicators <- function(ind,
     fmsb::radarchart(new_dat,pty=32,plwd=lwd_use,cglcol=gray(0.1),xlim=c(-1.5,2),
                      ylim=c(-1.5,1.5),pcol=col_use,plty=1,vlabels=axis_labels,axistype=0,seg=4)
   }
-
-  
-  print("Prague")
   
   # Add main title to graph
   text(0,1.7,labels=MainTitle, cex=1.5)
@@ -189,7 +170,6 @@ plot_indicators <- function(ind,
   legend(0.7,1.8,legend=legend_labels,lwd=3,col=colvec,cex=1,bty='n')
   
   dev.off()
-  print("Rome")
 }
 
 
