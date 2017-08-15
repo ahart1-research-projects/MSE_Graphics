@@ -242,9 +242,12 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
 #   }
 # }
 
+##################################################################################################################
 
 
 
+
+##################################################################################################################
 
 MakePictogram <- function(FileName=NULL, PickIcon=NULL, CountData=NULL, CountDataScale=NULL, NCols=NULL){
   # Args:
