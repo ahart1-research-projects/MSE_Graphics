@@ -497,9 +497,9 @@ ProducePlots(OriginalDataFile = MSE_OriginalDataFile,
              FilePath = MSE_FilePath,
              OutputDirectory = "HerringMSE_AdditionalPerfMet")
 
-##### Third Draft of Graphics: Include all performance metrics for presentation, OM with recent growth, CR 1,2,3,4A, 4E #####
+##### Third Draft of Graphics: Include all performance metrics for presentation, OM with recent growth, CR 1,2,3,4A, 4E 8/14/17 PDT Meeting #####
 
-MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
@@ -511,7 +511,7 @@ MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Ove
                                  "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
                                  "Interannual Variation in Yield", "Prop Year Tern Production > 1")
                                  
-MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
                              "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
 MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
@@ -532,39 +532,38 @@ ProduceBarPlots(OriginalDataFile = MSE_OriginalDataFile,
              OutputDirectory = "HerringMSE_AllPerfMetToPresent")
 
 
-MSE_FirstHalfPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf")
+# MSE_FirstHalfPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf")
+# 
+# ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+#                 ControlRuleNames = MSE_ControlRuleNames, 
+#                 TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+#                 ControlRuleColors = MSE_ControlRuleColors, 
+#                 CRNumbers = MSE_CRNumbers, 
+#                 PerformanceMetricVector = MSE_FirstHalfPerformanceMetricVector, 
+#                 TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+#                 PerformanceMetricColors = MSE_PerformanceMetricColors, 
+#                 OperatingModelList = MSE_OperatingModelList,
+#                 TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+#                 OperatingModelColors = MSE_OperatingModelColors,
+#                 FilePath = MSE_FilePath,
+#                 OutputDirectory = "HerringMSE_AllPerfMetToPresent")
+# 
+# MSE_SecondHalfPerformanceMetricVector <- c("PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
+# 
+# ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+#                 ControlRuleNames = MSE_ControlRuleNames, 
+#                 TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+#                 ControlRuleColors = MSE_ControlRuleColors, 
+#                 CRNumbers = MSE_CRNumbers, 
+#                 PerformanceMetricVector = MSE_SecondHalfPerformanceMetricVector, 
+#                 TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+#                 PerformanceMetricColors = MSE_PerformanceMetricColors, 
+#                 OperatingModelList = MSE_OperatingModelList,
+#                 TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+#                 OperatingModelColors = MSE_OperatingModelColors,
+#                 FilePath = MSE_FilePath,
+#                 OutputDirectory = "HerringMSE_AllPerfMetToPresent")
 
-ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
-                ControlRuleNames = MSE_ControlRuleNames, 
-                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
-                ControlRuleColors = MSE_ControlRuleColors, 
-                CRNumbers = MSE_CRNumbers, 
-                PerformanceMetricVector = MSE_FirstHalfPerformanceMetricVector, 
-                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
-                PerformanceMetricColors = MSE_PerformanceMetricColors, 
-                OperatingModelList = MSE_OperatingModelList,
-                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
-                OperatingModelColors = MSE_OperatingModelColors,
-                FilePath = MSE_FilePath,
-                OutputDirectory = "HerringMSE_AllPerfMetToPresent")
-
-MSE_SecondHalfPerformanceMetricVector <- c("PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
-
-ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
-                ControlRuleNames = MSE_ControlRuleNames, 
-                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
-                ControlRuleColors = MSE_ControlRuleColors, 
-                CRNumbers = MSE_CRNumbers, 
-                PerformanceMetricVector = MSE_SecondHalfPerformanceMetricVector, 
-                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
-                PerformanceMetricColors = MSE_PerformanceMetricColors, 
-                OperatingModelList = MSE_OperatingModelList,
-                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
-                OperatingModelColors = MSE_OperatingModelColors,
-                FilePath = MSE_FilePath,
-                OutputDirectory = "HerringMSE_AllPerfMetToPresent")
-
-# Run when axis scale set to 2 (autodetect=FALSE web script)
 MSE_ALLPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
                                  "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
 
@@ -585,7 +584,7 @@ ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile,
 ################################# Used for 2nd Herring PDT #############################
 # Web diagrams for 4 OM and all performance metrics
 
-MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
@@ -597,7 +596,7 @@ MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Ove
                                  "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
                                  "Interannual Variation in Yield", "Prop Year Tern Production > 1")
 
-MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
                              "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
 MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
@@ -619,7 +618,7 @@ ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile,
 
 # Web diagrams for 4 OM and 6 performance metrics to highlight tradeoffs
 
-MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
@@ -629,7 +628,7 @@ MSE_PerformanceMetricColors <- c("#ffeda0", "#78c679", "#238443", "#bcbddc", "#b
 MSE_TranslatedPerfMetVector <- c("Prop Year Tern Production > 1", "Net Revenue for Herring", "Yield Relative to MSY", 
                                  "Interannual Variation in Yield", "Prop Year Closure Occurs", "Prop Year Overfishing Occurs F > Fmsy")
 
-MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
                              "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
 MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
@@ -655,7 +654,7 @@ ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile,
 
 # Run for Tuna bargraph for Growth senario all 8 OM
 
-MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
@@ -667,7 +666,7 @@ MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Ove
                                  "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
                                  "Interannual Variation in Yield", "Prop Year Tern Production > 1")
 
-MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
                             "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
                             "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
@@ -688,4 +687,73 @@ ProduceBarPlots(OriginalDataFile = MSE_OriginalDataFile,
                 FilePath = MSE_FilePath,
                 OutputDirectory = "HerringMSE_AllPerfMetToPresent_AllOM")
 
+############################ After 8/15/17 Revisions to Graphics ###########################################
+# Web diagrams for 4 OM and all performance metrics
+
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
+MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
+MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
+MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
+MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 5363)
+MSE_ALLPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
+                                    "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
+MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1", "#bd0026", "#78c679", "#bcbddc", "#ffeda0")
+MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
+                                 "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
+                                 "Interannual Variation in Yield", "Prop Year Tern Production > 1")
+
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
+MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
+                             "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
+MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
+
+ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_ALLPerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = "HerringMSE_AllPerfMetToPresent_MaxAxisUsed")
+
+
+# Web diagrams for 4 OM and 6 performance metrics to highlight tradeoffs
+
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
+MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
+MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
+MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
+MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 5363)
+MSE_PerformanceMetricVector <- c("MedPropYrs_goodProd_Targplustern", "p50_NR", "YieldrelMSY", "Yvar", "PropClosure","PropFrelFmsy")
+MSE_PerformanceMetricColors <- c("#ffeda0", "#78c679", "#238443", "#bcbddc", "#bd0026", "#a8ddb5" )
+MSE_TranslatedPerfMetVector <- c("Prop Year Tern Production > 1", "Net Revenue for Herring", "Yield Relative to MSY", 
+                                 "Interannual Variation in Yield", "Prop Year Closure Occurs", "Prop Year Overfishing Occurs F > Fmsy")
+
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
+MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
+                             "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
+MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
+
+ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_PerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = "HerringMSE_AllPerfMetToPresent_MaxAxisUsed_SubsetPerfMet")
+
+# for some reason Prop Year Overfishing Occurs is different??????
 
