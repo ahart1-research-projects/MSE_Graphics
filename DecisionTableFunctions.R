@@ -73,6 +73,7 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
   # Produce and display GraphicFormat
   GraphicFormat <- layout(matrix(GraphicLayout, nrow = GraphicNRow, ncol = GraphicNCol, byrow = TRUE), widths = GraphicWidths, heights = GraphicHeights)
   layout.show(GraphicFormat)
+  lcm(10)
   
   ##### Set up title and headers for table #####
   # Title
@@ -144,11 +145,32 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
     
 
       for(i in 1:ncol(ExtraArguments$VerticalBarData)){
-        #par(mar=c(0,0,0,0), xpd=TRUE)
+        print(rownames(ExtraArguments$VerticalBarData))
+        if((rownames(ExtraArguments$VerticalBarData)[row]=="Tuna Weight Status") |
+          (rownames(ExtraArguments$VerticalBarData)[row]=="Prop Year Good Dogfish Biomass") |
+           (rownames(ExtraArguments$VerticalBarData)[row]=="Yield") |
+           (rownames(ExtraArguments$VerticalBarData)[row]=="Yield Relative to MSY") |
+           (rownames(ExtraArguments$VerticalBarData)[row]=="Net Revenue for Herring") |
+           (rownames(ExtraArguments$VerticalBarData)[row]=="Prop Year Tern Production > 1") |
+           (rownames(ExtraArguments$VerticalBarData)[row]=="SSB Relative to Unfished Biomass")){
+
+
         # Rank from high to low
-        Rank <- rank(ExtraArguments$VerticalBarData[row,])
+        Rank <- rank(ExtraArguments$VerticalBarData[row, ]) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
+
+
+        } else if((rownames(ExtraArguments$VerticalBarData)[row]=="Prop Year Biomass < Bmsy") |
+                  (rownames(ExtraArguments$VerticalBarData)[row]=="Probability of Overfished B < 0.5Bmsy") |
+                  (rownames(ExtraArguments$VerticalBarData)[row]=="Prop Year Overfishing Occurs F > Fmsy") |
+                  (rownames(ExtraArguments$VerticalBarData)[row]=="Prop Year Closure Occurs") |
+                  (rownames(ExtraArguments$VerticalBarData)[row]=="Interannual Variation in Yield")){
+
+        # Rank from low to high
+        Rank <- rank(-ExtraArguments$VerticalBarData[row,])
+        }
+
         Colors <- ExtraArguments$VerticalBarColors
-        print(as.factor(Colors))
+
         #print(Rank)
         #print(ExtraArguments$VerticalBarData[row,])
         par(mar=c(2,3,0,0), xpd=TRUE) # /?????????? probably need to adjust
