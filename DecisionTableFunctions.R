@@ -374,13 +374,14 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
          (Title =="Yield Relative to MSY") |
          (Title =="Net Revenue for Herring") |
          (Title =="Prop Year Tern Production > 1") |
-         (Title =="SSB Relative to Unfished Biomass")){
+         (Title =="SSB Relative to Unfished Biomass") |
+         (Title == "Surplus Production")){
         
         # Rank from high to low
         Rank <- rank(ExtraArguments$VerticalBarData[row, ]) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
         
       } else if((Title =="Prop Year Biomass < Bmsy") |
-                (Title =="Probability of Overfished B < 0.5Bmsy") |
+                (Title =="Probability of Overfished B < 0.5 Bmsy") | 
                 (Title =="Prop Year Overfishing Occurs F > Fmsy") |
                 (Title =="Prop Year Closure Occurs") |
                 (Title =="Interannual Variation in Yield")){
@@ -439,13 +440,14 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
        (Title =="Yield Relative to MSY") |
        (Title =="Net Revenue for Herring") |
        (Title =="Prop Year Tern Production > 1") |
-       (Title =="SSB Relative to Unfished Biomass")){
+       (Title =="SSB Relative to Unfished Biomass") |
+       (Title == "Surplus Production")){
       
       # Rank from high to low
       Rank <- rank(SummaryData_Sum) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
       
     } else if((Title =="Prop Year Biomass < Bmsy") |
-              (Title =="Probability of Overfished B < 0.5Bmsy") |
+              (Title =="Probability of Overfished B < 0.5 Bmsy") | 
               (Title =="Prop Year Overfishing Occurs F > Fmsy") |
               (Title =="Prop Year Closure Occurs") |
               (Title =="Interannual Variation in Yield")){
