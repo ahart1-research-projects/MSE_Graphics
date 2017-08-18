@@ -263,48 +263,76 @@ for(i in 1:length(MSE_OperatingModelList)){
 
 ##### Make Ranked decision tables for each performance metric ##### 
 # GraphicLayout information for all 9 control rules and 8 operating models
-GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  2,  3,  4,  5,  6,  7,  8,
-                           9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,
-                           10, 11, 11, 11, 11, 11, 11, 11, 11, 11,  8,
-                           10, 12, 12, 12, 12, 12, 12, 12, 12, 12,  12,
-                           10, 13, 14, 15, 16, 17, 18, 19, 20, 21,  8,
-                           22, 22, 22, 22, 22, 22, 22, 22, 22, 22,  22,
-                           23, 24, 25, 26, 27, 28, 29, 30, 31, 32,  8,
-                           33, 33, 33, 33, 33, 33, 33, 33, 33, 33,  33,
-                           34, 35, 36, 37, 38, 39, 40, 41, 42, 43,  8,
-                           44, 44, 44, 44, 44, 44, 44, 44, 44, 44,  44,
-                           45, 46, 47, 48, 49, 50, 51, 52, 53, 54,  8,
-                           55, 55, 55, 55, 55, 55, 55, 55, 55, 55,  55,
-                           56, 57, 58, 59, 60, 61, 62, 63, 64, 65,  8,
-                           66, 66, 66, 66, 66, 66, 66, 66, 66, 66,  66,
-                           67, 68, 69, 70, 71, 72, 73, 74, 75, 76,  8,
-                           77, 77, 77, 77, 77, 77, 77, 77, 77, 77,  77,
-                           78, 79, 80, 81, 82, 83, 84, 85, 86, 87,  8,
-                           88, 88, 88, 88, 88, 88, 88, 88, 88, 88,  88,
-                           89, 90, 91, 92, 93, 94, 95, 96, 97, 98,  8,
-                           99, 99, 99, 99, 99, 99, 99, 99, 99, 99,  99,
-                           100,101,102,103,104,105,106,107,108,109,  8,
-                           110,110,110,110,110,110,110,110,110,110,  110)
+GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  2,  3,  4,  5,  6,   
+                           7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  
+                           8,  9,  9,  9,  9,  9,  9,  9,  9,  9, 
+                           8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 
+                           8, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                          20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+                          21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 
+                          31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 
+                          32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 
+                          42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 
+                          43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
+                          53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 
+                          54, 55, 56, 57, 58, 59, 60, 61, 62, 63,  
+                          64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 
+                          65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
+                          75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 
+                          76, 77, 78, 79, 80, 81, 82, 83, 84, 85,
+                          86, 86, 86, 86, 86, 86, 86, 86, 86, 86, 
+                          87, 88, 89, 90, 91, 92, 93, 94, 95, 96,
+                          97, 97, 97, 97, 97, 97, 97, 97, 97, 97, 
+                          98, 99,100,101,102,103,104,105,106,107,
+                         108,108,108,108,108,108,108,108,108,108,  
+                         109,110,111,112,113,114,115,116,117,118,
+                         119,119,119,119,119,119,119,119,119,119)
 
-GraphicRowsAllOMs <- 22
+GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  2,  3,  4,  5,  6,  7,  
+                           8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  7,  
+                           9, 10, 10, 10, 10, 10, 10, 10, 10, 10,  7,
+                           9, 11, 11, 11, 11, 11, 11, 11, 11, 11,  7,
+                           9, 12, 13, 14, 15, 16, 17, 18, 19, 20,  7,
+                          21, 21, 21, 21, 21, 21, 21, 21, 21, 21,  7,
+                          22, 23, 24, 25, 26, 27, 28, 29, 30, 31,  7,
+                          32, 32, 32, 32, 32, 32, 32, 32, 32, 32,  7,
+                          33, 34, 35, 36, 37, 38, 39, 40, 41, 42,  7,
+                          43, 43, 43, 43, 43, 43, 43, 43, 43, 43,  7,
+                          44, 45, 46, 47, 48, 49, 50, 51, 52, 53,  7,
+                          54, 54, 54, 54, 54, 54, 54, 54, 54, 54,  7, 
+                          55, 56, 57, 58, 59, 60, 61, 62, 63, 64,  7,
+                          65, 65, 65, 65, 65, 65, 65, 65, 65, 65,  7, 
+                          66, 67, 68, 69, 70, 71, 72, 73, 74, 75,  7,
+                          76, 76, 76, 76, 76, 76, 76, 76, 76, 76,  7,
+                          77, 78, 79, 80, 81, 82, 83, 84, 85, 86,  7,
+                          87, 87, 87, 87, 87, 87, 87, 87, 87, 87,  7,
+                          88, 89, 90, 91, 92, 93, 94, 95, 96, 97,  7,
+                          98, 98, 98, 98, 98, 98, 98, 98, 98, 98,  7, 
+                          99,100,101,102,103,104,105,106,107,108,  7,
+                         109,109,109,109,109,109,109,109,109,109,  7, 
+                         110,111,112,113,114,115,116,117,118,119,  7,
+                         120,120,120,120,120,120,120,120,120,120,  7)
+
+GraphicRowsAllOMs <- 24
 GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 
-MSE_TranslatedOperatingModel <- c("A", "B", "C", "D", "E", "F", "G", "H")
+MSE_TranslatedOperatingModel <- c("A", "B", "C", "D", "E", "F", "G", "H", "Summary")
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
+MSE_PerfMetColors <- c("#ffffe5","#f7fcb9","#d9f0a3","#addd8e","#78c679","#41ab5d","#238443","#006837","#004529")
 
 # setwd to file with graphics
-setwd("/Users/ahart2/Research/MSE_Graphics/Icons")
-IconList=c("HerringFishery", "HerringResource", "LobsterFishery", "TunaFishery", "WhaleSeabirdWatching", "TunaFishery")
+setwd("/Users/arhart/Research/MSE_Graphics/Icons")
+IconList=c("HerringFishery", "HerringResource", "LobsterFishery", "TunaFishery", "WhaleSeabirdWatching", "WhaleSeabirdWatching")
 
 # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-Data <- read.table("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet/Data_OM_vs_CR_BB3yr_Yvar")
+Data <- read.table("/Users/arhart/Research/MSE_Graphics/HerringMSE_AdditionalPerfMet/Data_OM_vs_CR_BB3yr_MedPredAvWt_status")
 Data <- as.matrix(Data)
 
-MakePerfMetGraphicDecisionTable(OutputDirectory= "/Users/ahart2/Research/MSE_Graphics",
+MakePerfMetGraphicDecisionTable(OutputDirectory= "/Users/arhart/Research/MSE_Graphics",
                          Title="Interannual Variation in Yield", 
-                         IconList=c("HerringFishery", "HerringResource", "WhaleSeabirdSealResource", "GroundfishFishery"),
+                         IconList=c("HerringFishery", "HerringResource", "TunaFishery", "LobsterFishery", "WhaleSeabirdWatching"),
                          RowCategoryName = "Operating \n Models", 
                          ColumnCategoryName = "Control Rule Options", 
                          RowNames = MSE_TranslatedOperatingModel,
@@ -315,9 +343,12 @@ MakePerfMetGraphicDecisionTable(OutputDirectory= "/Users/ahart2/Research/MSE_Gra
                          GraphicHeights = GraphicHeightsAllOMs,
                          GraphicWidths = GraphicWidthsALLOMs,
                          
-                         VerticalBarData = Data, VerticalBarWidths = 0.5,
-                         VerticalBarColors=MSE_ControlRuleColors, VerticalBarXLabel="Test", VerticalBarYLabel="YVar",
+                         VerticalBarData = Data, 
+                         VerticalBarWidths = 0.5,
+                         VerticalBarColors=MSE_PerfMetColors, 
+                         VerticalBarXLabel="Test", 
+                         VerticalBarYLabel="YVar",
                          VerticalBarAxes = TRUE,
-                         OutputFileName = "Example_RankedDecisionTable_IAV_Yield")
+                         OutputFileName = "Example_RankedDecisionTable_TunaWeight")
 
 
