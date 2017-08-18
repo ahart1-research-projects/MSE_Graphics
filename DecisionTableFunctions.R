@@ -278,14 +278,17 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=500, height=800)
   
   # These set up the default format
-  GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, # First four grid spaces must be assigned 1 as this is where the title will be plotted
-                             3, 3, 3, 3, 3, # 2 is empty grid to balance table appearance
-                             4, 5, 5, 5, 2,
-                             4, 6, 6, 6, 6,
-                             4, 7, 8, 9, 2,
-                             10,10,10,10,10,
-                             11,12,13,14, 2,
-                             15,15,15,15,15)
+  GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, 3, 4, 5, # First four grid spaces must be assigned 1 as this is where the title will be plotted
+                             6, 6, 6, 6, 6, 6, 6, 6, 
+                             7, 8, 8, 8, 8, 8, 8, 8, 
+                             7, 9, 9, 9, 9, 9, 9, 9,
+                             7,10,11,12,13,14,15,16,
+                            17,17,17,17,17,17,17,17,
+                            18,19,20,21,22,23,24,25,
+                            26,26,26,26,26,26,26,26,
+                            27,28,29,30,31,32,33,34,
+                            35,35,35,35,35,35,35,35)
+  
   GraphicWidthsDefault <- c(rep(1, GraphicNCol-1), 0.5)
   GraphicHeightsDefault <- rep(c(1,0.25), GraphicNRow/2)
   
@@ -320,7 +323,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   }
   
   # Plot empty space on right side of graph
-  plot(1,1,type="n", axes=FALSE, ann=FALSE)
+  #plot(1,1,type="n", axes=FALSE, ann=FALSE)
   
   # Plot first horizontal division
   par(mar=c(0,0.5,0,0.5))
@@ -373,10 +376,8 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
          (Title =="Prop Year Tern Production > 1") |
          (Title =="SSB Relative to Unfished Biomass")){
         
-        
         # Rank from high to low
         Rank <- rank(ExtraArguments$VerticalBarData[row, ]) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
-        
         
       } else if((Title =="Prop Year Biomass < Bmsy") |
                 (Title =="Probability of Overfished B < 0.5Bmsy") |
@@ -393,6 +394,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
       #print(Rank)
       #print(ExtraArguments$VerticalBarData[row,])
       par(mar=c(2,3,0,0), xpd=TRUE) # /?????????? probably need to adjust
+      #par(mar=c(0,0,0,0), xpd=TRUE)
       barplot(height=ExtraArguments$VerticalBarData[row,i], 
               width=ExtraArguments$VerticalBarWidths, 
               space=0, 
@@ -419,11 +421,11 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   par(mar=c(0,0.5,0,0.5))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   abline(h=1, col="black", lwd=1)
-  
+
   # Plot RowName
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   text(1,1,labels=RowNames[length(RowNames)], cex=2) # plot last rowname
-  
+
   
   SummaryData_Sum <- colSums(ExtraArguments$VerticalBarData)
   # print(SummaryData_Sum)
@@ -457,6 +459,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
     #print(Rank)
     #print(ExtraArguments$VerticalBarData[row,])
     par(mar=c(2,3,0,0), xpd=TRUE) # /?????????? probably need to adjust
+    #par(mar=c(0,0,0,0), xpd=TRUE)
     barplot(height=SummaryData_Sum[i], 
             width=ExtraArguments$VerticalBarWidths, 
             space=0, 
@@ -465,19 +468,19 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
             #col=ExtraArguments$VerticalBarColors[i], 
             # xlab=Labels,
             # ylab=ExtraArguments$VerticalBarYLabel,
-            ylim=c(0,(1.1*max(SummaryData_Sum))),  # Scaling of these axes are standardized across the row but not across the entire column (summary axes are larger)
-            ##### The above line is not setting max axis correctly (should be more than 4.5 in this example but is instead set to 2) ????
+            ylim=c(0,1.1*max(SummaryData_Sum)),
             # axes=ExtraArguments$VerticalBarAxes, 
             cex.axis=1, 
             cex.names=1, 
-            offset=0)
-    print(max(SummaryData_Sum))
+            offset=0,
+            xaxt='n',
+            ann=FALSE)
+    
     Labels <- round(SummaryData_Sum[i], digits=2)
+    # text(0.23,-0.13,labels=paste(Labels), cex=1.5)
+    # text (0.23,-0.5, labels = Labels, cex=1.5)
     mtext(Labels, side=1, cex=1.2, line=1)
   }
-  
-  
-  
   
   # Plot last horizontal division
   par(mar=c(0,0.5,0,0.5))
