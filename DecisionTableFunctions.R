@@ -649,7 +649,7 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
         Rank <- rank(ExtraArguments$VerticalBarData[row, ]) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
         
       } else if((RowNames[row]=="Prop Year Biomass < Bmsy") |
-                (RowNames[row]=="Probability of Overfished B < 0.5Bmsy") |
+                (RowNames[row]=="Probability of Overfished B < 0.5 Bmsy") |
                 (RowNames[row]=="Prop Year Overfishing Occurs F > Fmsy") |
                 (RowNames[row]=="Prop Year Closure Occurs") |
                 (RowNames[row]=="Interannual Variation in Yield")){
@@ -680,6 +680,11 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
       
       if(RowNames[row]=="Surplus Production" | RowNames[row]=="Yield"){
         Labels <- round((ExtraArguments$VerticalBarData[row,i]/1000), digits=0)
+        # text(0.23,-0.13,labels=paste(Labels), cex=1.5)
+        # text (0.23,-0.5, labels = Labels, cex=1.5)
+        mtext(Labels, side=1, cex=1.2, line=1) 
+      } else if(RowNames[row]=="Net Revenue for Herring"){
+        Labels <- round((ExtraArguments$VerticalBarData[row,i]), digits=0)
         # text(0.23,-0.13,labels=paste(Labels), cex=1.5)
         # text (0.23,-0.5, labels = Labels, cex=1.5)
         mtext(Labels, side=1, cex=1.2, line=1) 
