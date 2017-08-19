@@ -631,7 +631,7 @@ rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
 print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
-                                   Title= "Valued Ecosystem Component: Protected Resources & Ecotourism", 
+                                   Title= "Valued Ecosystem Component: \n Protected Resources & Ecotourism", 
                                    #IconList=IconList, 
                                    RowCategoryName = "Performance \n Metrics", 
                                    ColumnCategoryName = "Control Rule Options", 
@@ -704,7 +704,7 @@ rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
 print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
-                                   Title= "Valued Ecosystem Component: Herring, Mackerel & Lobster Fisheries", 
+                                   Title= "Valued Ecosystem Component: Herring, Mackerel \n & Lobster Fisheries", 
                                    #IconList=IconList, 
                                    RowCategoryName = "Performance \n Metrics", 
                                    ColumnCategoryName = "Control Rule Options", 
@@ -769,7 +769,7 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    #IconList=IconList, 
                                    RowCategoryName = "Performance \n Metrics", 
                                    ColumnCategoryName = "Control Rule Options", 
-                                   RowNames = MSE_SummaryPerformanceMetricVector,
+                                   RowNames = MSE_SummaryTranslatedPerfMetVector,
                                    ColumnNames = MSE_TranslatedControlRuleVector,
                                    GraphicLayout = GraphicLayoutAllOMs, 
                                    GraphicNRow = GraphicRowsAllOMs, 
