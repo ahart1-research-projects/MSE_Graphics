@@ -367,6 +367,10 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
     
     # Determine color rank
     for(i in 1:ncol(ExtraArguments$VerticalBarData)){
+      
+      # Round data to 2 decimal points (data with same rounded values will have the same color)
+      ExtraArguments$VerticalBarData[row,i] <- round(ExtraArguments$VerticalBarData[row,i], digits=2)
+      
       # print(rownames(ExtraArguments$VerticalBarData))
       if((Title =="Tuna Weight Status") |
          (Title =="Prop Year Good Dogfish Biomass") |
