@@ -275,7 +275,8 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   # Returns:
        # A ploted decision table with customized graphics
   
-  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=500, height=800)
+  # This determines size of end image
+  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=700, height=800)
   
   # These set up the default format
   GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, 3, 4, 5, # First four grid spaces must be assigned 1 as this is where the title will be plotted
@@ -352,6 +353,9 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   }
   
   ##### Repeating information in the table #####
+  # Create object to hold row rank information
+  RankTable <- NULL 
+  
   for(row in 1:(length(RowNames)-1)){
     # Plot horizontal division line
     par(mar=c(0,0.5,0,0.5))
@@ -393,7 +397,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
         # Rank from low to high
         Rank <- rank(-ExtraArguments$VerticalBarData[row,])
       }
-      
+
       Colors <- ExtraArguments$VerticalBarColors
       
       #print(Rank)
@@ -426,6 +430,8 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
         mtext(Labels, side=1, cex=1.2, line=1) 
       }
     }
+    RankTable <- rbind(RankTable, Rank)
+    print(RankTable)
   }
   
   ##### Last Row Summary #####
@@ -439,33 +445,37 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   text(1,1,labels=RowNames[length(RowNames)], cex=2) # plot last rowname
 
   
-  SummaryData_Sum <- colSums(ExtraArguments$VerticalBarData)
+  SummaryData_RankSum <- colSums(RankTable)
   # print(SummaryData_Sum)
   
-  # Determine color rank for summary data
-  for(i in 1:length(SummaryData_Sum)){
-    # print(rownames(ExtraArguments$VerticalBarData))
-    if((Title =="Tuna Weight Status") |
-       (Title =="Prop Year Good Dogfish Biomass") |
-       (Title =="Yield") |
-       (Title =="Yield Relative to MSY") |
-       (Title =="Net Revenue for Herring") |
-       (Title =="Prop Year Tern Production > 1") |
-       (Title =="SSB Relative to Unfished Biomass") |
-       (Title == "Surplus Production")){
-      
-      # Rank from high to low
-      Rank <- rank(SummaryData_Sum) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
-      
-    } else if((Title =="Prop Year Biomass < Bmsy") |
-              (Title =="Probability of Overfished B < 0.5 Bmsy") | 
-              (Title =="Prop Year Overfishing Occurs F > Fmsy") |
-              (Title =="Prop Year Closure Occurs") |
-              (Title =="Interannual Variation in Yield")){
-      
-      # Rank from low to high
-      Rank <- rank(-SummaryData_Sum)
-    }
+  # Rank from high (best performance) to low (worst performance)
+  SummaryRank <- rank(SummaryData_RankSum)
+  
+  # # Determine color rank for summary data
+  for(i in 1:length(SummaryData_RankSum)){
+  #   # print(rownames(ExtraArguments$VerticalBarData))
+  #   if((Title =="Tuna Weight Status") |
+  #      (Title =="Prop Year Good Dogfish Biomass") |
+  #      (Title =="Yield") |
+  #      (Title =="Yield Relative to MSY") |
+  #      (Title =="Net Revenue for Herring") |
+  #      (Title =="Prop Year Tern Production > 1") |
+  #      (Title =="SSB Relative to Unfished Biomass") |
+  #      (Title == "Surplus Production")){
+  #     
+  #     # Rank from high to low
+  #     SummaryRank <- rank(SummaryData_Sum) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
+  #     
+  #   } else if((Title =="Prop Year Biomass < Bmsy") |
+  #             (Title =="Probability of Overfished B < 0.5 Bmsy") | 
+  #             (Title =="Prop Year Overfishing Occurs F > Fmsy") |
+  #             (Title =="Prop Year Closure Occurs") |
+  #             (Title =="Interannual Variation in Yield")){
+  #     
+  #     # Rank from low to high
+  #     SummaryRank <- rank(-SummaryData_Sum)
+  #     print(SummaryRank)
+  #   }
     
     Colors <- ExtraArguments$VerticalBarColors
     
@@ -473,15 +483,15 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
     #print(ExtraArguments$VerticalBarData[row,])
     par(mar=c(2,3,0,0), xpd=TRUE) # /?????????? probably need to adjust
     #par(mar=c(0,0,0,0), xpd=TRUE)
-    barplot(height=SummaryData_Sum[i], 
+    barplot(height=SummaryData_RankSum[i], 
             width=ExtraArguments$VerticalBarWidths, 
             space=0, 
             horiz=FALSE, 
-            col=Colors[Rank[i]],
+            col=Colors[SummaryRank[i]],
             #col=ExtraArguments$VerticalBarColors[i], 
             # xlab=Labels,
             # ylab=ExtraArguments$VerticalBarYLabel,
-            ylim=c(0,1.1*max(SummaryData_Sum)),
+            ylim=c(0,72),
             # axes=ExtraArguments$VerticalBarAxes, 
             cex.axis=1, 
             cex.names=1, 
@@ -489,17 +499,17 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
             xaxt='n',
             ann=FALSE)
     
-    if(Title=="Surplus Production" | Title =="Yield"){
-      Labels <- round((SummaryData_Sum[i]/1000), digits=0)
+    # if(Title=="Surplus Production" | Title =="Yield"){
+    #   Labels <- round((SummaryData_RankSum[i]/1000), digits=0)
+    #   # text(0.23,-0.13,labels=paste(Labels), cex=1.5)
+    #   # text (0.23,-0.5, labels = Labels, cex=1.5)
+    #   mtext(Labels, side=1, cex=1.2, line=1)
+    # } else {
+      Labels <- round(SummaryData_RankSum[i], digits=2)
       # text(0.23,-0.13,labels=paste(Labels), cex=1.5)
       # text (0.23,-0.5, labels = Labels, cex=1.5)
       mtext(Labels, side=1, cex=1.2, line=1)
-    } else {
-      Labels <- round(SummaryData_Sum[i], digits=2)
-      # text(0.23,-0.13,labels=paste(Labels), cex=1.5)
-      # text (0.23,-0.5, labels = Labels, cex=1.5)
-      mtext(Labels, side=1, cex=1.2, line=1)
-    }
+    # }
   }
   
   # Plot last horizontal division
@@ -572,13 +582,13 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
   
   # These set up the default format
   GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, # First four grid spaces must be assigned 1 as this is where the title will be plotted
-                             3, 3, 3, 3, 3, # 2 is empty grid to balance table appearance
+                             3, 3, 3, 3, 2, # 2 is empty grid to balance table appearance
                              4, 5, 5, 5, 2,
-                             4, 6, 6, 6, 6,
+                             4, 6, 6, 6, 2,
                              4, 7, 8, 9, 2,
-                             10,10,10,10,10,
+                             10,10,10,10,2,
                              11,12,13,14, 2,
-                             15,15,15,15,15)
+                             15,15,15,15,2)
   GraphicWidthsDefault <- c(rep(1, GraphicNCol-1), 0.5)
   GraphicHeightsDefault <- rep(c(1,0.25), GraphicNRow/2)
   
