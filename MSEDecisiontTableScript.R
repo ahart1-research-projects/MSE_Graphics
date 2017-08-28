@@ -65,14 +65,14 @@ MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5"
 
 
 # setwd to file with graphics
-setwd("/Users/arhart/Research/MSE_Graphics/Icons")
+setwd("/Users/ahart2/Research/MSE_Graphics/Icons")
 IconList=c("HerringFishery", "HerringResource", "LobsterFishery", "TunaFishery", "WhaleSeabirdWatching")
 
 # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-Data <- read.table("/Users/arhart/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet/Data_OM_vs_CR_BB3yr_Yvar")
+Data <- read.table("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet/Data_OM_vs_CR_BB3yr_Yvar")
 Data <- as.matrix(Data)
 
-MakeGraphicDecisionTable(OutputDirectory= "/Users/arhart/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet",
+MakeGraphicDecisionTable(OutputDirectory= "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Chosen4PerfMet",
                          Title="Interannual Variation in Yield", 
                          IconList=c("HerringFishery", "HerringResource", "WhaleSeabirdSealResource", "GroundfishFishery"),
                          RowCategoryName = "Operating \n Models", 
@@ -96,7 +96,7 @@ MakeGraphicDecisionTable(OutputDirectory= "/Users/arhart/Research/MSE_Graphics/H
 
 
 # Format data for Decision tables using barplot function
-MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
@@ -112,7 +112,7 @@ MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Ove
                                  "Tuna Weight Status", "Prop Year Good \n Dogfish Biomass", "Prop Year Tern Production > 1")
 
 
-MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
                              "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
 MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
@@ -203,7 +203,7 @@ GraphicColumns_HalfOMs <- 7
 GraphicHeights_HalfOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRows_HalfOMs/2-3))
 GraphicWidths_HalfOMs <- c(17,rep(5, GraphicColumns_HalfOMs-1),0.25)
 
-# MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+# MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 # MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
 # MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
@@ -226,19 +226,19 @@ MSE_TranslatedPerfMetVector <- c("Prop Year \n Biomass < Bmsy", "Probability of 
 ColorScale <- c("#ffffcc", "#d9f0a3", "#addd8e", "#78c679", "#31a354", "#006837")
 
 # setwd to file with graphics
-setwd("/Users/arhart/Research/MSE_Graphics/Icons")
+setwd("/Users/ahart2/Research/MSE_Graphics/Icons")
 
-# MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"  ?????? use in for loop)
+# MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"  ?????? use in for loop)
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
                             "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
 MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
  
 
 for(i in 1:length(MSE_OperatingModelList)){
-                     Data <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_AllPerfMetToPresent_DecisionTableData/Data_PerfMet_vs_CR_BB3yr", MSE_OperatingModelList[i], sep="_"))
+                     Data <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_AllPerfMetToPresent_DecisionTableData/Data_PerfMet_vs_CR_BB3yr", MSE_OperatingModelList[i], sep="_"))
                      Data <- as.matrix(Data)
                      
-                     MakeGraphicDecisionTable(OutputDirectory= "/Users/arhart/Research/MSE_Graphics/HerringMSE_AllPerfMetToPresent",
+                     MakeGraphicDecisionTable(OutputDirectory= "/Users/ahart2/Research/MSE_Graphics/HerringMSE_AllPerfMetToPresent",
                                               Title=paste("Operating Model", MSE_TranslatedOperatingModel[i], sep=" "), 
                                               IconList=c(),
                                               RowCategoryName = "Performance \n Metrics", 
@@ -262,7 +262,7 @@ for(i in 1:length(MSE_OperatingModelList)){
 ############################ After 8/15/17 Revisions to Graphics stored in HerringMSE_Semi-Final_FullTables ###########################################
 
 # Format data for Decision tables using barplot function
-MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4B", "4C", "4D", "4E", "4F") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
@@ -275,7 +275,7 @@ MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Ove
                                  "Interannual Variation in Yield", "Prop Year Tern Production > 1")
 
 
-MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
                             "HiM_LowSteep_NoAssBias_RecWt", "LoM_HiSteep_AssBias_OldWt", "LoM_HiSteep_AssBias_RecWt", 
                             "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
@@ -388,7 +388,7 @@ GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_TranslatedOperatingModel <- c("A", "B", "C", "D", "E", "F", "G", "H", "Summary")
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_PerfMetColors <- c("#ffffe5","#f7fcb9","#d9f0a3","#addd8e","#78c679","#41ab5d","#238443","#006837","#004529")
-MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
 MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
                                  "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
 MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
@@ -400,7 +400,7 @@ for(i in 1:length(MSE_PerformanceMetricVector)){
   MSE_OutputFile <- paste("RankedDecisionTable", MSE_PerformanceMetricVector[i], sep="_") 
   
   # setwd to file with graphics
-  setwd("/Users/arhart/Research/MSE_Graphics/Icons")
+  setwd("/Users/ahart2/Research/MSE_Graphics/Icons")
   if(MSE_TranslatedPerfMetVector[i]=="Prop Year Biomass < Bmsy"){
     IconList = c("HerringResource")
   } else if(MSE_TranslatedPerfMetVector[i]=="Probability of Overfished B < 0.5 Bmsy"){
@@ -430,7 +430,7 @@ for(i in 1:length(MSE_PerformanceMetricVector)){
   }
   
   # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  Data <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_PerformanceMetricVector[i], sep="_"))
+  Data <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_PerformanceMetricVector[i], sep="_"))
   Data <- as.matrix(Data)
   
   MakePerfMetGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
@@ -484,7 +484,7 @@ GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
 MSE_SummaryPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "SurpProd", "PropFrelFmsy")
 MSE_SummaryTranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy","Probability of Overfished B < 0.5 Bmsy","SSB Relative to Unfished Biomass", 
                                  "Surplus Production", "Prop Year Overfishing Occurs F > Fmsy")
@@ -495,7 +495,7 @@ colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
   # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
+  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
   tempData <- as.matrix(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
@@ -547,7 +547,7 @@ GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
 MSE_SummaryPerformanceMetricVector <- c("MedSSBrelSSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf")
 MSE_SummaryTranslatedPerfMetVector <- c("SSB Relative to Unfished Biomass", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass")
 
@@ -558,7 +558,7 @@ colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
   # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
+  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
   tempData <- as.matrix(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
@@ -611,7 +611,7 @@ GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
 MSE_SummaryPerformanceMetricVector <- c("MedSSBrelSSBzero", "SurpProd", "MedPropYrs_goodProd_Targplustern")
 MSE_SummaryTranslatedPerfMetVector <- c("SSB Relative to Unfished Biomass", "Surplus Production", "Prop Year Tern Production > 1")
 
@@ -622,7 +622,7 @@ colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
   # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
+  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
   tempData <- as.matrix(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
@@ -683,7 +683,7 @@ GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
 MSE_SummaryPerformanceMetricVector <- c("PropSSBrelhalfSSBmsy", "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar")
 MSE_SummaryTranslatedPerfMetVector <- c("Probability of Overfished B < 0.5 Bmsy", "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY",
                                         "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring","Interannual Variation in Yield")
@@ -695,7 +695,7 @@ colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
   # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
+  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
   tempData <- as.matrix(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
@@ -745,7 +745,7 @@ GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables"
 MSE_SummaryPerformanceMetricVector <- c("MedPredAvWt_status", "AvPropYrs_okBstatusgf")
 MSE_SummaryTranslatedPerfMetVector <- c("Tuna Weight Status", "Prop Year Good Dogfish Biomass")
 
@@ -756,7 +756,7 @@ colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
   # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
+  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
   tempData <- as.matrix(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
