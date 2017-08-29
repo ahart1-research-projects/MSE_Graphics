@@ -276,7 +276,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
        # A ploted decision table with customized graphics
   
   # This determines size of end image
-  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=700, height=800)
+  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=650, height=800)
   
   # These set up the default format
   GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, 3, 4, 5, # First four grid spaces must be assigned 1 as this is where the title will be plotted
@@ -371,7 +371,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
     
     # Determine color rank
     for(i in 1:ncol(ExtraArguments$VerticalBarData)){
-      
+
       # Round data to 2 decimal points (data with same rounded values will have the same color)
       ExtraArguments$VerticalBarData[row,i] <- round(ExtraArguments$VerticalBarData[row,i], digits=2)
       
@@ -386,7 +386,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
          (Title == "Surplus Production")){
         
         # Rank from high to low
-        Rank <- rank(ExtraArguments$VerticalBarData[row, ]) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
+        Rank <- rank(ExtraArguments$VerticalBarData[row, ], ties.method = "max") # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
         
       } else if((Title =="Prop Year Biomass < Bmsy") |
                 (Title =="Probability of Overfished B < 0.5 Bmsy") | 
@@ -395,12 +395,52 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
                 (Title =="Interannual Variation in Yield")){
         
         # Rank from low to high
-        Rank <- rank(-ExtraArguments$VerticalBarData[row,])
+        Rank <- rank(-ExtraArguments$VerticalBarData[row,], ties.method = "max")
       }
 
+      # Colors <- ExtraArguments$VerticalBarColors
+      #  print((Rank[i]))
+      #  print(Colors[ceiling(Rank[i])])
+      #  print(ExtraArguments$VerticalBarData[row,i])
+      # #print(ExtraArguments$VerticalBarData[row,])
+      # par(mar=c(2,3,0,0), xpd=TRUE) # /?????????? probably need to adjust
+      # #par(mar=c(0,0,0,0), xpd=TRUE)
+      # barplot(height=ExtraArguments$VerticalBarData[row,i], 
+      #         width=ExtraArguments$VerticalBarWidths, 
+      #         space=0, 
+      #         horiz=FALSE, 
+      #         col=Colors[ceiling(Rank[i])],
+      #         #col=ExtraArguments$VerticalBarColors[i], 
+      #         # xlab=Labels,
+      #         # ylab=ExtraArguments$VerticalBarYLabel,
+      #         ylim=c(0,1.1*max(ExtraArguments$VerticalBarData[row,])),
+      #         # axes=ExtraArguments$VerticalBarAxes, 
+      #         cex.axis=1, 
+      #         cex.names=1, 
+      #         offset=0)
+      # 
+      # if(Title=="Surplus Production" | Title =="Yield"){
+      #   Labels <- round((ExtraArguments$VerticalBarData[row,i]/1000), digits=0)
+      #   # text(0.23,-0.13,labels=paste(Labels), cex=1.5)
+      #   # text (0.23,-0.5, labels = Labels, cex=1.5)
+      #   mtext(Labels, side=1, cex=1.2, line=1) 
+      # } else{
+      #   Labels <- round(ExtraArguments$VerticalBarData[row,i], digits=2)
+      #   # text(0.23,-0.13,labels=paste(Labels), cex=1.5)
+      #   # text (0.23,-0.5, labels = Labels, cex=1.5)
+      #   mtext(Labels, side=1, cex=1.2, line=1) 
+      # }
+    }
+    RankTable <- rbind(RankTable, Rank)
+    print("Here")
+    print(RankTable[row,])
+    
+    # Plot bars, colors determined by rank in RankTable
+    for(i in 1:ncol(ExtraArguments$VerticalBarData)){
       Colors <- ExtraArguments$VerticalBarColors
-      
-      #print(Rank)
+      print((Rank[i]))
+      print(Colors[(RankTable[row,i])])
+      print(ExtraArguments$VerticalBarData[row,i])
       #print(ExtraArguments$VerticalBarData[row,])
       par(mar=c(2,3,0,0), xpd=TRUE) # /?????????? probably need to adjust
       #par(mar=c(0,0,0,0), xpd=TRUE)
@@ -408,7 +448,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
               width=ExtraArguments$VerticalBarWidths, 
               space=0, 
               horiz=FALSE, 
-              col=Colors[Rank[i]],
+              col=Colors[(RankTable[row,i])],
               #col=ExtraArguments$VerticalBarColors[i], 
               # xlab=Labels,
               # ylab=ExtraArguments$VerticalBarYLabel,
@@ -430,8 +470,6 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
         mtext(Labels, side=1, cex=1.2, line=1) 
       }
     }
-    RankTable <- rbind(RankTable, Rank)
-    print(RankTable)
   }
   
   ##### Last Row Summary #####
@@ -449,7 +487,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   # print(SummaryData_Sum)
   
   # Rank from high (best performance) to low (worst performance)
-  SummaryRank <- rank(SummaryData_RankSum)
+  SummaryRank <- rank(SummaryData_RankSum, ties.method = "max")
   
   # # Determine color rank for summary data
   for(i in 1:length(SummaryData_RankSum)){
@@ -478,7 +516,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   #   }
     
     Colors <- ExtraArguments$VerticalBarColors
-    
+
     #print(Rank)
     #print(ExtraArguments$VerticalBarData[row,])
     par(mar=c(2,3,0,0), xpd=TRUE) # /?????????? probably need to adjust
@@ -487,7 +525,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
             width=ExtraArguments$VerticalBarWidths, 
             space=0, 
             horiz=FALSE, 
-            col=Colors[SummaryRank[i]],
+            col=Colors[ceiling(SummaryRank[i])],
             #col=ExtraArguments$VerticalBarColors[i], 
             # xlab=Labels,
             # ylab=ExtraArguments$VerticalBarYLabel,
