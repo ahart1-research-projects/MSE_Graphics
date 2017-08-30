@@ -15,6 +15,7 @@ ProduceBarPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
                # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
                # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+               # "PropSSBrel30_75SSBzero"           : "Prop Year SSB is 30-75% of SSB Zero"
                # "MedPredAvWt_status"               : "Tuna Weight Status" 
                # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
                # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
