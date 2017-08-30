@@ -383,9 +383,10 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
          (Title =="Net Revenue for Herring") |
          (Title =="Prop Year Tern Production > 1") |
          (Title =="SSB Relative to Unfished Biomass") |
-         (Title == "Surplus Production")){
+         (Title == "Surplus Production") |
+         (Title == "Prop Year SSB is 30-75% of SSB Zero")){
         
-        # Rank from high to low
+        # Rank from high to low (higher is better performance)
         Rank <- rank(ExtraArguments$VerticalBarData[row, ]) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
         
       } else if((Title =="Prop Year Biomass < Bmsy") |
@@ -394,7 +395,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
                 (Title =="Prop Year Closure Occurs") |
                 (Title =="Interannual Variation in Yield")){
         
-        # Rank from low to high
+        # Rank from low to high (lower is better performance)
         Rank <- rank(-ExtraArguments$VerticalBarData[row,])
       }
 
@@ -578,7 +579,7 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
   # Returns:
   # A ploted decision table with customized graphics
   
-  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=500, height=800)
+  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=700, height=900)
   
   # These set up the default format
   GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, # First four grid spaces must be assigned 1 as this is where the title will be plotted
