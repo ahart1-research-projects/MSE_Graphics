@@ -29,6 +29,7 @@ plot_indicators <- function(ind,
      # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
      # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
      # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+     # "PropSSBrel30_75SSBzero"           : "Prop Year SSB is 30-75% of SSB Zero"
      # "SurpProd"                         : "Surplus Production"
      # "MedPredAvWt_status"               : "Tuna Weight Status" 
      # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
@@ -44,7 +45,7 @@ plot_indicators <- function(ind,
     if(colnames(ind)[NCol] == "Yield.Relative.to.MSY" | colnames(ind)[NCol] == "Tuna.Weight.Status" |
        colnames(ind)[NCol] == "Prop.Year.Good.Dogfish.Biomass" | colnames(ind)[NCol] == "Yield" |
        colnames(ind)[NCol] == "Prop.Year.Tern.Production...1" | colnames(ind)[NCol] == "SSB.Relative.to.Unfished.Biomass" |
-       colnames(ind)[NCol] == "Surplus.Production"){
+       colnames(ind)[NCol] == "Surplus.Production" | colnames(ind)[NCol] == "Prop.Year.SSB.is.30-75%.of.SSB.Zero"){
       # No data scaling necessary, larger value is preferred
       Scaled_ind <- cbind(Scaled_ind, ind[ ,NCol])
       
