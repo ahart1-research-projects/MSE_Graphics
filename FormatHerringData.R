@@ -45,7 +45,18 @@ ExtractCRandOMInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRN
     # Combine subset with full results matrix
     CRandOMSubset_HerringMSEData <- rbind(CRandOMSubset_HerringMSEData, CRSubset_HerringMSEData[MatrixRows,])
   }
-  # print(CRandOMSubset_HerringMSEData)
+  
+  # These next few lines calculate PropSSBrel30_75SSBzero metric using PropSSBrel3SSBzero and PropSSBrel75SSBzero columns, these lines are very specific to this project
+  PropSSBrel30_75SSBzero <- CRandOMSubset_HerringMSEData[ ,"PropSSBrel75SSBzero"] - CRandOMSubset_HerringMSEData[ ,"PropSSBrel3SSBzero"]
+  # Add this data to the matrix
+  CRandOMSubset_HerringMSEData <- cbind(CRandOMSubset_HerringMSEData, PropSSBrel30_75SSBzero) 
+
+  # Calculate proportion simulations (out of 100) that net revenue at equilibrium
+  NetRevEquilibrium <- CRandOMSubset_HerringMSEData[, "stationary"]/100
+  # Add this revised proportion data to the matrix
+  CRandOMSubset_HerringMSEData <- cbind(CRandOMSubset_HerringMSEData, NetRevEquilibrium)
+  
+  # print((CRandOMSubset_HerringMSEData))
   
   # Return results matrix
   return(CRandOMSubset_HerringMSEData)
