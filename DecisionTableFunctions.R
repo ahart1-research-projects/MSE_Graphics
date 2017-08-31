@@ -384,7 +384,25 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
          (Title =="Prop Year Tern Production > 1") |
          (Title =="SSB Relative to Unfished Biomass") |
          (Title == "Surplus Production") |
-         (Title == "Prop Year SSB is 30-75% of SSB Zero")){
+         (Title == "Prop Year SSB is 30-75% of SSB Zero") | 
+         (Title == "Prop Year Net Revenue at Equilibrium")){
+        
+        
+        # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+        # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+        # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+        # "PropSSBrel30_75SSBzero"           : "Prop Year SSB is 30-75% of SSB Zero"
+        # "SurpProd"                         : "Surplus Production"
+        # "MedPredAvWt_status"               : "Tuna Weight Status" 
+        # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+        # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+        # "YieldrelMSY"                      : "Yield Relative to MSY"
+        # "Yield"                            : "Yield"
+        # "PropClosure"                      : "Prop Year Closure Occurs"
+        # "p50_NR"                           : "Net Revenue for Herring"
+        # "NetRevEquilibrium"                : "Prop Year Net Revenue at Equilibrium"
+        # "Yvar"                             : "Interannual Variation in Yield"
+        # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
         
         # Rank from high to low (higher is better performance)
         Rank <- rank(ExtraArguments$VerticalBarData[row, ]) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
@@ -526,60 +544,34 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
 MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=NULL, RowCategoryName=NULL, RowNames=NULL, 
                                      ColumnCategoryName=NULL, ColumnNames=NULL,
                                      GraphicLayout=GraphicLayoutDefault, GraphicNRow=8, GraphicNCol=4, 
-                                     GraphicHeights=GraphicHeightsDefault, GraphicWidths=GraphicWidthsDefault, PlotOrder=NULL, OutputFileName=NULL, ...){
+                                     GraphicHeights=GraphicHeightsDefault, GraphicWidths=GraphicWidthsDefault, PlotOrder=NULL, OutputFileName=NULL, ImageWidth=700, ImageHeight=900, ...){
   # Args:
-  # OutputDirectory: String containing the full path name of folder to store output
-  # Title: A string containing the title for the decision table graphic
-  # IconList: A vector of icons names to be printed right of the Title, number can not exceed (GraphicNCol - 4), default is empty
-  # RowCategoryName: A string containing the descriptive title for row names
-  # ColumnCategoryName: A string containing the descriptive title for column names
-  # RowNames: A vector of row names, each name should be a string in ""
-  # ColumnNames: A vector of column names, each name should be a string in ""
-  # GraphicLayout: A vector containing information that lays out graphic structure, the matrix must have at least 4 columns and 8 rows, default=GraphicLayoutDefault
-  # GraphicNRow: Number of rows in GraphicFormat Matrix, must be at least 4
-  # GraphicNCol: Number of columns in GraphicFormat Matrix, must be at least 8
-  # GraphicHeights: A vector containing row heights, must be same length as GraphicNRow
-  # GraphicWidths: A vector containing column widths, must be same length as GraphicNCol
-  # OutputFileName: A string contining the output file name
-  # PlotOrder: A vector of strings containing names of the plots to produce options are listed below with associated arguments, PlotOrder must be equal in length of GraphicNCol-1
-  # "SingleColumn_VerticalBarplot"
-  # VerticalBarData: List of vectors or matricies containing data to plot in vertical barplot, number of items in list must be equal to length of RowNames
-  # Each item in the list will be plotted in an individual graph
-  # VerticalBarWidths vector of bar widths
-  # VerticalBarColors: 1 or more colors for plot
-  # VerticalBarXLabel: labels x axis
-  # VerticalBarYLabel: labels y axis
-  # VerticalBarAxes determines if axes plotted, must be TRUE/FALSE
-  # "VerticalStackedBar"
-  # VerticalStackedBarData: List of objects, each with two or more $ categories (eg Data$category1, Data$category2...), number of objects in list must be equal to length of RowNames
-  # VerticalStackedBarWidths vector of bar widths
-  # VerticalStackedBarColors: 2 or more colors
-  # VerticalStackedBarXLabel: labels x axis
-  # VerticalStackedBarYLabel: labels y axis
-  # VerticalStackedBarAxes determines if axes plotted, must be TRUE/FALSE
-  # "HorizontalBarplot"
-  # HorizontalBarData: List of vectors or matricies containing data to plot in vertical barplot, number of items in list must be equal to length of RowNames
-  # HorizontalBarWidths vector of bar widths
-  # HorizontalBarColors: 1 or more colors for plot
-  # HorizontalBarXLabel: labels x axis
-  # HorizontalBarYLabel: labels y axis
-  # VerticalBarAxes determines if axes plotted, must be TRUE/FALSE
-  # "HorizontalStackedBar"
-  # HorizontalStackedBarData: List of objects, each with two or more $ categories (eg Data$category1, Data$category2...), number of objects in list must be equal to length of RowNames
-  # HorizontalStackedBarWidths vector of bar widths
-  # HorizontalStackedBarColors: 2 or more colors
-  # HorizontallStackedBarXLabel: labels x axis
-  # HorizontalStackedBarYLabel: labels y axis
-  # HorizontalStackedBarAxes determines if axes plotted, must be TRUE/FALSE
-  # "Pictogram"
-  # PictogramImage: Name of image for pictogram, "ImageName.png" format
-  # PictogramData: Vector of counts, must be same length as RowNames
-  # PictogramDataScale: Single number determines count scale
-  # PictogramColumns: Single number determines number of columns in pictogram
+       # OutputDirectory: String containing the full path name of folder to store output
+       # Title: A string containing the title for the decision table graphic
+       # IconList: A vector of icons names to be printed right of the Title, number can not exceed (GraphicNCol - 4), default is empty
+       # RowCategoryName: A string containing the descriptive title for row names
+       # ColumnCategoryName: A string containing the descriptive title for column names
+       # RowNames: A vector of row names, each name should be a string in ""
+       # ColumnNames: A vector of column names, each name should be a string in ""
+       # GraphicLayout: A vector containing information that lays out graphic structure, the matrix must have at least 4 columns and 8 rows, default=GraphicLayoutDefault
+       # GraphicNRow: Number of rows in GraphicFormat Matrix, must be at least 4
+       # GraphicNCol: Number of columns in GraphicFormat Matrix, must be at least 8
+       # GraphicHeights: A vector containing row heights, must be same length as GraphicNRow
+       # GraphicWidths: A vector containing column widths, must be same length as GraphicNCol
+       # OutputFileName: A string contining the output file name
+       # ImageWidth: A number usually between 500-1000 which sets the width of the entire graphic, default=700
+       # ImageHeight: A number usually between 500-1000 which sets the height of the entire graphic, default=900
+       # VerticalBarData: List of vectors or matricies containing data to plot in vertical barplot, number of items in list must be equal to length of RowNames
+          # Each item in the list will be plotted in an individual graph
+          # VerticalBarWidths vector of bar widths
+          # VerticalBarColors: 1 or more colors for plot
+          # VerticalBarXLabel: labels x axis
+          # VerticalBarYLabel: labels y axis
+          # VerticalBarAxes determines if axes plotted, must be TRUE/FALSE
   # Returns:
-  # A ploted decision table with customized graphics
+       # A ploted decision table with customized graphics
   
-  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=700, height=900)
+  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=ImageWidth, height=ImageHeight)
   
   # These set up the default format
   GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, # First four grid spaces must be assigned 1 as this is where the title will be plotted
