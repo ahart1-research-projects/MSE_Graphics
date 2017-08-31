@@ -16,6 +16,7 @@ ProduceBarPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
                # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
                # "PropSSBrel30_75SSBzero"           : "Prop Year SSB is 30-75% of SSB Zero"
+               # "SurpProd"                         : "Surplus Production"
                # "MedPredAvWt_status"               : "Tuna Weight Status" 
                # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
                # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
@@ -23,6 +24,7 @@ ProduceBarPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                # "Yield"                            : "Yield"
                # "PropClosure"                      : "Prop Year Closure Occurs"
                # "p50_NR"                           : "Net Revenue for Herring"
+               # "NetRevEquilibrium"                : "Prop Year Net Revenue at Equilibrium"
                # "Yvar"                             : "Interannual Variation in Yield"
                # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
        # ControlRuleColors: Vector of colors equal in length to ControlRuleNames
@@ -249,7 +251,7 @@ ProduceBarPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
 ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirectory=NULL, ControlRuleNames=NULL, TranslatedControlRuleVector=NULL, ControlRuleColors=NULL, 
                               CRNumbers=NULL, PerformanceMetricVector=NULL, PerformanceMetricColors=PerformanceMetricColorsDefault,
                               TranslatedPerfMetVector=NULL, OperatingModelList=NULL, 
-                              OperatingModelColors=OperatingModelColorsDefault, TranslatedOperatingModel=NULL){
+                              OperatingModelColors=OperatingModelColorsDefault, TranslatedOperatingModel=NULL, CustomTitle=NULL){
     # Args:
          # OriginalDataFile: Matrix with a column for every performance metric, contains all data, RDS file type
          # FilePath: File path to MSE_Graphics project
@@ -257,18 +259,21 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
          # ControlRuleNames: Vector of control rule names corresponding to data
          # TranslatedControlRuleVector: Vector of full control rule names, must be same order and length as ControlRuleNames
             # Below are metrics and corresponding translated label that should be used, other metrics may be used but will not be scaled in any plot (mainly web diagrams)
-                 # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
-                 # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
-                 # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
-                 # "MedPredAvWt_status"               : "Tuna Weight Status" 
-                 # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
-                 # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
-                 # "YieldrelMSY"                      : "Yield Relative to MSY"
-                 # "Yield"                            : "Yield"
-                 # "PropClosure"                      : "Prop Year Closure Occurs"
-                 # "p50_NR"                           : "Net Revenue for Herring"
-                 # "Yvar"                             : "Interannual Variation in Yield"
-                 # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
+               # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+               # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+               # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+               # "PropSSBrel30_75SSBzero"           : "Prop Year SSB is 30-75% of SSB Zero"
+               # "SurpProd"                         : "Surplus Production"
+               # "MedPredAvWt_status"               : "Tuna Weight Status" 
+               # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+               # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+               # "YieldrelMSY"                      : "Yield Relative to MSY"
+               # "Yield"                            : "Yield"
+               # "PropClosure"                      : "Prop Year Closure Occurs"
+               # "p50_NR"                           : "Net Revenue for Herring"
+               # "NetRevEquilibrium"                : "Prop Year Net Revenue at Equilibrium"
+               # "Yvar"                             : "Interannual Variation in Yield"
+               # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
          # ControlRuleColors: Vector of colors equal in length to ControlRuleNames
          # default = ControlRuleColorsDefault, contains 9 colors
          # CRNumbers: Vector of control rule numbers, must be same order and length as CRNumbers
@@ -280,6 +285,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
          # OperatingModelColors: Vector of colors equal in length to OperatingModelList
               # default = OperatingModelColorsDefault, contains 8 colors
          # TranslatedOperatingModel: Vector of full operating model names, must be same order and length as OperatingModelList
+         # CustomTitle: A string to be added to the graphic name so different webs can be differentiated from one another, default = NULL
   
     # Returns:
          # Formatted data matrices used for producing graphics
@@ -373,7 +379,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                     PlotColor=OperatingModelColors,
                     LegendLabels = paste("Operating Model", TranslatedOperatingModel),
                     AxisLabels = TranslatedPerfMetVector,
-                    OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_OM_BB", ControlRuleNames[cr], ".png", sep="_"), sep="/"),
+                    OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_OM_BB", ControlRuleNames[cr], CustomTitle, ".png", sep="_"), sep="/"),
                     MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "))
   }
   # Loop over control rules for BB3yr data
@@ -382,7 +388,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                     PlotColor=OperatingModelColors,
                     LegendLabels = paste("Operating Model", TranslatedOperatingModel),
                     AxisLabels = TranslatedPerfMetVector,
-                    OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], ".png", sep="_"), sep="/"),
+                    OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_OM_BB3yr", ControlRuleNames[cr], CustomTitle, ".png", sep="_"), sep="/"),
                     MainTitle = paste("Control Rule", TranslatedControlRuleVector[cr], sep=" "))
   }
   
@@ -393,7 +399,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                     PlotColor=ControlRuleColors,
                     LegendLabels = paste("Control Rule", TranslatedControlRuleVector),
                     AxisLabels = TranslatedPerfMetVector,
-                    OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_CR_BB", OperatingModelList[om], ".png", sep="_"), sep="/"),
+                    OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_CR_BB", OperatingModelList[om], CustomTitle, ".png", sep="_"), sep="/"),
                     MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "))
   }
   # Loop over operating models for BB3yr data
@@ -402,7 +408,7 @@ ProduceWebPlots <- function(OriginalDataFile=NULL, FilePath=NULL, OutputDirector
                     PlotColor=ControlRuleColors,
                     LegendLabels = paste("Control Rule", TranslatedControlRuleVector),
                     AxisLabels = TranslatedPerfMetVector,
-                    OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_CR_BB3yr", OperatingModelList[om], ".png", sep="_"), sep="/"),
+                    OutputFileName = paste(FilePath, OutputDirectory, paste("Graph_Web_PerfMet_vs_CR_BB3yr", OperatingModelList[om], CustomTitle, ".png", sep="_"), sep="/"),
                     MainTitle = paste("Operating Model", TranslatedOperatingModel[om], sep=" "))
   }
 }
