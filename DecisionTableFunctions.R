@@ -304,8 +304,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   text(1,1,labels=c(Title), cex=2.25)
   
-  # Optional printed icons to right of title, may not exceed (GraphicNCol - 4)
-  # need a way to say if not all empty spaces used print empty, if more than empty in icon list stop printing ??????
+  # Optional printed icons to right of title, may not exceed (GraphicNCol - 7)
   library(raster)
   library(png)
   for(icon in 1:length(IconList)){
@@ -574,14 +573,14 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
   png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=ImageWidth, height=ImageHeight)
   
   # These set up the default format
-  GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, # First four grid spaces must be assigned 1 as this is where the title will be plotted
-                             3, 3, 3, 3, 2, # 2 is empty grid to balance table appearance
-                             4, 5, 5, 5, 2,
-                             4, 6, 6, 6, 2,
-                             4, 7, 8, 9, 2,
-                             10,10,10,10,2,
-                             11,12,13,14, 2,
-                             15,15,15,15,2)
+  GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, 3, # First four grid spaces must be assigned 1 as this is where the title will be plotted
+                             4, 4, 4, 4, 4, 3, # 3 is empty grid to balance table appearance
+                             5, 6, 6, 6, 6, 3,
+                             5, 7, 7, 7, 7, 3,
+                             5, 8, 9,10,11, 3,
+                            12,12,12,12,12, 3,
+                            13,14,15,16,17, 3,
+                            18,18,18,18,18, 3)
   GraphicWidthsDefault <- c(rep(1, GraphicNCol-1), 0.5)
   GraphicHeightsDefault <- rep(c(1,0.25), GraphicNRow/2)
   
@@ -595,6 +594,21 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
   par(mar=c(0,0,0,0))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   text(1,1,labels=c(Title), cex=2.5)
+  
+  # Optional, plots up to 1 icon right of the title, if no .png icon provided then a blank space provided
+  library(raster)
+  library(png)
+  if(length(IconList) >= 1){
+    IconImage <- readPNG(paste(IconList, ".png", sep=""))
+    plot(1,1, axes=FALSE, ann=FALSE) # Sets up empty plot
+    lim <- par() # Gets boundaries of plot space
+    rasterImage(IconImage, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4]) # Plots raster image in plot space bounded by lim
+  } else if(length(IconList) < 1){
+    # This fills slot in first row with empty plots if fewer than 1 icon provided in IconList
+    par(mar=c(0,0,0,0))
+    plot(1,1,type="n", axes=FALSE, ann=FALSE)
+    print("Empty Plot Icon" )
+  }
   
   # Plot empty space on right side of graph
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
