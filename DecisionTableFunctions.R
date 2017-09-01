@@ -304,8 +304,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   text(1,1,labels=c(Title), cex=2.25)
   
-  # Optional printed icons to right of title, may not exceed (GraphicNCol - 4)
-  # need a way to say if not all empty spaces used print empty, if more than empty in icon list stop printing ??????
+  # Optional printed icons to right of title, may not exceed (GraphicNCol - 7)
   library(raster)
   library(png)
   for(icon in 1:length(IconList)){
@@ -383,10 +382,34 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
          (Title =="Net Revenue for Herring") |
          (Title =="Prop Year Tern Production > 1") |
          (Title =="SSB Relative to Unfished Biomass") |
-         (Title == "Surplus Production")){
+         (Title == "Surplus Production") |
+         (Title == "Prop Year SSB is 30-75% of SSB Zero") | 
+         (Title == "Prop Year Net Revenue at Equilibrium")){
         
+<<<<<<< HEAD
         # Rank from high to low, ties rounded up so coloring consistent
         Rank <- rank(ExtraArguments$VerticalBarData[row, ], ties.method = "max") # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
+=======
+        
+        # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
+        # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
+        # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
+        # "PropSSBrel30_75SSBzero"           : "Prop Year SSB is 30-75% of SSB Zero"
+        # "SurpProd"                         : "Surplus Production"
+        # "MedPredAvWt_status"               : "Tuna Weight Status" 
+        # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
+        # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
+        # "YieldrelMSY"                      : "Yield Relative to MSY"
+        # "Yield"                            : "Yield"
+        # "PropClosure"                      : "Prop Year Closure Occurs"
+        # "p50_NR"                           : "Net Revenue for Herring"
+        # "NetRevEquilibrium"                : "Prop Year Net Revenue at Equilibrium"
+        # "Yvar"                             : "Interannual Variation in Yield"
+        # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
+        
+        # Rank from high to low (higher is better performance)
+        Rank <- rank(ExtraArguments$VerticalBarData[row, ]) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
+>>>>>>> 23ba3f5a10ee46542d72e80fdbdceedc9a4a8ab3
         
       } else if((Title =="Prop Year Biomass < Bmsy") |
                 (Title =="Probability of Overfished B < 0.5 Bmsy") | 
@@ -394,8 +417,13 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
                 (Title =="Prop Year Closure Occurs") |
                 (Title =="Interannual Variation in Yield")){
         
+<<<<<<< HEAD
         # Rank from low to high, ties rounded up so coloring consistent
         Rank <- rank(-ExtraArguments$VerticalBarData[row,], ties.method = "max")
+=======
+        # Rank from low to high (lower is better performance)
+        Rank <- rank(-ExtraArguments$VerticalBarData[row,])
+>>>>>>> 23ba3f5a10ee46542d72e80fdbdceedc9a4a8ab3
       }
     }
     RankTable <- rbind(RankTable, Rank)
@@ -500,7 +528,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
 MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=NULL, RowCategoryName=NULL, RowNames=NULL, 
                                      ColumnCategoryName=NULL, ColumnNames=NULL,
                                      GraphicLayout=GraphicLayoutDefault, GraphicNRow=8, GraphicNCol=4, 
-                                     GraphicHeights=GraphicHeightsDefault, GraphicWidths=GraphicWidthsDefault, PlotOrder=NULL, OutputFileName=NULL, ...){
+                                     GraphicHeights=GraphicHeightsDefault, GraphicWidths=GraphicWidthsDefault, PlotOrder=NULL, OutputFileName=NULL, ImageWidth=700, ImageHeight=900, ...){
   # Args:
        # OutputDirectory: String containing the full path name of folder to store output
        # Title: A string containing the title for the decision table graphic
@@ -515,6 +543,7 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
        # GraphicHeights: A vector containing row heights, must be same length as GraphicNRow
        # GraphicWidths: A vector containing column widths, must be same length as GraphicNCol
        # OutputFileName: A string contining the output file name
+<<<<<<< HEAD
        # PlotOrder: A vector of strings containing names of the plots to produce options are listed below with associated arguments, PlotOrder must be equal in length of GraphicNCol-1
      # "SingleColumn_VerticalBarplot"
        # VerticalBarData: List of vectors or matricies containing data to plot in vertical barplot, number of items in list must be equal to length of RowNames
@@ -550,20 +579,31 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
        # PictogramData: Vector of counts, must be same length as RowNames
        # PictogramDataScale: Single number determines count scale
        # PictogramColumns: Single number determines number of columns in pictogram
+=======
+       # ImageWidth: A number usually between 500-1000 which sets the width of the entire graphic, default=700
+       # ImageHeight: A number usually between 500-1000 which sets the height of the entire graphic, default=900
+       # VerticalBarData: List of vectors or matricies containing data to plot in vertical barplot, number of items in list must be equal to length of RowNames
+          # Each item in the list will be plotted in an individual graph
+          # VerticalBarWidths vector of bar widths
+          # VerticalBarColors: 1 or more colors for plot
+          # VerticalBarXLabel: labels x axis
+          # VerticalBarYLabel: labels y axis
+          # VerticalBarAxes determines if axes plotted, must be TRUE/FALSE
+>>>>>>> 23ba3f5a10ee46542d72e80fdbdceedc9a4a8ab3
   # Returns:
        # A ploted decision table with customized graphics
   
-  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=500, height=800)
+  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=ImageWidth, height=ImageHeight)
   
   # These set up the default format
-  GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, # First four grid spaces must be assigned 1 as this is where the title will be plotted
-                             3, 3, 3, 3, 2, # 2 is empty grid to balance table appearance
-                             4, 5, 5, 5, 2,
-                             4, 6, 6, 6, 2,
-                             4, 7, 8, 9, 2,
-                             10,10,10,10,2,
-                             11,12,13,14, 2,
-                             15,15,15,15,2)
+  GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, 3, # First four grid spaces must be assigned 1 as this is where the title will be plotted
+                             4, 4, 4, 4, 4, 3, # 3 is empty grid to balance table appearance
+                             5, 6, 6, 6, 6, 3,
+                             5, 7, 7, 7, 7, 3,
+                             5, 8, 9,10,11, 3,
+                            12,12,12,12,12, 3,
+                            13,14,15,16,17, 3,
+                            18,18,18,18,18, 3)
   GraphicWidthsDefault <- c(rep(1, GraphicNCol-1), 0.5)
   GraphicHeightsDefault <- rep(c(1,0.25), GraphicNRow/2)
   
@@ -577,6 +617,21 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
   par(mar=c(0,0,0,0))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   text(1,1,labels=c(Title), cex=2.5)
+  
+  # Optional, plots up to 1 icon right of the title, if no .png icon provided then a blank space provided
+  library(raster)
+  library(png)
+  if(length(IconList) >= 1){
+    IconImage <- readPNG(paste(IconList, ".png", sep=""))
+    plot(1,1, axes=FALSE, ann=FALSE) # Sets up empty plot
+    lim <- par() # Gets boundaries of plot space
+    rasterImage(IconImage, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4]) # Plots raster image in plot space bounded by lim
+  } else if(length(IconList) < 1){
+    # This fills slot in first row with empty plots if fewer than 1 icon provided in IconList
+    par(mar=c(0,0,0,0))
+    plot(1,1,type="n", axes=FALSE, ann=FALSE)
+    print("Empty Plot Icon" )
+  }
   
   # Plot empty space on right side of graph
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
