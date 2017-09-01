@@ -1,20 +1,17 @@
 # This script makes decision tables for the 1-year (BB) Herring Management option (ABC updated each year)
 
-############################ After 8/30/17 Revisions to Graphics stored in HerringMSE_Semi-Final_BB_FullTables ###########################################
-
 # Format data for Decision tables using barplot function
 MSE_OriginalDataFile <- "/Users/ahart2/Downloads/allres.rds"
 MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria2", "MeetCriteria3", "MeetCriteria4", "MeetCriteria5", "MeetCriteria6")
 MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4B", "4C", "4D", "4E", "4F") 
 MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5", "#084081", "#238443" , "#2b8cbe", "#7bccc4")
 MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
-MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
-                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
 MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1", "#bd0026", "#78c679", "#bcbddc", "#ffeda0")
-MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
-                                 "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
+MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "PropSSBrel30_75SSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
+                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "NetRevEquilibrium", "Yvar", "MedPropYrs_goodProd_Targplustern")
+MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Prop Year SSB is 30-75% of SSB Zero", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
+                                 "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring", "Prop Year Net Revenue at Equilibrium",
                                  "Interannual Variation in Yield", "Prop Year Tern Production > 1")
-
 
 MSE_FilePath <- "/Users/ahart2/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
@@ -22,7 +19,7 @@ MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_
                             "LoM_HiSteep_NoAssBias_OldWt", "LoM_HiSteep_NoAssBias_RecWt")
 MSE_OperatingModelColors <- c("#084081", "#0868ac", "#800026", "#bd0026", "#4eb3d3", "#a8ddb5", "#fc4e2a", "#feb24c")
 MSE_TranslatedOperatingModel <- c("A", "B", "C", "D", "E", "F", "G", "H")
-MSE_OutputDirectory <- "HerringMSE_Semi-Final_BB_FullTables"
+MSE_OutputDirectory <- "HerringMSE_Final_Graphics_CR1Year"
 
 ProduceBarPlots(OriginalDataFile = MSE_OriginalDataFile, 
                 ControlRuleNames = MSE_ControlRuleNames, 
@@ -43,56 +40,6 @@ ProduceBarPlots(OriginalDataFile = MSE_OriginalDataFile,
 
 
 ##### Make Ranked decision tables for each performance metric ##### 
-# GraphicLayout information for all 9 control rules and 8 operating models
-# GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  2,  3,  4,  5,  6,   
-#                            7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  
-#                            8,  9,  9,  9,  9,  9,  9,  9,  9,  9, 
-#                            8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 
-#                            8, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-#                           20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
-#                           21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 
-#                           31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 
-#                           32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 
-#                           42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 
-#                           43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
-#                           53, 53, 53, 53, 53, 53, 53, 53, 53, 53, 
-#                           54, 55, 56, 57, 58, 59, 60, 61, 62, 63,  
-#                           64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 
-#                           65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
-#                           75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 
-#                           76, 77, 78, 79, 80, 81, 82, 83, 84, 85,
-#                           86, 86, 86, 86, 86, 86, 86, 86, 86, 86, 
-#                           87, 88, 89, 90, 91, 92, 93, 94, 95, 96,
-#                           97, 97, 97, 97, 97, 97, 97, 97, 97, 97, 
-#                           98, 99,100,101,102,103,104,105,106,107,
-#                          108,108,108,108,108,108,108,108,108,108,  
-#                          109,110,111,112,113,114,115,116,117,118,
-#                          119,119,119,119,119,119,119,119,119,119)
-
-# GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  2,  3,  4,  5,  6,  7,  
-#                            8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  7,  
-#                            9, 10, 10, 10, 10, 10, 10, 10, 10, 10,  7,
-#                            9, 11, 11, 11, 11, 11, 11, 11, 11, 11,  7,
-#                            9, 12, 13, 14, 15, 16, 17, 18, 19, 20,  7,
-#                           21, 21, 21, 21, 21, 21, 21, 21, 21, 21,  7,
-#                           22, 23, 24, 25, 26, 27, 28, 29, 30, 31,  7,
-#                           32, 32, 32, 32, 32, 32, 32, 32, 32, 32,  7,
-#                           33, 34, 35, 36, 37, 38, 39, 40, 41, 42,  7,
-#                           43, 43, 43, 43, 43, 43, 43, 43, 43, 43,  7,
-#                           44, 45, 46, 47, 48, 49, 50, 51, 52, 53,  7,
-#                           54, 54, 54, 54, 54, 54, 54, 54, 54, 54,  7, 
-#                           55, 56, 57, 58, 59, 60, 61, 62, 63, 64,  7,
-#                           65, 65, 65, 65, 65, 65, 65, 65, 65, 65,  7, 
-#                           66, 67, 68, 69, 70, 71, 72, 73, 74, 75,  7,
-#                           76, 76, 76, 76, 76, 76, 76, 76, 76, 76,  7,
-#                           77, 78, 79, 80, 81, 82, 83, 84, 85, 86,  7,
-#                           87, 87, 87, 87, 87, 87, 87, 87, 87, 87,  7,
-#                           88, 89, 90, 91, 92, 93, 94, 95, 96, 97,  7,
-#                           98, 98, 98, 98, 98, 98, 98, 98, 98, 98,  7, 
-#                           99,100,101,102,103,104,105,106,107,108,  7,
-#                          109,109,109,109,109,109,109,109,109,109,  7, 
-#                          110,111,112,113,114,115,116,117,118,119,  7,
-#                          120,120,120,120,120,120,120,120,120,120,  7)
 
 GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  2,  3,  4,   5,  
                            6,  6,  6,  6,  6,  6,  6,  6,  6,  6,   5,  
@@ -129,11 +76,11 @@ GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_TranslatedOperatingModel <- c("A", "B", "C", "D", "E", "F", "G", "H", "Summary")
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_PerfMetColors <- c("#ffffe5","#f7fcb9","#d9f0a3","#addd8e","#78c679","#41ab5d","#238443","#006837","#004529")
-MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_BB_FullTables"
-MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
-                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar", "MedPropYrs_goodProd_Targplustern")
-MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
-                                 "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring",
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year"
+MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "PropSSBrel30_75SSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
+                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "NetRevEquilibrium", "Yvar", "MedPropYrs_goodProd_Targplustern")
+MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Prop Year SSB is 30-75% of SSB Zero", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
+                                 "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring", "Prop Year Net Revenue at Equilibrium",
                                  "Interannual Variation in Yield", "Prop Year Tern Production > 1")
 
 # Loop over performance metrics to produce tables
@@ -168,10 +115,14 @@ for(i in 1:length(MSE_PerformanceMetricVector)){
     IconList = c("HerringMackerelLobsterFisheries")
   } else if(MSE_TranslatedPerfMetVector[i]=="Prop Year Tern Production > 1"){
     IconList = c("Protected&Tourism")
+  } else if(MSE_TranslatedPerfMetVector[i]=="Prop Year SSB is 30-75% of SSB Zero"){
+    IconList = c("HerringResource", "UnprotectedPredators", "Protected&Tourism")
+  } else if(MSE_TranslatedPerfMetVector[i]=="Prop Year Net Revenue at Equilibrium"){
+    IconList = c("HerringMackerelLobsterFisheries")
   }
   
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  Data <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_PerformanceMetricVector[i], sep="_"))
+  # Extract data for barplots from Data_OM_vs_CR_BB file
+  Data <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year/Data_OM_vs_CR_BB", MSE_PerformanceMetricVector[i], sep="_"))
   Data <- as.matrix(Data)
   
   MakePerfMetGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
@@ -198,46 +149,51 @@ for(i in 1:length(MSE_PerformanceMetricVector)){
 
 ################### Make ranked summary data by VEC ##########################################################################
 ##### Herring Resource VEC #####
-GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   2,  
-                           3,  3,  3,  3,  3,  3,  3,  3,  3,  3,   2,  
-                           4,  5,  5,  5,  5,  5,  5,  5,  5,  5,   2,
-                           4,  6,  6,  6,  6,  6,  6,  6,  6,  6,   2,
-                           4,  7,  8,  9, 10, 11, 12, 13, 14, 15,   2,
-                           16, 16, 16, 16, 16, 16, 16, 16, 16, 16,   2,
-                           17, 18, 19, 20, 21, 22, 23, 24, 25, 26,   2,
-                           27, 27, 27, 27, 27, 27, 27, 27, 27, 27,   2,
-                           28, 29, 30, 31, 32, 33, 34, 35, 36, 37,   2,
-                           38, 38, 38, 38, 38, 38, 38, 38, 38, 38,   2,
-                           39, 40, 41, 42, 43, 44, 45, 46, 47, 48,   2,
-                           49, 49, 49, 49, 49, 49, 49, 49, 49, 49,   2, 
-                           50, 51, 52, 53, 54, 55, 56, 57, 58, 59,   2,
-                           60, 60, 60, 60, 60, 60, 60, 60, 60, 60,   2, 
-                           61, 62, 63, 64, 65, 66, 67, 68, 69, 70,   2,
-                           71, 71, 71, 71, 71, 71, 71, 71, 71, 71,   2)#5
-#72, 73, 74, 75, 76, 77, 78, 79, 80, 81,   2,
-#82, 82, 82, 82, 82, 82, 82, 82, 82, 82,   2)#6
+GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  3,  
+                           4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  3,  
+                           5,  6,  6,  6,  6,  6,  6,  6,  6,  6,  3,
+                           5,  7,  7,  7,  7,  7,  7,  7,  7,  7,  3,
+                           5,  8,  9, 10, 11, 12, 13, 14, 15, 16,  3,
+                           17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  3,
+                           18, 19, 20, 21, 22, 23, 24, 25, 26, 27,  3,
+                           28, 28, 28, 28, 28, 28, 28, 28, 28, 28,  3,
+                           29, 30, 31, 32, 33, 34, 35, 36, 37, 38,  3,
+                           39, 39, 39, 39, 39, 39, 39, 39, 39, 39,  3,
+                           40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  3,
+                           50, 50, 50, 50, 50, 50, 50, 50, 50, 50,  3,
+                           51, 52, 53, 54, 55, 56, 57, 58, 59, 60,  3,
+                           61, 61, 61, 61, 61, 61, 61, 61, 61, 61,  3, 
+                           62, 63, 64, 65, 66, 67, 68, 69, 70, 71,  3,
+                           72, 72, 72, 72, 72, 72, 72, 72, 72, 72,  3,
+                           73, 74, 75, 76, 77, 78, 79, 80, 81, 82,  3,
+                           83, 83, 83, 83, 83, 83, 83, 83, 83, 83,  3)#6
 
 
 
-GraphicRowsAllOMs <- 16
+GraphicRowsAllOMs <- 18
 GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
+MSE_ImageWidth <- 700
+MSE_ImageHeight <- 850
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_BB_FullTables"
-MSE_SummaryPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "SurpProd", "PropFrelFmsy")
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year"
+MSE_SummaryPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "PropSSBrel30_75SSBzero", "SurpProd", "PropFrelFmsy")
 MSE_SummaryTranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy","Probability of Overfished B < 0.5 Bmsy","SSB Relative to Unfished Biomass", 
-                                        "Surplus Production", "Prop Year Overfishing Occurs F > Fmsy")
+                                        "Prop Year SSB is 30-75% of SSB Zero", "Surplus Production", "Prop Year Overfishing Occurs F > Fmsy")
 MSE_OutputFile <- "VEC_HerringResource"
+MSE_IconList <- "HerringResource"
 
 Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(MSE_TranslatedControlRuleVector))
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
@@ -245,7 +201,7 @@ rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Herring Resource", 
-                                   #IconList=IconList, 
+                                   IconList=MSE_IconList, 
                                    RowCategoryName = "Performance \n Metrics", 
                                    ColumnCategoryName = "Control Rule Options", 
                                    RowNames = MSE_SummaryTranslatedPerfMetVector,
@@ -255,6 +211,8 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    GraphicNCol = GraphicColumnsAllOMs, 
                                    GraphicHeights = GraphicHeightsAllOMs,
                                    GraphicWidths = GraphicWidthsALLOMs,
+                                   ImageWidth = MSE_ImageWidth,
+                                   ImageHeight = MSE_ImageHeight,
                                    
                                    VerticalBarData = Data, 
                                    VerticalBarWidths = 0.5,
@@ -265,51 +223,51 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    OutputFileName = MSE_OutputFile)
 
 ##### Predator species VEC #####
-GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   2,  
-                           3,  3,  3,  3,  3,  3,  3,  3,  3,  3,   2,  
-                           4,  5,  5,  5,  5,  5,  5,  5,  5,  5,   2,
-                           4,  6,  6,  6,  6,  6,  6,  6,  6,  6,   2,
-                           4,  7,  8,  9, 10, 11, 12, 13, 14, 15,   2,
-                           16, 16, 16, 16, 16, 16, 16, 16, 16, 16,   2,
-                           17, 18, 19, 20, 21, 22, 23, 24, 25, 26,   2,
-                           27, 27, 27, 27, 27, 27, 27, 27, 27, 27,   2,
-                           28, 29, 30, 31, 32, 33, 34, 35, 36, 37,   2,
-                           38, 38, 38, 38, 38, 38, 38, 38, 38, 38,   2,
-                           39, 40, 41, 42, 43, 44, 45, 46, 47, 48,   2,
-                           49, 49, 49, 49, 49, 49, 49, 49, 49, 49,   2, 
-                           50, 51, 52, 53, 54, 55, 56, 57, 58, 59,   2,
-                           60, 60, 60, 60, 60, 60, 60, 60, 60, 60,   2) 
-#61, 62, 63, 64, 65, 66, 67, 68, 69, 70,   2,
-#71, 71, 71, 71, 71, 71, 71, 71, 71, 71,   2)#5
+GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  3,  
+                           4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  3,  
+                           5,  6,  6,  6,  6,  6,  6,  6,  6,  6,  3,
+                           5,  7,  7,  7,  7,  7,  7,  7,  7,  7,  3,
+                           5,  8,  9, 10, 11, 12, 13, 14, 15, 16,  3,
+                           17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  3,
+                           18, 19, 20, 21, 22, 23, 24, 25, 26, 27,  3,
+                           28, 28, 28, 28, 28, 28, 28, 28, 28, 28,  3,
+                           29, 30, 31, 32, 33, 34, 35, 36, 37, 38,  3,
+                           39, 39, 39, 39, 39, 39, 39, 39, 39, 39,  3,
+                           40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  3,
+                           50, 50, 50, 50, 50, 50, 50, 50, 50, 50,  3,
+                           51, 52, 53, 54, 55, 56, 57, 58, 59, 60,  3,
+                           61, 61, 61, 61, 61, 61, 61, 61, 61, 61,  3,
+                           62, 63, 64, 65, 66, 67, 68, 69, 70, 71,  3,
+                           72, 72, 72, 72, 72, 72, 72, 72, 72, 72,  3)#5
 
-GraphicRowsAllOMs <- 14
+GraphicRowsAllOMs <- 16
 GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
+MSE_ImageWidth <- 700
+MSE_ImageHeight <- 750
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_BB_FullTables"
-MSE_SummaryPerformanceMetricVector <- c("MedSSBrelSSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf")
-MSE_SummaryTranslatedPerfMetVector <- c("SSB Relative to Unfished Biomass", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass")
-
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year"
+MSE_SummaryPerformanceMetricVector <- c("MedSSBrelSSBzero", "PropSSBrel30_75SSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf")
+MSE_SummaryTranslatedPerfMetVector <- c("SSB Relative to Unfished Biomass", "Prop Year SSB is 30-75% of SSB Zero", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass")
+MSE_IconList <- "UnprotectedPredators"
 MSE_OutputFile <- "VEC_PredatorSpecies"
 
-Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(MSE_TranslatedControlRuleVector))
-colnames(Data) <- MSE_TranslatedControlRuleVector
-
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Predator Species", 
-                                   #IconList=IconList, 
+                                   IconList=MSE_IconList, 
                                    RowCategoryName = "Performance \n Metrics", 
                                    ColumnCategoryName = "Control Rule Options", 
                                    RowNames = MSE_SummaryTranslatedPerfMetVector,
@@ -319,6 +277,8 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    GraphicNCol = GraphicColumnsAllOMs, 
                                    GraphicHeights = GraphicHeightsAllOMs,
                                    GraphicWidths = GraphicWidthsALLOMs,
+                                   ImageWidth = MSE_ImageWidth,
+                                   ImageHeight = MSE_ImageHeight,
                                    
                                    VerticalBarData = Data, 
                                    VerticalBarWidths = 0.5,
@@ -330,50 +290,53 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
 
 
 ##### Protected Resources & Ecotourism VEC #####
-GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   2,  
-                           3,  3,  3,  3,  3,  3,  3,  3,  3,  3,   2,  
-                           4,  5,  5,  5,  5,  5,  5,  5,  5,  5,   2,
-                           4,  6,  6,  6,  6,  6,  6,  6,  6,  6,   2,
-                           4,  7,  8,  9, 10, 11, 12, 13, 14, 15,   2,
-                           16, 16, 16, 16, 16, 16, 16, 16, 16, 16,   2,
-                           17, 18, 19, 20, 21, 22, 23, 24, 25, 26,   2,
-                           27, 27, 27, 27, 27, 27, 27, 27, 27, 27,   2,
-                           28, 29, 30, 31, 32, 33, 34, 35, 36, 37,   2,
-                           38, 38, 38, 38, 38, 38, 38, 38, 38, 38,   2,
-                           39, 40, 41, 42, 43, 44, 45, 46, 47, 48,   2,
-                           49, 49, 49, 49, 49, 49, 49, 49, 49, 49,   2)
-#50, 51, 52, 53, 54, 55, 56, 57, 58, 59,   2,
-#60, 60, 60, 60, 60, 60, 60, 60, 60, 60,   2) #4 
+GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  3,  
+                           4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  3,  
+                           5,  6,  6,  6,  6,  6,  6,  6,  6,  6,  3,
+                           5,  7,  7,  7,  7,  7,  7,  7,  7,  7,  3,
+                           5,  8,  9, 10, 11, 12, 13, 14, 15, 16,  3,
+                           17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  3,
+                           18, 19, 20, 21, 22, 23, 24, 25, 26, 27,  3, 
+                           28, 28, 28, 28, 28, 28, 28, 28, 28, 28,  3,
+                           29, 30, 31, 32, 33, 34, 35, 36, 37, 38,  3,
+                           39, 39, 39, 39, 39, 39, 39, 39, 39, 39,  3,
+                           40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  3,
+                           50, 50, 50, 50, 50, 50, 50, 50, 50, 50,  3,
+                           51, 52, 53, 54, 55, 56, 57, 58, 59, 60,  3,
+                           61, 61, 61, 61, 61, 61, 61, 61, 61, 61,  3) #4 
 
 
-GraphicRowsAllOMs <- 12
+GraphicRowsAllOMs <- 14
 GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
+MSE_ImageWidth <- 700
+MSE_ImageHeight <- 700
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_BB_FullTables"
-MSE_SummaryPerformanceMetricVector <- c("MedSSBrelSSBzero", "SurpProd", "MedPropYrs_goodProd_Targplustern")
-MSE_SummaryTranslatedPerfMetVector <- c("SSB Relative to Unfished Biomass", "Surplus Production", "Prop Year Tern Production > 1")
-
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year"
+MSE_SummaryPerformanceMetricVector <- c("MedSSBrelSSBzero", "PropSSBrel30_75SSBzero", "SurpProd", "MedPropYrs_goodProd_Targplustern")
+MSE_SummaryTranslatedPerfMetVector <- c("SSB Relative to Unfished Biomass", "Prop Year SSB is 30-75% of SSB Zero", "Surplus Production", "Prop Year Tern Production > 1")
+MSE_IconList <- "Protected&Tourism"
 MSE_OutputFile <- "VEC_ProtectedResources_Ecotourism"
 
 Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(MSE_TranslatedControlRuleVector))
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: \n Protected Resources & Ecotourism", 
-                                   #IconList=IconList, 
+                                   IconList = MSE_IconList, 
                                    RowCategoryName = "Performance \n Metrics", 
                                    ColumnCategoryName = "Control Rule Options", 
                                    RowNames = MSE_SummaryTranslatedPerfMetVector,
@@ -383,6 +346,8 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    GraphicNCol = GraphicColumnsAllOMs, 
                                    GraphicHeights = GraphicHeightsAllOMs,
                                    GraphicWidths = GraphicWidthsALLOMs,
+                                   ImageWidth = MSE_ImageWidth,
+                                   ImageHeight = MSE_ImageHeight,
                                    
                                    VerticalBarData = Data, 
                                    VerticalBarWidths = 0.5,
@@ -394,59 +359,62 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
 
 
 ##### Herring, Mackerel & Lobster Fisheries VEC #####
-GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   2,  
-                           3,  3,  3,  3,  3,  3,  3,  3,  3,  3,   2,  
-                           4,  5,  5,  5,  5,  5,  5,  5,  5,  5,   2,
-                           4,  6,  6,  6,  6,  6,  6,  6,  6,  6,   2,
-                           4,  7,  8,  9, 10, 11, 12, 13, 14, 15,   2,
-                           16, 16, 16, 16, 16, 16, 16, 16, 16, 16,   2,
-                           17, 18, 19, 20, 21, 22, 23, 24, 25, 26,   2,
-                           27, 27, 27, 27, 27, 27, 27, 27, 27, 27,   2,
-                           28, 29, 30, 31, 32, 33, 34, 35, 36, 37,   2,
-                           38, 38, 38, 38, 38, 38, 38, 38, 38, 38,   2,
-                           39, 40, 41, 42, 43, 44, 45, 46, 47, 48,   2,
-                           49, 49, 49, 49, 49, 49, 49, 49, 49, 49,   2, 
-                           50, 51, 52, 53, 54, 55, 56, 57, 58, 59,   2,
-                           60, 60, 60, 60, 60, 60, 60, 60, 60, 60,   2, 
-                           61, 62, 63, 64, 65, 66, 67, 68, 69, 70,   2,
-                           71, 71, 71, 71, 71, 71, 71, 71, 71, 71,   2,#5
-                           72, 73, 74, 75, 76, 77, 78, 79, 80, 81,   2,
-                           82, 82, 82, 82, 82, 82, 82, 82, 82, 82,   2,#6
-                           83, 84, 85, 86, 87, 88, 89, 90, 91, 92,   2,
-                           93, 93, 93, 93, 93, 93, 93, 93, 93, 93,   2) #7
-#94, 95, 96, 97, 98, 99,100,101,102,103,   2,
-#104,104,104,104,104,104,104,104,104,104,   2) #8 
+GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  3,  
+                           4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  3,  
+                           5,  6,  6,  6,  6,  6,  6,  6,  6,  6,  3,
+                           5,  7,  7,  7,  7,  7,  7,  7,  7,  7,  3,
+                           5,  8,  9, 10, 11, 12, 13, 14, 15, 16,  3,
+                           17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  3,
+                           18, 19, 20, 21, 22, 23, 24, 25, 26, 27,  3,
+                           28, 28, 28, 28, 28, 28, 28, 28, 28, 28,  3,
+                           29, 30, 31, 32, 33, 34, 35, 36, 37, 38,  3,
+                           39, 39, 39, 39, 39, 39, 39, 39, 39, 39,  3,
+                           40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  3,
+                           50, 50, 50, 50, 50, 50, 50, 50, 50, 50,  3,
+                           51, 52, 53, 54, 55, 56, 57, 58, 59, 60,  3,
+                           61, 61, 61, 61, 61, 61, 61, 61, 61, 61,  3,
+                           62, 63, 64, 65, 66, 67, 68, 69, 70, 71,  3,
+                           72, 72, 72, 72, 72, 72, 72, 72, 72, 72,  3,#5
+                           73, 74, 75, 76, 77, 78, 79, 80, 81, 82,  3,
+                           83, 83, 83, 83, 83, 83, 83, 83, 83, 83,  3,#6
+                           84, 85, 86, 87, 88, 89, 90, 91, 92, 93,  3,
+                           94, 94, 94, 94, 94, 94, 94, 94, 94, 94,  3, #7
+                           95, 96, 97, 98, 99,100,101,102,103,104,  3,
+                           105,105,105,105,105,105,105,105,105,105,  3) #8 
 
 
-GraphicRowsAllOMs <- 20
+GraphicRowsAllOMs <- 22
 GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
+MSE_ImageWidth <- 700
+MSE_ImageHeight <- 1000
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_BB_FullTables"
-MSE_SummaryPerformanceMetricVector <- c("PropSSBrelhalfSSBmsy", "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "Yvar")
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year"
+MSE_SummaryPerformanceMetricVector <- c("PropSSBrelhalfSSBmsy", "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR","NetRevEquilibrium",  "Yvar")
 MSE_SummaryTranslatedPerfMetVector <- c("Probability of Overfished B < 0.5 Bmsy", "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY",
-                                        "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring","Interannual Variation in Yield")
-
+                                        "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring", "Prop Year Net Revenue at Equilibrium", "Interannual Variation in Yield")
+MSE_IconList <- "HerringMackerelLobsterFisheries"
 MSE_OutputFile <- "VEC_Herring_Mackerel_Lobster_Fisheries"
 
 Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(MSE_TranslatedControlRuleVector))
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Herring, Mackerel \n & Lobster Fisheries", 
-                                   #IconList=IconList, 
+                                   IconList = MSE_IconList, 
                                    RowCategoryName = "Performance \n Metrics", 
                                    ColumnCategoryName = "Control Rule Options", 
                                    RowNames = MSE_SummaryTranslatedPerfMetVector,
@@ -456,6 +424,8 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    GraphicNCol = GraphicColumnsAllOMs, 
                                    GraphicHeights = GraphicHeightsAllOMs,
                                    GraphicWidths = GraphicWidthsALLOMs,
+                                   ImageWidth = MSE_ImageWidth,
+                                   ImageHeight = MSE_ImageHeight,
                                    
                                    VerticalBarData = Data, 
                                    VerticalBarWidths = 0.5,
@@ -468,46 +438,48 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
 
 
 ##### Predator Fisheries VEC #####
-GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,   2,  
-                           3,  3,  3,  3,  3,  3,  3,  3,  3,  3,   2,  
-                           4,  5,  5,  5,  5,  5,  5,  5,  5,  5,   2,
-                           4,  6,  6,  6,  6,  6,  6,  6,  6,  6,   2,
-                           4,  7,  8,  9, 10, 11, 12, 13, 14, 15,   2,
-                           16,  16, 16, 16, 16, 16, 16, 16, 16, 16,   2,
-                           17,  18, 19, 20, 21, 22, 23, 24, 25, 26,   2,
-                           27,  27, 27, 27, 27, 27, 27, 27, 27, 27,   2,
-                           28,  29, 30, 31, 32, 33, 34, 35, 36, 37,   2,
-                           38,  38, 38, 38, 38, 38, 38, 38, 38, 38,   2)
-
+GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  3,  
+                           4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  3,  
+                           5,  6,  6,  6,  6,  6,  6,  6,  6,  6,  3,
+                           5,  7,  7,  7,  7,  7,  7,  7,  7,  7,  3,
+                           5,  8,  9, 10, 11, 12, 13, 14, 15, 16,  3,
+                           17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  3,
+                           18, 19, 20, 21, 22, 23, 24, 25, 26, 27,  3,
+                           28, 28, 28, 28, 28, 28, 28, 28, 28, 28,  3,
+                           29, 30, 31, 32, 33, 34, 35, 36, 37, 38,  3,
+                           39, 39, 39, 39, 39, 39, 39, 39, 39, 39,  3)
 
 GraphicRowsAllOMs <- 10
 GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
+MSE_ImageWidth <- 700
+MSE_ImageHeight <- 400
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
-MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_BB_FullTables"
+MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year"
 MSE_SummaryPerformanceMetricVector <- c("MedPredAvWt_status", "AvPropYrs_okBstatusgf")
 MSE_SummaryTranslatedPerfMetVector <- c("Tuna Weight Status", "Prop Year Good Dogfish Biomass")
-
+MSE_IconList <- "TunaGroundfishFishery"
 MSE_OutputFile <- "VEC_PredatorFisheries"
 
 Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(MSE_TranslatedControlRuleVector))
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Semi-Final_FullTables/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics_CR1Year/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Predator Fisheries", 
-                                   #IconList=IconList, 
+                                   IconList = MSE_IconList, 
                                    RowCategoryName = "Performance \n Metrics", 
                                    ColumnCategoryName = "Control Rule Options", 
                                    RowNames = MSE_SummaryTranslatedPerfMetVector,
@@ -517,6 +489,8 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    GraphicNCol = GraphicColumnsAllOMs, 
                                    GraphicHeights = GraphicHeightsAllOMs,
                                    GraphicWidths = GraphicWidthsALLOMs,
+                                   ImageWidth = MSE_ImageWidth,
+                                   ImageHeight = MSE_ImageHeight,
                                    
                                    VerticalBarData = Data, 
                                    VerticalBarWidths = 0.5,
@@ -525,11 +499,3 @@ MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    #VerticalBarYLabel="YVar",
                                    VerticalBarAxes = TRUE,
                                    OutputFileName = MSE_OutputFile)
-
-
-
-
-
-
-
-
