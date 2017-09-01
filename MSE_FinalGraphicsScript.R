@@ -177,7 +177,7 @@ GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_ImageWidth <- 700
-MSE_ImageHeight <- 900
+MSE_ImageHeight <- 850
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics"
@@ -191,9 +191,11 @@ Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
@@ -245,7 +247,7 @@ GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_ImageWidth <- 700
-MSE_ImageHeight <- 850
+MSE_ImageHeight <- 750
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics"
@@ -254,18 +256,16 @@ MSE_SummaryTranslatedPerfMetVector <- c("SSB Relative to Unfished Biomass", "Pro
 MSE_IconList <- "UnprotectedPredators"
 MSE_OutputFile <- "VEC_PredatorSpecies"
 
-Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(MSE_TranslatedControlRuleVector))
-colnames(Data) <- MSE_TranslatedControlRuleVector
-
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Predator Species", 
@@ -313,7 +313,7 @@ GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_ImageWidth <- 700
-MSE_ImageHeight <- 800
+MSE_ImageHeight <- 700
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics"
@@ -326,14 +326,15 @@ Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: \n Protected Resources & Ecotourism", 
@@ -403,14 +404,15 @@ Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Herring, Mackerel \n & Lobster Fisheries", 
@@ -454,7 +456,7 @@ GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_ImageWidth <- 700
-MSE_ImageHeight <- 750
+MSE_ImageHeight <- 400
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_OutputDirectory <- "/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics"
@@ -467,14 +469,15 @@ Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/ahart2/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Predator Fisheries", 
