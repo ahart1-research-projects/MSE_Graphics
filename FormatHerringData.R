@@ -45,7 +45,24 @@ ExtractCRandOMInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRN
     # Combine subset with full results matrix
     CRandOMSubset_HerringMSEData <- rbind(CRandOMSubset_HerringMSEData, CRSubset_HerringMSEData[MatrixRows,])
   }
-  # print(CRandOMSubset_HerringMSEData)
+  
+  # These next few lines calculate PropSSBrel30_75SSBzero metric using PropSSBrel3SSBzero and PropSSBrel75SSBzero columns & 25% and 75% CI columns, these lines are very specific to this project
+  PropSSBrel30_75SSBzero <- CRandOMSubset_HerringMSEData[ ,"PropSSBrel75SSBzero"] - CRandOMSubset_HerringMSEData[ ,"PropSSBrel3SSBzero"]
+  # Add this data to the matrix
+  CRandOMSubset_HerringMSEData <- cbind(CRandOMSubset_HerringMSEData, PropSSBrel30_75SSBzero) 
+  # 25% CI
+  PropSSBrel30_75SSBzero_25 <- CRandOMSubset_HerringMSEData[ ,"PropSSBrel75SSBzero_25"] - CRandOMSubset_HerringMSEData[ ,"PropSSBrel3SSBzero_25"]
+  CRandOMSubset_HerringMSEData <- cbind(CRandOMSubset_HerringMSEData, PropSSBrel30_75SSBzero_25)
+  # 75% CI
+  PropSSBrel30_75SSBzero_75 <- CRandOMSubset_HerringMSEData[ ,"PropSSBrel75SSBzero_75"] - CRandOMSubset_HerringMSEData[ ,"PropSSBrel3SSBzero_75"]
+  CRandOMSubset_HerringMSEData <- cbind(CRandOMSubset_HerringMSEData, PropSSBrel30_75SSBzero_75)
+
+  # Calculate proportion simulations (out of 100) that net revenue at equilibrium
+  NetRevEquilibrium <- CRandOMSubset_HerringMSEData[, "stationary"]/100
+  # Add this revised proportion data to the matrix
+  CRandOMSubset_HerringMSEData <- cbind(CRandOMSubset_HerringMSEData, NetRevEquilibrium)
+  
+  # print((CRandOMSubset_HerringMSEData))
   
   # Return results matrix
   return(CRandOMSubset_HerringMSEData)
@@ -199,10 +216,10 @@ Make_WebDiagram_Matrix_1_OM <- function(OperatingModel=NULL, ControlRules=NULL, 
   
   # Set up matrix
   Data_Web_PerfMet_vs_CR <- matrix(NA, length(ControlRules), length(PerformanceMetrics))
-  
+
   # Fill matrix with data corresponding to chosen Control Rule
   for(metric in 1:length(PerformanceMetrics)){
-    Data_Web_PerfMet_vs_CR[ ,metric] <- Data[which(Data[,"OM"]== OperatingModel),PerformanceMetrics[metric]]
+    Data_Web_PerfMet_vs_CR[ ,metric] <- Data[which(Data[,"OM"]== OperatingModel), PerformanceMetrics[metric]]
   }
   
   colnames(Data_Web_PerfMet_vs_CR) <- TranslatedPerfMetVector
