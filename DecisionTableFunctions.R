@@ -386,44 +386,17 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
          (Title == "Prop Year SSB is 30-75% of SSB Zero") | 
          (Title == "Prop Year Net Revenue at Equilibrium")){
         
-<<<<<<< HEAD
         # Rank from high to low, ties rounded up so coloring consistent
         Rank <- rank(ExtraArguments$VerticalBarData[row, ], ties.method = "max") # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
-=======
-        
-        # "PropSSBrelSSBmsy"                 : "Prop Year Biomass < Bmsy"
-        # "PropSSBrelhalfSSBmsy"             : "Probability of Overfished B < 0.5 Bmsy"
-        # "MedSSBrelSSBzero"                 : "SSB Relative to Unfished Biomass" 
-        # "PropSSBrel30_75SSBzero"           : "Prop Year SSB is 30-75% of SSB Zero"
-        # "SurpProd"                         : "Surplus Production"
-        # "MedPredAvWt_status"               : "Tuna Weight Status" 
-        # "AvPropYrs_okBstatusgf"            : "Prop Year Good Dogfish Biomass" 
-        # "PropFrelFmsy"                     : "Prop Year Overfishing Occurs F > Fmsy"
-        # "YieldrelMSY"                      : "Yield Relative to MSY"
-        # "Yield"                            : "Yield"
-        # "PropClosure"                      : "Prop Year Closure Occurs"
-        # "p50_NR"                           : "Net Revenue for Herring"
-        # "NetRevEquilibrium"                : "Prop Year Net Revenue at Equilibrium"
-        # "Yvar"                             : "Interannual Variation in Yield"
-        # "MedPropYrs_goodProd_Targplustern" : "Prop Year Tern Production > 1"
-        
-        # Rank from high to low (higher is better performance)
-        Rank <- rank(ExtraArguments$VerticalBarData[row, ]) # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
->>>>>>> 23ba3f5a10ee46542d72e80fdbdceedc9a4a8ab3
-        
+      
       } else if((Title =="Prop Year Biomass < Bmsy") |
                 (Title =="Probability of Overfished B < 0.5 Bmsy") | 
                 (Title =="Prop Year Overfishing Occurs F > Fmsy") |
                 (Title =="Prop Year Closure Occurs") |
                 (Title =="Interannual Variation in Yield")){
         
-<<<<<<< HEAD
-        # Rank from low to high, ties rounded up so coloring consistent
+        # Rank from low to high, ties rounded up so coloring consistent (lower is better performance)
         Rank <- rank(-ExtraArguments$VerticalBarData[row,], ties.method = "max")
-=======
-        # Rank from low to high (lower is better performance)
-        Rank <- rank(-ExtraArguments$VerticalBarData[row,])
->>>>>>> 23ba3f5a10ee46542d72e80fdbdceedc9a4a8ab3
       }
     }
     RankTable <- rbind(RankTable, Rank)
@@ -543,43 +516,6 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
        # GraphicHeights: A vector containing row heights, must be same length as GraphicNRow
        # GraphicWidths: A vector containing column widths, must be same length as GraphicNCol
        # OutputFileName: A string contining the output file name
-<<<<<<< HEAD
-       # PlotOrder: A vector of strings containing names of the plots to produce options are listed below with associated arguments, PlotOrder must be equal in length of GraphicNCol-1
-     # "SingleColumn_VerticalBarplot"
-       # VerticalBarData: List of vectors or matricies containing data to plot in vertical barplot, number of items in list must be equal to length of RowNames
-          # Each item in the list will be plotted in an individual graph
-       # VerticalBarWidths vector of bar widths
-       # VerticalBarColors: 1 or more colors for plot
-       # VerticalBarXLabel: labels x axis
-       # VerticalBarYLabel: labels y axis
-       # VerticalBarAxes determines if axes plotted, must be TRUE/FALSE
-    # "VerticalStackedBar"
-       # VerticalStackedBarData: List of objects, each with two or more $ categories (eg Data$category1, Data$category2...), number of objects in list must be equal to length of RowNames
-       # VerticalStackedBarWidths vector of bar widths
-       # VerticalStackedBarColors: 2 or more colors
-       # VerticalStackedBarXLabel: labels x axis
-       # VerticalStackedBarYLabel: labels y axis
-       # VerticalStackedBarAxes determines if axes plotted, must be TRUE/FALSE
-    # "HorizontalBarplot"
-       # HorizontalBarData: List of vectors or matricies containing data to plot in vertical barplot, number of items in list must be equal to length of RowNames
-       # HorizontalBarWidths vector of bar widths
-       # HorizontalBarColors: 1 or more colors for plot
-       # HorizontalBarXLabel: labels x axis
-       # HorizontalBarYLabel: labels y axis
-       # VerticalBarAxes determines if axes plotted, must be TRUE/FALSE
-    # "HorizontalStackedBar"
-       # HorizontalStackedBarData: List of objects, each with two or more $ categories (eg Data$category1, Data$category2...), number of objects in list must be equal to length of RowNames
-       # HorizontalStackedBarWidths vector of bar widths
-       # HorizontalStackedBarColors: 2 or more colors
-       # HorizontallStackedBarXLabel: labels x axis
-       # HorizontalStackedBarYLabel: labels y axis
-       # HorizontalStackedBarAxes determines if axes plotted, must be TRUE/FALSE
-    # "Pictogram"
-       # PictogramImage: Name of image for pictogram, "ImageName.png" format
-       # PictogramData: Vector of counts, must be same length as RowNames
-       # PictogramDataScale: Single number determines count scale
-       # PictogramColumns: Single number determines number of columns in pictogram
-=======
        # ImageWidth: A number usually between 500-1000 which sets the width of the entire graphic, default=700
        # ImageHeight: A number usually between 500-1000 which sets the height of the entire graphic, default=900
        # VerticalBarData: List of vectors or matricies containing data to plot in vertical barplot, number of items in list must be equal to length of RowNames
@@ -589,7 +525,6 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
           # VerticalBarXLabel: labels x axis
           # VerticalBarYLabel: labels y axis
           # VerticalBarAxes determines if axes plotted, must be TRUE/FALSE
->>>>>>> 23ba3f5a10ee46542d72e80fdbdceedc9a4a8ab3
   # Returns:
        # A ploted decision table with customized graphics
   
