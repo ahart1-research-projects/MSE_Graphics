@@ -535,7 +535,8 @@ ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile,
                 TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
                 OperatingModelColors = MSE_OperatingModelColors,
                 FilePath = MSE_FilePath,
-                OutputDirectory = MSE_OutputDirectory)
+                OutputDirectory = MSE_OutputDirectory,
+                CustomTitle <- "FocusedWeb")
 
 
 
