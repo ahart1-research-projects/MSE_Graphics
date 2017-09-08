@@ -137,7 +137,9 @@ plot_indicators <- function(ind,
     plotfile <- sub("IndicatorPlot","IndicatorPlotAutoAxis", plotfile)
   }
   
-  png(file=plotfile)
+  # For high resolution use line 141 not 140, 3 may be adjusted to change resolution
+  png(file=plotfile, res=72*3, width=480*3, height=480*3)
+  #png(file=plotfile)
 
   par(mar=c(0,3,3,0), oma=c(0,0,0,0), xpd=TRUE)
 
