@@ -10,10 +10,12 @@ MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#a8ddb5"
 MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 4272, 4373, 5171, 5363, 7161)
 MSE_PerformanceMetricColors <- c("#084081", "#feb24c", "#4eb3d3", "#fc4e2a", "#a8ddb5", "#238443", "#f768a1", "#bd0026", "#78c679", "#bcbddc", "#ffeda0")
 MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "PropSSBrel30_75SSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
-                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "NetRevEquilibrium", "Yvar", "MedPropYrs_goodProd_Targplustern")
+                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "NetRevEquilibrium", "Yvar", "MedPropYrs_goodProd_Targplustern", "PropSSBGreater30SSBzero")
 MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Prop Year SSB is 30-75% of SSB Zero", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
                                  "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring", "Prop Year Net Revenue at Equilibrium",
-                                 "Interannual Variation in Yield", "Prop Year Tern Production > 1")
+                                 "Interannual Variation in Yield", "Prop Year Tern Production > 1", " Prop Year SSB > 30% of SSB Zero")
+
+# " Prop Year SSB > 30% of SSB Zero" is for diagnostic purposes 
 
 MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
 MSE_OperatingModelList <- c("HiM_LowSteep_AssBias_OldWt", "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_OldWt", 
@@ -80,10 +82,12 @@ MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_PerfMetColors <- c("#ffffe5","#f7fcb9","#d9f0a3","#addd8e","#78c679","#41ab5d","#238443","#006837","#004529")
 MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics"
 MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "PropSSBrel30_75SSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
-                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "NetRevEquilibrium", "Yvar", "MedPropYrs_goodProd_Targplustern")
+                                 "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "NetRevEquilibrium", "Yvar", "MedPropYrs_goodProd_Targplustern", "PropSSBGreater30SSBzero")
 MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Prop Year SSB is 30-75% of SSB Zero", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
                                  "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring", "Prop Year Net Revenue at Equilibrium",
-                                 "Interannual Variation in Yield", "Prop Year Tern Production > 1")
+                                 "Interannual Variation in Yield", "Prop Year Tern Production > 1", "Prop Year SSB > 30% of SSB Zero")
+
+# " Prop Year SSB > 30% of SSB Zero" is for diagnostic purposes 
 
 # Loop over performance metrics to produce tables
 for(i in 1:length(MSE_PerformanceMetricVector)){
@@ -121,6 +125,8 @@ for(i in 1:length(MSE_PerformanceMetricVector)){
     IconList = c("HerringResource", "UnprotectedPredators", "Protected&Tourism")
   } else if(MSE_TranslatedPerfMetVector[i]=="Prop Year Net Revenue at Equilibrium"){
     IconList = c("HerringMackerelLobsterFisheries")
+  } else if (MSE_TranslatedPerfMetVector[i]=="Prop Year SSB > 30% of SSB Zero"){
+    IconList = c("HerringResource")
   }
   
   # Extract data for barplots from Data_OM_vs_CR_BB3yr file
