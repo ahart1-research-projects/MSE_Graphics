@@ -56,7 +56,11 @@ ExtractCRandOMInformation <- function(OriginalDataFile=NULL, ChooseYrs=NULL, CRN
   # 75% CI
   PropSSBrel30_75SSBzero_75 <- CRandOMSubset_HerringMSEData[ ,"PropSSBrel75SSBzero_75"] - CRandOMSubset_HerringMSEData[ ,"PropSSBrel3SSBzero_75"]
   CRandOMSubset_HerringMSEData <- cbind(CRandOMSubset_HerringMSEData, PropSSBrel30_75SSBzero_75)
-
+  
+  # Calculate Prop SSB is > 30% of SSB zero (currently Prop SSB < 30% of SSB zero)
+  PropSSBGreater30SSBzero <- 1 - CRandOMSubset_HerringMSEData[, "PropSSBrel3SSBzero"]
+  CRandOMSubset_HerringMSEData <- cbind(CRandOMSubset_HerringMSEData, PropSSBGreater30SSBzero)
+  
   # Calculate proportion simulations (out of 100) that net revenue at equilibrium
   NetRevEquilibrium <- CRandOMSubset_HerringMSEData[, "stationary"]/100
   # Add this revised proportion data to the matrix
