@@ -635,7 +635,8 @@ ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile,
                 TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
                 OperatingModelColors = MSE_OperatingModelColors,
                 FilePath = MSE_FilePath,
-                OutputDirectory = MSE_OutputDirectory)
+                OutputDirectory = MSE_OutputDirectory,
+                CustomTitle <- "FocusedWeb")
 
 
 # Web diagrams for 4 OM and 4 performance metrics used to determine which CR "meet criteria"
