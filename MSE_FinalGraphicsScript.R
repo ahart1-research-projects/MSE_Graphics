@@ -149,6 +149,8 @@ for(i in 1:length(MSE_PerformanceMetricVector)){
                                   OutputFileName = MSE_OutputFile)
 }
 
+
+
 ################### Make ranked summary data by VEC ##########################################################################
 ##### Herring Resource VEC #####
 GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  3,  
@@ -177,7 +179,7 @@ GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_ImageWidth <- 700
-MSE_ImageHeight <- 900
+MSE_ImageHeight <- 850
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics"
@@ -191,9 +193,11 @@ Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
@@ -245,7 +249,7 @@ GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_ImageWidth <- 700
-MSE_ImageHeight <- 850
+MSE_ImageHeight <- 750
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics"
@@ -254,18 +258,16 @@ MSE_SummaryTranslatedPerfMetVector <- c("SSB Relative to Unfished Biomass", "Pro
 MSE_IconList <- "UnprotectedPredators"
 MSE_OutputFile <- "VEC_PredatorSpecies"
 
-Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(MSE_TranslatedControlRuleVector))
-colnames(Data) <- MSE_TranslatedControlRuleVector
-
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Predator Species", 
@@ -313,7 +315,7 @@ GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_ImageWidth <- 700
-MSE_ImageHeight <- 800
+MSE_ImageHeight <- 700
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics"
@@ -326,14 +328,15 @@ Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: \n Protected Resources & Ecotourism", 
@@ -403,14 +406,15 @@ Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Herring, Mackerel \n & Lobster Fisheries", 
@@ -454,7 +458,7 @@ GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_ImageWidth <- 700
-MSE_ImageHeight <- 750
+MSE_ImageHeight <- 400
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics"
@@ -467,14 +471,15 @@ Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
 MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
                                    Title= "Valued Ecosystem Component: Predator Fisheries", 
@@ -536,7 +541,9 @@ GraphicLayoutAllOMs <- c(  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  3,
                           161,162,163,164,165,166,167,168,169,170,  3,
                           171,171,171,171,171,171,171,171,171,171,  3, #14
                           172,173,174,175,176,177,178,179,180,181,  3,
-                          182,182,182,182,182,182,182,182,182,182,  3) #15 
+                          182,182,182,182,182,182,182,182,182,182,  3) #15
+                          #183,184,185,186,187,188,189,190,191,192,  3,
+                          #193,193,193,193,193,193,193,193,193,193,  3) #15 
 
 
 GraphicRowsAllOMs <- 36
@@ -544,13 +551,13 @@ GraphicColumnsAllOMs <- 11
 GraphicHeightsAllOMs <- c(1,0.25,1,0.25,1,0.25,rep(c(2,0.25), GraphicRowsAllOMs/2-3))
 GraphicWidthsALLOMs <- c(2,rep(1, GraphicColumnsAllOMs-1),0.25)
 MSE_ImageWidth <- 700
-MSE_ImageHeight <- 1400
+MSE_ImageHeight <- 1000
 
 MSE_TranslatedControlRuleVector <- c("1","2","3","4A","4B","4C","4D","4E","4F")
 MSE_OutputDirectory <- "/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics"
-MSE_PerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "PropSSBrel30_75SSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
+MSE_SummaryPerformanceMetricVector <- c("PropSSBrelSSBmsy", "PropSSBrelhalfSSBmsy", "MedSSBrelSSBzero", "PropSSBrel30_75SSBzero", "SurpProd", "MedPredAvWt_status", "AvPropYrs_okBstatusgf", 
                                  "PropFrelFmsy", "YieldrelMSY", "Yield", "PropClosure", "p50_NR", "NetRevEquilibrium", "Yvar", "MedPropYrs_goodProd_Targplustern")
-MSE_TranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Prop Year SSB is 30-75% of SSB Zero", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
+MSE_SummaryTranslatedPerfMetVector <- c("Prop Year Biomass < Bmsy", "Probability of Overfished B < 0.5 Bmsy", "SSB Relative to Unfished Biomass", "Prop Year SSB is 30-75% of SSB Zero", "Surplus Production", "Tuna Weight Status", "Prop Year Good Dogfish Biomass",
                                  "Prop Year Overfishing Occurs F > Fmsy", "Yield Relative to MSY", "Yield", "Prop Year Closure Occurs", "Net Revenue for Herring", "Prop Year Net Revenue at Equilibrium",
                                  "Interannual Variation in Yield", "Prop Year Tern Production > 1")
 
@@ -560,16 +567,17 @@ Data <- matrix(NA, nrow=length(MSE_SummaryPerformanceMetricVector), ncol=length(
 colnames(Data) <- MSE_TranslatedControlRuleVector
 
 for(i in 1:length(MSE_SummaryPerformanceMetricVector)){
-  # Extract data for barplots from Data_OM_vs_CR_BB3yr file
-  tempData <- read.table(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Data_OM_vs_CR_BB3yr", MSE_SummaryPerformanceMetricVector[i], sep="_"))
-  tempData <- as.matrix(tempData)
+  # Extract data for barplots from Rank file
+  tempData <- read.csv(paste("/Users/arhart/Research/MSE_Graphics/HerringMSE_Final_Graphics/Rank", MSE_SummaryTranslatedPerfMetVector[i], sep="_"))
+  tempData <- data.matrix(tempData)
+  tempData <- tempData[ ,-1]
+  # print(tempData)
   tempData <- colSums(tempData)
   Data[i,] <- tempData
 }
 rownames(Data) <- MSE_SummaryTranslatedPerfMetVector
-print(Data)
 
-MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory,
+MakeVECSummaryGraphicDecisionTable(OutputDirectory= MSE_OutputDirectory, # To change position of table need to change text from (1,1) to (0.75,1)
                                    Title= "Performance Summary", 
                                    # IconList = MSE_IconList, 
                                    RowCategoryName = "Performance \n Metrics", 
@@ -628,6 +636,101 @@ ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile,
                 OperatingModelColors = MSE_OperatingModelColors,
                 FilePath = MSE_FilePath,
                 OutputDirectory = MSE_OutputDirectory)
+
+
+# Web diagrams for 4 OM and 4 performance metrics used to determine which CR "meet criteria"
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_ControlRuleNames <- c("StrawmanA", "StrawmanB", "Params upfront", "MeetCriteria1", "MeetCriteria5")
+MSE_TranslatedControlRuleVector <- c(" 1"," 2"," 3"," 4A", "4E") 
+MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
+MSE_CRNumbers <- c(4191, 12858, 5393, 4171, 5363)
+MSE_PerformanceMetricVector <- c("YieldrelMSY", "PropClosure", "PropSSBrelhalfSSBmsy", "Yvar")
+MSE_TranslatedPerfMetVector <- c("Yield Relative to MSY", "Prop Year Closure Occurs",
+                                 "Probability of Overfished B < 0.5 Bmsy", "Interannual Variation in Yield")
+
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
+                             "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
+MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
+MSE_OutputDirectory <- "HerringMSE_Final_Graphics"
+
+ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_PerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = MSE_OutputDirectory)
+
+
+
+# Web diagrams for 4 OM and 6 performance metrics for control rule 4A show tradeoffs between 1 and 3 year implementation 
+
+MSE_OriginalDataFile <- "/Users/arhart/Downloads/allres.rds"
+MSE_ControlRuleNames <- c("MeetCriteria1")
+MSE_TranslatedControlRuleVector <- c(" 4A") 
+MSE_WebColors <- c("#016c59", "#67a9cf")
+MSE_ControlRuleColors <- c("#b30000", "#feb24c", "#fc4e2a", "#4eb3d3", "#2b8cbe")
+MSE_CRNumbers <- c(4171)
+MSE_PerformanceMetricVector <- c("MedPropYrs_goodProd_Targplustern", "p50_NR", "YieldrelMSY", "Yvar", "PropClosure","PropFrelFmsy")
+MSE_TranslatedPerfMetVector <- c("Prop Year Tern Production > 1", "Net Revenue for Herring", "Yield Relative to MSY", 
+                                 "Interannual Variation in Yield", "Prop Year Closure Occurs", "Prop Year Overfishing Occurs F > Fmsy")
+
+MSE_FilePath <- "/Users/arhart/Research/MSE_Graphics"
+MSE_OperatingModelList <- c( "HiM_LowSteep_AssBias_RecWt", "HiM_LowSteep_NoAssBias_RecWt", 
+                             "LoM_HiSteep_AssBias_RecWt", "LoM_HiSteep_NoAssBias_RecWt")
+MSE_OperatingModelColors <- c("#0868ac", "#bd0026", "#a8ddb5", "#feb24c")
+MSE_TranslatedOperatingModel <- c("B", "D", "F", "H")
+MSE_OutputDirectory <- "HerringMSE_Final_Graphics"
+
+ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile, 
+                ControlRuleNames = MSE_ControlRuleNames, 
+                TranslatedControlRuleVector = MSE_TranslatedControlRuleVector,
+                ControlRuleColors = MSE_ControlRuleColors, 
+                CRNumbers = MSE_CRNumbers, 
+                PerformanceMetricVector = MSE_PerformanceMetricVector, 
+                TranslatedPerfMetVector = MSE_TranslatedPerfMetVector,
+                PerformanceMetricColors = MSE_PerformanceMetricColors, 
+                OperatingModelList = MSE_OperatingModelList,
+                TranslatedOperatingModel = MSE_TranslatedOperatingModel, 
+                OperatingModelColors = MSE_OperatingModelColors,
+                FilePath = MSE_FilePath,
+                OutputDirectory = MSE_OutputDirectory)
+
+MSE_CustomTitle <- "ImplementationWebs"
+
+for(om in 1:length(MSE_OperatingModelList)){
+  BB_Data <- paste(paste(MSE_FilePath, MSE_OutputDirectory, "Data_Web_PerfMet_vs_CR_BB", sep="/"), MSE_OperatingModelList[om], sep="_" )
+  BB_Data <- read.table(BB_Data)
+  BB_Data <- as.data.frame(BB_Data)
+  rownames(BB_Data) <- "1 Year implementation"
+  
+  BB3yr_Data <- paste(paste(MSE_FilePath, MSE_OutputDirectory, "Data_Web_PerfMet_vs_CR_BB3yr", sep="/"), MSE_OperatingModelList[om], sep="_" )
+  BB3yr_Data <- read.table(BB3yr_Data)
+  BB3yr_Data <- as.data.frame(BB3yr_Data)
+  rownames(BB3yr_Data) <- "3 Year implementation"
+  
+  BBandBB3yr_Data <- rbind(BB_Data, BB3yr_Data)
+  
+  write.table(BBandBB3yr_Data, paste(MSE_FilePath, MSE_OutputDirectory, paste("BBandBB3yr_Data", MSE_OperatingModelList[om], sep="_"), sep="/"))
+  
+  print(BBandBB3yr_Data)
+  
+  WebDiagramPlots(Data = paste(paste(MSE_FilePath, MSE_OutputDirectory, "BBandBB3yr_Data", sep="/"), MSE_OperatingModelList[om], sep="_" ),
+                  PlotColor=MSE_WebColors,
+                  LegendLabels = c("1 Year implementation", "3 Year implementation"),
+                  AxisLabels = MSE_TranslatedPerfMetVector,
+                  OutputFileName = paste(MSE_FilePath, MSE_OutputDirectory, paste("Graph_Web_PerfMet_vs_BBandBB3yr", MSE_OperatingModelList[om], MSE_CustomTitle, ".png", sep="_"), sep="/"),
+                  MainTitle = paste("Operating Model", MSE_TranslatedOperatingModel[om], sep=" "))
+}
+
 
 
 
@@ -706,7 +809,6 @@ ProduceWebPlots(OriginalDataFile = MSE_OriginalDataFile,
                 FilePath = MSE_FilePath,
                 OutputDirectory = MSE_OutputDirectory,
                 CustomTitle <- MSE_CustomTitle)
-
 
 # Web diagrams for 4 OM and all performance metrics 25% CI
 

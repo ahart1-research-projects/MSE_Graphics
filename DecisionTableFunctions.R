@@ -394,7 +394,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
                 (Title =="Prop Year Overfishing Occurs F > Fmsy") |
                 (Title =="Prop Year Closure Occurs") |
                 (Title =="Interannual Variation in Yield")){
-        
+
         # Rank from low to high, ties rounded up so coloring consistent (lower is better performance)
         Rank <- rank(-ExtraArguments$VerticalBarData[row,], ties.method = "max")
       }
@@ -552,6 +552,7 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
   par(mar=c(0,0,0,0))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
   text(1,1,labels=c(Title), cex=2.5)
+  # text(0.75,1,labels=c(Title), cex=2.5) # For All Metric Summary Only
   
   # Optional, plots up to 1 icon right of the title, if no .png icon provided then a blank space provided
   library(raster)
