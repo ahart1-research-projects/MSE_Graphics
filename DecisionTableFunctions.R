@@ -276,7 +276,10 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
        # A ploted decision table with customized graphics
   
   # This determines size of end image
-  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=650, height=800)
+  #png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=650, height=800)
+  # For high resolution use below
+  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"),   res=72*3, width=650*3, height=800*3)
+
   
   # These set up the default format
   GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, 3, 4, 5, # First four grid spaces must be assigned 1 as this is where the title will be plotted
@@ -384,7 +387,8 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
          (Title =="SSB Relative to Unfished Biomass") |
          (Title == "Surplus Production") |
          (Title == "Prop Year SSB is 30-75% of SSB Zero") | 
-         (Title == "Prop Year Net Revenue at Equilibrium")){
+         (Title == "Prop Year Net Revenue at Equilibrium") |
+         (Title == "Prop Year SSB > 30% of SSB Zero")){
         
         # Rank from high to low, ties rounded up so coloring consistent
         Rank <- rank(ExtraArguments$VerticalBarData[row, ], ties.method = "max") # will not be produced if a rowname does not match something in the if statement (returns Rank not found error)
