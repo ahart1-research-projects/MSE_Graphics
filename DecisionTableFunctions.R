@@ -245,7 +245,7 @@ MakeGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=
 ##################################################################################################################
 # This function is what I used to make decision tables for individual performance metrics, it is separate simply for ease of use but should eventually be combined with the above
 
-MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=NULL, RowCategoryName=NULL, RowNames=NULL, 
+MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=NULL, RowCategoryName=NULL, RowNames=NULL, FormattedRowNames=NULL,
                                      ColumnCategoryName=NULL, ColumnNames=NULL,
                                      GraphicLayout=GraphicLayoutDefault, GraphicNRow=8, GraphicNCol=4, 
                                      GraphicHeights=GraphicHeightsDefault, GraphicWidths=GraphicWidthsDefault, PlotOrder=NULL, OutputFileName=NULL, ...){
@@ -256,6 +256,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
        # RowCategoryName: A string containing the descriptive title for row names
        # ColumnCategoryName: A string containing the descriptive title for column names
        # RowNames: A vector of row names, each name should be a string in "", last item should be "Summary" or something to that effect as the last row will be a sum of each column to use as a ranking across operating models
+       # FormattedRowNames: A vector of row names formatted so they fit in the plot, should have same order and length as RowNames
        # ColumnNames: A vector of column names, each name should be a string in ""
        # GraphicLayout: A vector containing information that lays out graphic structure, the matrix must have at least 4 columns and 8 rows, default=GraphicLayoutDefault
        # GraphicNRow: Number of rows in GraphicFormat Matrix, must be at least 4
@@ -408,6 +409,12 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
     print("Here")
     print(RankTable[row,])
     
+    # Save max and min values (rounded to 2 digits) from the whole table
+    MinValue <- round(min(ExtraArguments$VerticalBarData), digits=2)
+    MaxValue <- round(max(ExtraArguments$VerticalBarData), digits=2)
+    Range <- c(MinValue, MaxValue)
+    write.csv(Range, file= paste(OutputDirectory, paste("Range", Title, sep="_"), sep="/"))
+    
     # Plot bars, colors determined by rank in RankTable
     for(i in 1:ncol(ExtraArguments$VerticalBarData)){
       Colors <- ExtraArguments$VerticalBarColors
@@ -502,7 +509,7 @@ MakePerfMetGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, Ic
 
 ##################################################################################################################
 
-MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=NULL, RowCategoryName=NULL, RowNames=NULL, 
+MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL, IconList=NULL, RowCategoryName=NULL, RowNames=NULL, FormattedRowNames=NULL,
                                      ColumnCategoryName=NULL, ColumnNames=NULL,
                                      GraphicLayout=GraphicLayoutDefault, GraphicNRow=8, GraphicNCol=4, 
                                      GraphicHeights=GraphicHeightsDefault, GraphicWidths=GraphicWidthsDefault, PlotOrder=NULL, OutputFileName=NULL, ImageWidth=700, ImageHeight=900, ...){
@@ -529,10 +536,11 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
           # VerticalBarXLabel: labels x axis
           # VerticalBarYLabel: labels y axis
           # VerticalBarAxes determines if axes plotted, must be TRUE/FALSE
+       # FormattedRowNames: Vector containing formatted names so they fit in plot, must be same length and order as RowNames
   # Returns:
        # A ploted decision table with customized graphics
   
-  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), width=ImageWidth, height=ImageHeight)
+  png(filename = paste(OutputDirectory, paste(OutputFileName, ".png", sep=""), sep="/"), res=72*3, width=ImageWidth*3, height=ImageHeight*3)
   
   # These set up the default format
   GraphicLayoutDefault <- c( 1, 1, 1, 1, 2, 3, # First four grid spaces must be assigned 1 as this is where the title will be plotted
@@ -555,7 +563,7 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
   # Title
   par(mar=c(0,0,0,0))
   plot(1,1,type="n", axes=FALSE, ann=FALSE)
-  text(1,1,labels=c(Title), cex=2.5)
+  text(1,1,labels=c(Title), cex=3)
   # text(0.75,1,labels=c(Title), cex=2.5) # For All Metric Summary Only
   
   # Optional, plots up to 1 icon right of the title, if no .png icon provided then a blank space provided
@@ -602,6 +610,10 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
     text(1,1, labels = ColumnNames[Name], cex=2)
   }
   
+  # Plot Range title
+  plot(1,1,type="n", axes=FALSE, ann=FALSE)
+  text(1,1, labels = "Range", cex=2)
+  
   ##### Repeating information in the table #####
   for(row in 1:length(RowNames)){
     print(RowNames)
@@ -612,7 +624,8 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
     
     # Plot RowName
     plot(1,1,type="n", axes=FALSE, ann=FALSE)
-    text(1,1,labels=RowNames[row], cex=2)
+    text(1,1,labels=c(FormattedRowNames[row]), cex=2)
+    print(FormattedRowNames[row])
     
     # Plot graphs specified by PlotOrder
     ExtraArguments <- list(...) # This turns data passed as extra arguments into a list for graphs to use
@@ -685,6 +698,17 @@ MakeVECSummaryGraphicDecisionTable <- function(OutputDirectory=NULL, Title=NULL,
       #   mtext(Labels, side=1, cex=1.2, line=1) 
       # }
     }
+    
+    # Plot Range #/????????????? This is cheating, it should eventually be passed in as an argument
+    RangeValues <- read.csv(paste(paste(OutputDirectory, paste("Range", RowNames[row], sep="_"), sep="/")))
+    MinRangeValue <- RangeValues[1,2]
+    # print(MinRangeValue)
+    MaxRangeValue <- RangeValues[2,2]
+    # print(MaxRangeValue)
+    # print(RangeValues)
+    # Print value names
+    plot(1,1,type="n", axes=FALSE, ann=FALSE)
+    text(1,1,labels=paste(MinRangeValue, "-", MaxRangeValue, sep=" "), cex=2)
   }
   
   # Plot last horizontal division
